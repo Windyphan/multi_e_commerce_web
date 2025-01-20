@@ -1,10 +1,10 @@
-<%@page import="com.eazydeals.dao.WishlistDao"%>
-<%@page import="com.eazydeals.entities.User"%>
-<%@page import="com.eazydeals.dao.CategoryDao"%>
-<%@page import="com.eazydeals.entities.Product"%>
+<%@page import="com.phong.dao.WishlistDao"%>
+<%@page import="com.phong.entities.User"%>
+<%@page import="com.phong.dao.CategoryDao"%>
+<%@page import="com.phong.entities.Product"%>
 <%@page import="java.util.List"%>
-<%@page import="com.eazydeals.helper.ConnectionProvider"%>
-<%@page import="com.eazydeals.dao.ProductDao"%>
+<%@page import="com.phong.helper.ConnectionProvider"%>
+<%@page import="com.phong.dao.ProductDao"%>
 <%
 User u = (User) session.getAttribute("activeUser");
 WishlistDao wishlistDao = new WishlistDao(ConnectionProvider.getConnection());

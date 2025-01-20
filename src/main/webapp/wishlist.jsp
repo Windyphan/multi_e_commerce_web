@@ -1,12 +1,12 @@
-<%@page import="com.eazydeals.entities.Message"%>
-<%@page import="com.eazydeals.entities.Product"%>
-<%@page import="com.eazydeals.dao.ProductDao"%>
-<%@page import="com.eazydeals.entities.Wishlist"%>
+<%@page import="com.phong.entities.Message"%>
+<%@page import="com.phong.entities.Product"%>
+<%@page import="com.phong.dao.ProductDao"%>
+<%@page import="com.phong.entities.Wishlist"%>
 <%@page import="java.util.List"%>
 <%@page errorPage="error_exception.jsp"%>
-<%@page import="com.eazydeals.entities.User"%>
-<%@page import="com.eazydeals.helper.ConnectionProvider"%>
-<%@page import="com.eazydeals.dao.WishlistDao"%>
+<%@page import="com.phong.entities.User"%>
+<%@page import="com.phong.helper.ConnectionProvider"%>
+<%@page import="com.phong.dao.WishlistDao"%>
 
 <%
 User u1 = (User) session.getAttribute("activeUser");

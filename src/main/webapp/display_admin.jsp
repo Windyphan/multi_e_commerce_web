@@ -1,4 +1,4 @@
-<%@page import="com.eazydeals.dao.AdminDao"%>
+<%@page import="com.phong.dao.AdminDao"%>
 <%@page errorPage="error_exception.jsp"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>

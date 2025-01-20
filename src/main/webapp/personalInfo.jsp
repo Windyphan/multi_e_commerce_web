@@ -1,5 +1,5 @@
-<%@page import="com.eazydeals.entities.Message"%>
-<%@page import="com.eazydeals.entities.User"%>
+<%@page import="com.phong.entities.Message"%>
+<%@page import="com.phong.entities.User"%>
 <%
 User user1 = (User) session.getAttribute("activeUser");
 if (user1 == null) {

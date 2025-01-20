@@ -1,10 +1,10 @@
-<%@page import="com.eazydeals.entities.Message"%>
+<%@page import="com.phong.entities.Message"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 	<%@page errorPage="error_exception.jsp"%>
-<%@page import="com.eazydeals.dao.UserDao"%>
-<%@page import="com.eazydeals.entities.Product"%>
-<%@page import="com.eazydeals.dao.ProductDao"%>
+<%@page import="com.phong.dao.UserDao"%>
+<%@page import="com.phong.entities.Product"%>
+<%@page import="com.phong.dao.ProductDao"%>
 <%
 Admin activeAdmin = (Admin) session.getAttribute("activeAdmin");
 if (activeAdmin == null) {

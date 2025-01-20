@@ -1,8 +1,8 @@
-<%@page import="com.eazydeals.entities.Message"%>
-<%@page import="com.eazydeals.dao.ProductDao"%>
+<%@page import="com.phong.entities.Message"%>
+<%@page import="com.phong.dao.ProductDao"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@page import="com.eazydeals.dao.CartDao"%>
+<%@page import="com.phong.dao.CartDao"%>
 <%@page errorPage="error_exception.jsp"%>
 <%
 User activeUser = (User) session.getAttribute("activeUser");

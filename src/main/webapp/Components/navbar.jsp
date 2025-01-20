@@ -1,11 +1,11 @@
-<%@page import="com.eazydeals.entities.Admin"%>
-<%@page import="com.eazydeals.entities.Cart"%>
-<%@page import="com.eazydeals.dao.CartDao"%>
-<%@page import="com.eazydeals.entities.User"%>
+<%@page import="com.phong.entities.Admin"%>
+<%@page import="com.phong.entities.Cart"%>
+<%@page import="com.phong.dao.CartDao"%>
+<%@page import="com.phong.entities.User"%>
 <%@page import="java.util.List"%>
-<%@page import="com.eazydeals.entities.Category"%>
-<%@page import="com.eazydeals.helper.ConnectionProvider"%>
-<%@page import="com.eazydeals.dao.CategoryDao"%>
+<%@page import="com.phong.entities.Category"%>
+<%@page import="com.phong.helper.ConnectionProvider"%>
+<%@page import="com.phong.dao.CategoryDao"%>
 <%
 User user = (User) session.getAttribute("activeUser");
 Admin admin = (Admin) session.getAttribute("activeAdmin");
@@ -40,7 +40,7 @@ List<Category> categoryList = catDao.getAllCategories();
 	%>
 	<div class="container">
 		<a class="navbar-brand" href="admin.jsp"><i
-			class="fa-sharp fa-solid fa-house" style="color: #ffffff;"></i>&ensp;EazyDeals</a>
+			class="fa-sharp fa-solid fa-house" style="color: #ffffff;"></i>&ensp;Phong</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
 			data-bs-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -75,7 +75,7 @@ List<Category> categoryList = catDao.getAllCategories();
 	<!-- for all -->
 	<div class="container">
 		<a class="navbar-brand" href="index.jsp"><i
-			class="fa-sharp fa-solid fa-house" style="color: #ffffff;"></i>&ensp;EazyDeals</a>
+			class="fa-sharp fa-solid fa-house" style="color: #ffffff;"></i>&ensp;Phong</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
 			data-bs-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false"

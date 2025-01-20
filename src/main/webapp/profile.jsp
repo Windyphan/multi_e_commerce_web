@@ -1,5 +1,5 @@
-<%@page import="com.eazydeals.entities.Message"%>
-<%@page import="com.eazydeals.entities.User"%>
+<%@page import="com.phong.entities.Message"%>
+<%@page import="com.phong.entities.User"%>
 <%@page errorPage="error_exception.jsp"%>
 <%
 User activeUser = (User) session.getAttribute("activeUser");
