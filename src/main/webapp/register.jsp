@@ -71,55 +71,131 @@ label {
 										placeholder="City/District/Town" required>
 								</div>
 								<div class="col-md-6 mt-2">
-									<label class="form-label">Pincode</label> <input
+									<label class="form-label">Postcode</label> <input
 										class="form-control" type="number" name="pincode"
-										placeholder="Pincode" maxlength="6" required>
+										placeholder="Postcode" maxlength="6" required>
 								</div>  
 							</div>
 							<div class="row">
 								<div class="col-md-6 mt-2">
-									<label class="form-label">State</label> <select name="state"
-										class="form-select">
-										<option selected>--Select State--</option>
-										<option value="Andaman &amp; Nicobar Islands">Andaman
-											&amp; Nicobar Islands</option>
-										<option value="Andhra Pradesh">Andhra Pradesh</option>
-										<option value="Arunachal Pradesh">Arunachal Pradesh</option>
-										<option value="Assam">Assam</option>
-										<option value="Bihar">Bihar</option>
-										<option value="Chandigarh">Chandigarh</option>
-										<option value="Chhattisgarh">Chhattisgarh</option>
-										<option value="Dadra &amp; Nagar Haveli &amp; Daman &amp; Diu">Dadra
-											&amp; Nagar Haveli &amp; Daman &amp; Diu</option>
-										<option value="Delhi">Delhi</option>
-										<option value="Goa">Goa</option>
-										<option value="Gujarat">Gujarat</option>
-										<option value="Haryana">Haryana</option>
-										<option value="Himachal Pradesh">Himachal Pradesh</option>
-										<option value="Jammu &amp; Kashmir">Jammu &amp;
-											Kashmir</option> 
-										<option value="Jharkhand">Jharkhand</option>
-										<option value="Karnataka">Karnataka</option>
-										<option value="Kerala">Kerala</option>
-										<option value="Ladakh">Ladakh</option>
-										<option value="Lakshadweep">Lakshadweep</option>
-										<option value="Madhya Pradesh">Madhya Pradesh</option>
-										<option value="Maharashtra">Maharashtra</option>
-										<option value="Manipur">Manipur</option>
-										<option value="Meghalaya">Meghalaya</option>
-										<option value="Mizoram">Mizoram</option>
-										<option value="Nagaland">Nagaland</option>
-										<option value="Odisha">Odisha</option>
-										<option value="Puducherry">Puducherry</option>
-										<option value="Punjab">Punjab</option>
-										<option value="Rajasthan">Rajasthan</option>
-										<option value="Sikkim">Sikkim</option>
-										<option value="Tamil Nadu">Tamil Nadu</option>
-										<option value="Telangana">Telangana</option>
-										<option value="Tripura">Tripura</option>
-										<option value="Uttarakhand">Uttarakhand</option>
-										<option value="Uttar Pradesh">Uttar Pradesh</option>
-										<option value="West Bengal">West Bengal</option>
+									<label class="form-label">County</label>
+									<select name="county" class="form-select">
+										<option selected>--Select County--</option>
+										<optgroup label="England">
+											<option value="Bedfordshire">Bedfordshire</option>
+											<option value="Berkshire">Berkshire</option>
+											<option value="Bristol">Bristol</option>
+											<option value="Buckinghamshire">Buckinghamshire</option>
+											<option value="Cambridgeshire">Cambridgeshire</option>
+											<option value="Cheshire">Cheshire</option>
+											<option value="Cornwall">Cornwall</option>
+											<option value="Cumbria">Cumbria</option>
+											<option value="Derbyshire">Derbyshire</option>
+											<option value="Devon">Devon</option>
+											<option value="Dorset">Dorset</option>
+											<option value="Durham">Durham</option>
+											<option value="East Riding of Yorkshire">East Riding of Yorkshire</option>
+											<option value="East Sussex">East Sussex</option>
+											<option value="Essex">Essex</option>
+											<option value="Gloucestershire">Gloucestershire</option>
+											<option value="Greater London">Greater London</option>
+											<option value="Greater Manchester">Greater Manchester</option>
+											<option value="Hampshire">Hampshire</option>
+											<option value="Herefordshire">Herefordshire</option>
+											<option value="Hertfordshire">Hertfordshire</option>
+											<option value="Isle of Wight">Isle of Wight</option>
+											<option value="Kent">Kent</option>
+											<option value="Lancashire">Lancashire</option>
+											<option value="Leicestershire">Leicestershire</option>
+											<option value="Lincolnshire">Lincolnshire</option>
+											<option value="Merseyside">Merseyside</option>
+											<option value="Norfolk">Norfolk</option>
+											<option value="North Yorkshire">North Yorkshire</option>
+											<option value="Northamptonshire">Northamptonshire</option>
+											<option value="Northumberland">Northumberland</option>
+											<option value="Nottinghamshire">Nottinghamshire</option>
+											<option value="Oxfordshire">Oxfordshire</option>
+											<option value="Rutland">Rutland</option>
+											<option value="Shropshire">Shropshire</option>
+											<option value="Somerset">Somerset</option>
+											<option value="South Yorkshire">South Yorkshire</option>
+											<option value="Staffordshire">Staffordshire</option>
+											<option value="Suffolk">Suffolk</option>
+											<option value="Surrey">Surrey</option>
+											<option value="Tyne and Wear">Tyne and Wear</option>
+											<option value="Warwickshire">Warwickshire</option>
+											<option value="West Midlands">West Midlands</option>
+											<option value="West Sussex">West Sussex</option>
+											<option value="West Yorkshire">West Yorkshire</option>
+											<option value="Wiltshire">Wiltshire</option>
+											<option value="Worcestershire">Worcestershire</option>
+
+
+										</optgroup>
+										<optgroup label="Scotland">
+											<option value="Aberdeenshire">Aberdeenshire</option>
+											<option value="Angus">Angus</option>
+											<option value="Argyll and Bute">Argyll and Bute</option>
+											<option value="Clackmannanshire">Clackmannanshire</option>
+											<option value="Dumfries and Galloway">Dumfries and Galloway</option>
+											<option value="Dundee">Dundee</option>
+											<option value="East Ayrshire">East Ayrshire</option>
+											<option value="East Dunbartonshire">East Dunbartonshire</option>
+											<option value="East Lothian">East Lothian</option>
+											<option value="Edinburgh">Edinburgh</option>
+											<option value="Falkirk">Falkirk</option>
+											<option value="Fife">Fife</option>
+											<option value="Glasgow">Glasgow</option>
+											<option value="Highland">Highland</option>
+											<option value="Inverclyde">Inverclyde</option>
+											<option value="Midlothian">Midlothian</option>
+											<option value="Moray">Moray</option>
+											<option value="North Ayrshire">North Ayrshire</option>
+											<option value="North Lanarkshire">North Lanarkshire</option>
+											<option value="Orkney">Orkney</option>
+											<option value="Perth and Kinross">Perth and Kinross</option>
+											<option value="Renfrewshire">Renfrewshire</option>
+											<option value="Scottish Borders">Scottish Borders</option>
+											<option value="Shetland">Shetland</option>
+											<option value="South Ayrshire">South Ayrshire</option>
+											<option value="South Lanarkshire">South Lanarkshire</option>
+											<option value="Stirling">Stirling</option>
+											<option value="West Dunbartonshire">West Dunbartonshire</option>
+											<option value="West Lothian">West Lothian</option>
+
+										</optgroup>
+										<optgroup label="Wales">
+											<option value="Anglesey">Anglesey</option>
+											<option value="Blaenau Gwent">Blaenau Gwent</option>
+											<option value="Bridgend">Bridgend</option>
+											<option value="Caerphilly">Caerphilly</option>
+											<option value="Cardiff">Cardiff</option>
+											<option value="Carmarthenshire">Carmarthenshire</option>
+											<option value="Ceredigion">Ceredigion</option>
+											<option value="Conwy">Conwy</option>
+											<option value="Denbighshire">Denbighshire</option>
+											<option value="Flintshire">Flintshire</option>
+											<option value="Gwynedd">Gwynedd</option>
+											<option value="Merthyr Tydfil">Merthyr Tydfil</option>
+											<option value="Monmouthshire">Monmouthshire</option>
+											<option value="Neath Port Talbot">Neath Port Talbot</option>
+											<option value="Newport">Newport</option>
+											<option value="Pembrokeshire">Pembrokeshire</option>
+											<option value="Powys">Powys</option>
+											<option value="Rhondda Cynon Taf">Rhondda Cynon Taf</option>
+											<option value="Swansea">Swansea</option>
+											<option value="Torfaen">Torfaen</option>
+											<option value="Vale of Glamorgan">Vale of Glamorgan</option>
+											<option value="Wrexham">Wrexham</option>
+										</optgroup>
+										<optgroup label="Northern Ireland">
+											<option value="Antrim">Antrim</option>
+											<option value="Armagh">Armagh</option>
+											<option value="Down">Down</option>
+											<option value="Fermanagh">Fermanagh</option>
+											<option value="Londonderry">Londonderry</option>
+											<option value="Tyrone">Tyrone</option>
+										</optgroup>
 									</select>
 								</div>
 								<div class="col-md-6 mt-2">

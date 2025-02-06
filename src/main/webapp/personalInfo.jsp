@@ -88,7 +88,7 @@ label {
 					value="<%=user1.getUserState()%>">
 					 <select name="state"
 					id="state-list" class="form-select">
-					<option selected>--Select State--</option>
+					<option selected>--Select County--</option>
 					<option value="Andaman &amp; Nicobar Islands">Andaman
 						&amp; Nicobar Islands</option>
 					<option value="Andhra Pradesh">Andhra Pradesh</option>
