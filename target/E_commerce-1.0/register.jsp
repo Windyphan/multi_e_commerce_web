@@ -50,12 +50,13 @@ label {
 										placeholder="Mobile number" class="form-control">
 								</div>
 								<div class="col-md-6 mt-5">
-									<label class="form-label pe-3">Gender</label> <input
-										class="form-check-input" type="radio" name="gender"
-										value="Male"> <span class="form-check-label pe-3 ps-1">
-										Male </span> <input class="form-check-input" type="radio"
-										name="gender" value="Female"> <span
-										class="form-check-label ps-1"> Female </span>
+									<label class="form-label pe-3">Gender</label>
+									<input class="form-check-input" type="radio" name="gender" value="Male">
+									<span class="form-check-label pe-3 ps-1">Male</span>
+									<input class="form-check-input" type="radio" name="gender" value="Female">
+									<span class="form-check-label ps-1">Female</span>
+									<input class="form-check-input" type="radio" name="gender" value="Other">
+									<span class="form-check-label ps-1">Other</span>
 								</div>
 							</div>
 							<div class="mt-2">
