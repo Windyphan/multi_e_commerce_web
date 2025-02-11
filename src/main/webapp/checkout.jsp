@@ -195,7 +195,7 @@ String from = (String)session.getAttribute("from");
 						<div class="mt-2">
 							<label class="form-label fw-bold">Address</label>
 							<textarea name="user_address" rows="3"
-								placeholder="Enter Address(Area and Street))"
+								placeholder="Enter Address"
 								class="form-control" required></textarea>
 						</div>
 						<div class="mt-2">
