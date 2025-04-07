@@ -7,7 +7,7 @@ public class Product {
     private String productDescription;
     private float productPrice;
     private int productDiscount;
-    private int productQunatity;
+    private int productQuantity;
     private String productImages;
     private int categoryId;
     
@@ -16,48 +16,48 @@ public class Product {
 	}
 	
 	public Product(int productId, String productName, String productDescription, float productPrice,
-			int productDiscount, int productQunatity, String productImages, int categoryId) {
+			int productDiscount, int productQuantity, String productImages, int categoryId) {
 		super();
 		this.productId = productId;
 		this.productName = productName;
 		this.productDescription = productDescription;
 		this.productPrice = productPrice;
 		this.productDiscount = productDiscount;
-		this.productQunatity = productQunatity;
+		this.productQuantity = productQuantity;
 		this.productImages = productImages;
 		this.categoryId = categoryId;
 	}
 
 	public Product(String productName, String productDescription, float productPrice, int productDiscount,
-			int productQunatity, String productImages) {
+			int productQuantity, String productImages) {
 		super();
 		this.productName = productName;
 		this.productDescription = productDescription;
 		this.productPrice = productPrice;
 		this.productDiscount = productDiscount;
-		this.productQunatity = productQunatity;
+		this.productQuantity = productQuantity;
 		this.productImages = productImages;
 	}
 
 	public Product(String productName, String productDescription, float productPrice, int productDiscount,
-			int productQunatity, String productImages, int categoryId) {
+			int productQuantity, String productImages, int categoryId) {
 		super();
 		this.productName = productName;
 		this.productDescription = productDescription;
 		this.productPrice = productPrice;
 		this.productDiscount = productDiscount;
-		this.productQunatity = productQunatity;
+		this.productQuantity = productQuantity;
 		this.productImages = productImages;
 		this.categoryId = categoryId;
 	}
 	
-	public Product(int productId, String productName, float productPrice, int productDiscount, int productQunatity) {
+	public Product(int productId, String productName, float productPrice, int productDiscount, int productQuantity) {
 		super();
 		this.productId = productId;
 		this.productName = productName;
 		this.productPrice = productPrice;
 		this.productDiscount = productDiscount;
-		this.productQunatity = productQunatity;
+		this.productQuantity = productQuantity;
 	}
 
 	public int getProductId() {
@@ -100,12 +100,12 @@ public class Product {
 		this.productDiscount = productDiscount;
 	}
 
-	public int getProductQunatity() {
-		return productQunatity;
+	public int getProductQuantity() {
+		return productQuantity;
 	}
 
-	public void setProductQunatity(int productQunatity) {
-		this.productQunatity = productQunatity;
+	public void setProductQuantity(int productQuantity) {
+		this.productQuantity = productQuantity;
 	}
 
 	public String getProductImages() {
@@ -134,7 +134,7 @@ public class Product {
 	public String toString() {
 		return "Product [productId=" + productId + ", productName=" + productName + ", productDescription="
 				+ productDescription + ", productPrice=" + productPrice + ", productDiscount=" + productDiscount
-				+ ", productQunatity=" + productQunatity + ", productImages=" + productImages + ", categoryId="
+				+ ", productQuantity=" + productQuantity + ", productImages=" + productImages + ", categoryId="
 				+ categoryId + "]";
 	}
     
