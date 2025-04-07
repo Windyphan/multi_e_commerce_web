@@ -4,13 +4,12 @@
 <%@page import="com.phong.entities.User"%>
 <%@page import="java.util.List"%>
 <%@page import="com.phong.entities.Category"%>
-<%@page import="com.phong.helper.ConnectionProvider"%>
 <%@page import="com.phong.dao.CategoryDao"%>
 <%
 User user = (User) session.getAttribute("activeUser");
 Admin admin = (Admin) session.getAttribute("activeAdmin");
 
-CategoryDao catDao = new CategoryDao(ConnectionProvider.getConnection());
+CategoryDao catDao = new CategoryDao();
 List<Category> categoryList = catDao.getAllCategories();
 %>
 <style>
@@ -113,7 +112,7 @@ List<Category> categoryList = catDao.getAllCategories();
 			<!-- when user is logged in -->
 			<%
 			if (user != null) {
-				CartDao cartDao = new CartDao(ConnectionProvider.getConnection());
+				CartDao cartDao = new CartDao();
 				int cartCount = cartDao.getCartCountByUserId(user.getUserId());
 			%>
 			<ul class="navbar-nav ml-auto">

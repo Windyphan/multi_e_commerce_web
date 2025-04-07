@@ -7,7 +7,7 @@
 	
 <%
 int productId = Integer.parseInt(request.getParameter("pid"));
-ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
+ProductDao productDao = new ProductDao();
 Product product = (Product) productDao.getProductsByProductId(productId);
 %>
 <!DOCTYPE html>
@@ -57,7 +57,7 @@ Product product = (Product) productDao.getProductsByProductId(productId);
 					<span class="product-discount"><%=product.getProductDiscount()%>&#37;off</span><br>
 					<span class="fs-5"><b>Status : </b></span> <span id="availability">
 						<%
-						if (product.getProductQunatity() > 0) {
+						if (product.getProductQuantity() > 0) {
 							out.println("Available");
 						} else {
 							out.println("Currently Out of stock");

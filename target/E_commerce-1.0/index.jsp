@@ -1,11 +1,10 @@
 <%@page import="com.phong.dao.ProductDao"%>
 <%@page import="com.phong.entities.Product"%>
-<%@page import="com.phong.helper.ConnectionProvider"%>
 <%@page errorPage="error_exception.jsp"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%
-ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
+ProductDao productDao = new ProductDao();
 List<Product> productList = productDao.getAllLatestProducts();
 List<Product> topDeals = productDao.getDiscountedProducts();
 %>

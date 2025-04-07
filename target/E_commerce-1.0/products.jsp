@@ -3,18 +3,17 @@
 <%@page import="com.phong.dao.CategoryDao"%>
 <%@page import="com.phong.entities.Product"%>
 <%@page import="java.util.List"%>
-<%@page import="com.phong.helper.ConnectionProvider"%>
 <%@page import="com.phong.dao.ProductDao"%>
 <%
 User u = (User) session.getAttribute("activeUser");
-WishlistDao wishlistDao = new WishlistDao(ConnectionProvider.getConnection());
+WishlistDao wishlistDao = new WishlistDao();
 
 String searchKey = request.getParameter("search");
 String catId = request.getParameter("category");
-CategoryDao categoryDao = new CategoryDao(ConnectionProvider.getConnection());
+CategoryDao categoryDao = new CategoryDao();
 String message = "";
 
-ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
+ProductDao productDao = new ProductDao();
 List<Product> prodList = null;
 if (searchKey != null) {
 	if (!searchKey.isEmpty()) {

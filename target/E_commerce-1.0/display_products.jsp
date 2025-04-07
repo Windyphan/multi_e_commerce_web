@@ -13,8 +13,8 @@ if (activeAdmin == null) {
 	response.sendRedirect("adminlogin.jsp");
 	return;
 }
-UserDao userDao = new UserDao(ConnectionProvider.getConnection());
-ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
+UserDao userDao = new UserDao();
+ProductDao productDao = new ProductDao();
 %>
 <!DOCTYPE html>
 <html>
@@ -51,7 +51,7 @@ ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
 				<td class="text-start"><%=prod.getProductName()%></td>
 				<td><%=category%></td>
 				<td>&#8377;<%=prod.getProductPriceAfterDiscount()%></td>
-				<td><%=prod.getProductQunatity()%></td>
+				<td><%=prod.getProductQuantity()%></td>
 				<td><%=prod.getProductDiscount()%>%</td>
 				<td><a href="update_product.jsp?pid=<%=prod.getProductId()%>" role="button" class="btn btn-secondary">Update</a>&emsp;<a
 					href="AddOperationServlet?pid=<%=prod.getProductId()%>&operation=deleteProduct"

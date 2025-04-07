@@ -35,7 +35,7 @@ if (activeAdmin == null) {
 				<th>Action</th>
 			</tr>
 			<%
-			UserDao userDao = new UserDao(ConnectionProvider.getConnection());
+			UserDao userDao = new UserDao();
 			List<User> userList = userDao.getAllUser();
 			for (User u : userList) {
 			%>

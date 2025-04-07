@@ -41,7 +41,7 @@ if (activeUser == null) {
 
 	<%
 	float totalPrice = 0;
-	CartDao cartDao = new CartDao(ConnectionProvider.getConnection());
+	CartDao cartDao = new CartDao();
 	List<Cart> listOfCart = cartDao.getCartListByUserId(user.getUserId());
 	if (listOfCart == null || listOfCart.size() == 0) {
 	%>
@@ -73,7 +73,7 @@ if (activeUser == null) {
 				</thead>
 				<tbody>
 					<%
-					ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
+					ProductDao productDao = new ProductDao();
 					for (Cart c : listOfCart) {
 						Product prod = productDao.getProductsByProductId(c.getProductId());						
 					%>

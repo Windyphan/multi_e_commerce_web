@@ -8,7 +8,6 @@
 <%@page import="java.util.List"%>
 <%@page import="com.phong.dao.OrderedProductDao"%>
 <%@page import="com.phong.dao.OrderDao"%>
-<%@page import="com.phong.helper.ConnectionProvider"%>
 
 <%
 Admin activeAdmin = (Admin) session.getAttribute("activeAdmin");
@@ -18,10 +17,10 @@ if (activeAdmin == null) {
 	response.sendRedirect("adminlogin.jsp");
 	return;
 }
-OrderDao orderDao = new OrderDao(ConnectionProvider.getConnection());
-OrderedProductDao ordProdDao = new OrderedProductDao(ConnectionProvider.getConnection());
+OrderDao orderDao = new OrderDao();
+OrderedProductDao ordProdDao = new OrderedProductDao();
 List<Order> orderList = orderDao.getAllOrder();
-UserDao userDao = new UserDao(ConnectionProvider.getConnection());
+UserDao userDao = new UserDao();
 %>
 <!DOCTYPE html>
 <html>

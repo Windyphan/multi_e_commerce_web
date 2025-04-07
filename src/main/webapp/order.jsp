@@ -16,8 +16,8 @@ if (u2 == null) {
 	response.sendRedirect("login.jsp");
 	return;  
 }
-OrderDao orderDao = new OrderDao(ConnectionProvider.getConnection());
-OrderedProductDao ordProdDao = new OrderedProductDao(ConnectionProvider.getConnection());
+OrderDao orderDao = new OrderDao();
+OrderedProductDao ordProdDao = new OrderedProductDao();
 
 List<Order> orderList = orderDao.getAllOrderByUserId(u2.getUserId());
 %>

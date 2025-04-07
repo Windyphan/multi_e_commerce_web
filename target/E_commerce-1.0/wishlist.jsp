@@ -16,9 +16,9 @@ if (u1 == null) {
 	response.sendRedirect("login.jsp");
 	return;  
 }
-WishlistDao wishListDao = new WishlistDao(ConnectionProvider.getConnection());
+WishlistDao wishListDao = new WishlistDao();
 List<Wishlist> wlist = wishListDao.getListByUserId(u1.getUserId());
-ProductDao pDao = new ProductDao(ConnectionProvider.getConnection());
+ProductDao pDao = new ProductDao();
 %>
 <div class="container px-3 py-3">
 	<%

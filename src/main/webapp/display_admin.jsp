@@ -10,7 +10,7 @@ if (activeAdmin == null) {
 	response.sendRedirect("adminlogin.jsp");
 	return;
 }
-AdminDao adminDao = new AdminDao(ConnectionProvider.getConnection());
+AdminDao adminDao = new AdminDao();
 List<Admin> adminList = adminDao.getAllAdmin();
 %>
 <!DOCTYPE html>

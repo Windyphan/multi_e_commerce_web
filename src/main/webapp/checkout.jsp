@@ -109,7 +109,7 @@ String from = (String)session.getAttribute("from");
 						<hr>
 						<%
 						if (from.trim().equals("cart")) {
-							CartDao cartDao = new CartDao(ConnectionProvider.getConnection());
+							CartDao cartDao = new CartDao();
 							int totalProduct = cartDao.getCartCountByUserId(user.getUserId());
 							float totalPrice = (float) session.getAttribute("totalPrice");
 						%>
@@ -139,7 +139,7 @@ String from = (String)session.getAttribute("from");
 						</table>
 						<%
 						} else {
-							ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
+							ProductDao productDao = new ProductDao();
 							int pid = (int) session.getAttribute("pid");
 							float price = productDao.getProductPriceById(pid);
 						%>

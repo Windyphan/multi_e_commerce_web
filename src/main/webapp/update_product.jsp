@@ -27,7 +27,7 @@ if (activeAdmin == null) {
 	<!-- update product -->
 	<%
 	int pid = Integer.parseInt(request.getParameter("pid"));
-	ProductDao productDao = new ProductDao(ConnectionProvider.getConnection());
+	ProductDao productDao = new ProductDao();
 	Product product = productDao.getProductsByProductId(pid);
 	%>
 	<div class="container mt-3">
@@ -61,7 +61,7 @@ if (activeAdmin == null) {
 								<div class="col-md-6 mb-2">
 									<label class="form-label"><b>Product Quantity</b></label> <input
 										type="number" name="quantity"
-										value="<%=product.getProductQunatity()%>" class="form-control">
+										value="<%=product.getProductQuantity()%>" class="form-control">
 								</div>
 								<div class="col-md-6 mb-2">
 									<label class="form-label"><b>Discount Percentage</b></label> <input
