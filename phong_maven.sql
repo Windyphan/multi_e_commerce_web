@@ -16,8 +16,8 @@ CREATE TABLE admin (
 
 -- Insert data into 'admin'
 INSERT INTO admin (name, email, password, phone) VALUES
-                                                     ('Phong Phan', 'test@gmail.com', 'abc123', '7755632012'),
-                                                     ('Phong Phan', 'test34@gmail.com', 'abc', '8565452152');
+                                                     ('Phong Phan', 'test@gmail.com', 'abc123', '01614960123'),
+                                                     ('Phong Phan', 'test34@gmail.com', 'abc', '01614960123');
 
 -- Create the 'user' table
 CREATE TABLE "user" (  -- Enclose "user" in quotes as it's a reserved word.  Much better to rename the table.
@@ -30,14 +30,14 @@ CREATE TABLE "user" (  -- Enclose "user" in quotes as it's a reserved word.  Muc
                         registerdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         address VARCHAR(250),
                         city VARCHAR(100),
-                        pincode VARCHAR(10),
-                        state VARCHAR(100)
+                        postcode VARCHAR(10),
+                        county VARCHAR(100)
 );
 
 -- Insert data into 'user'
-INSERT INTO "user" (name, email, password, phone, gender, address, city, pincode, state) VALUES
-                                                                                             ('Minh Phan', 'test786@gmail.com', 'abc123', '7546254260', 'Male', 'KN nagar', 'Patna', '401980', 'Bihar'),
-                                                                                             ('Phong', 'amt677@gmail.com', 'abc', '8563201201', 'Male', 'AJ', 'Banglore', '865012', 'Karnataka');
+INSERT INTO "user" (name, email, password, phone, gender, address, city, postcode, county) VALUES
+                                                                                               ('Alice Smith', 'alice.s@example.com', 'hashed_user_pw1', '07700900123', 'Female', '10 Church Lane', 'Manchester', 'M1 1AA', 'Greater Manchester'),
+                                                                                               ('Bob Jones', 'b.jones@example.co.uk', 'hashed_user_pw2', '02079460987', 'Male', 'Flat 5, The Old Mill', 'Bristol', 'BS1 5TT', 'Bristol');
 
 -- Create the 'category' table
 CREATE TABLE category (
@@ -72,14 +72,14 @@ CREATE TABLE product (
 
 -- Insert data into 'product'
 INSERT INTO product (name, description, price, quantity, discount, image, cid) VALUES
-                                                                                   ('SAMSUNG Galaxy F14 5G', 'The Samsung Galaxy F14...', '18490.0', 9, 24, 'phone1.jpeg', 1),
-                                                                                   ('LG 242 L Frost Free...', 'You can enjoy chilled drinks...', '37099.0', 50, 29, 'fridge1.jpeg', 2),
-                                                                                   ('OnePlus Y1S Pro...', 'Enjoy rich, clear...', '49999.0', 1, 18, 'tv1.jpeg', 2),
-                                                                                   ('Samsung Galaxy S23 5G', 'Brand Samsung...', '79999.0', 10, 17, 'Samsung_Galaxy.jpg', 1),
-                                                                                   ('ASUS TUF Gaming A15', '15.6 inch Full HD...', '71990.0', 11, 20, 'asus_tuf.jpeg', 3),
-                                                                                   ('Men Printed Casual Jacket', 'Color Black...', '1999.0', 1, 57, 'men_jacket.jpeg', 6),
-                                                                                   ('boAt Airdopes 161...', 'The Airdopes 161 TWS...', '2400.0', 27, 42, 'boat-airdopes.jpeg', 7),
-                                                                                   ('KURLON Natural...', 'Brand KURLON...', '8000.0', 11, 16, 'mattress.jpeg', 4);
+                                                                                   ('SAMSUNG Galaxy F14 5G', 'The Samsung Galaxy F14...', '184.99', 9, 24, 'phone1.jpeg', 1),
+                                                                                   ('LG 242 L Frost Free...', 'You can enjoy chilled drinks...', '370.99', 50, 29, 'fridge1.jpeg', 2),
+                                                                                   ('OnePlus Y1S Pro...', 'Enjoy rich, clear...', '499.99', 1, 18, 'tv1.jpeg', 2),
+                                                                                   ('Samsung Galaxy S23 5G', 'Brand Samsung...', '799.99', 10, 17, 'Samsung_Galaxy.jpg', 1),
+                                                                                   ('ASUS TUF Gaming A15', '15.6 inch Full HD...', '719.90', 11, 20, 'asus_tuf.jpeg', 3),
+                                                                                   ('Men Printed Casual Jacket', 'Color Black...', '19.99', 1, 57, 'men_jacket.jpeg', 6),
+                                                                                   ('boAt Airdopes 161...', 'The Airdopes 161 TWS...', '24.00', 27, 42, 'boat-airdopes.jpeg', 7),
+                                                                                   ('KURLON Natural...', 'Brand KURLON...', '80.00', 11, 16, 'mattress.jpeg', 4);
 
 -- Create the 'cart' table
 CREATE TABLE cart (
