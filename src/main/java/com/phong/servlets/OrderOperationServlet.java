@@ -49,7 +49,7 @@ public class OrderOperationServlet extends HttpServlet {
 
 		// --- Get required parameters and session attributes ---
 		String from = (String) session.getAttribute(FROM_SESSION_ATTR);
-		String paymentType = request.getParameter("payementMode"); // Correct spelling? paymentMode?
+		String paymentType = request.getParameter("paymentMode"); // Correct spelling? paymentMode?
 		User user = (User) session.getAttribute(ACTIVE_USER_SESSION_ATTR);
 
 		// --- Validation ---
