@@ -1,111 +1,356 @@
-<%@page import="com.phong.dao.WishlistDao"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <%@page import="com.phong.dao.ProductDao"%>
+<%@page import="com.phong.dao.CategoryDao"%>
+<%@page import="com.phong.dao.WishlistDao"%> <%-- If showing wishlist status --%>
 <%@page import="com.phong.entities.Product"%>
+<%@page import="com.phong.entities.Category"%>
+<%@page import="com.phong.entities.User"%>
+<%@page import="com.phong.entities.Message"%> <%-- If setting messages --%>
+<%@page import="java.util.Set"%>
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.stream.Collectors"%>
+
 <%@page errorPage="error_exception.jsp"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-	
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%-- Data Fetching and Validation --%>
 <%
-int productId = Integer.parseInt(request.getParameter("pid"));
-ProductDao productDao = new ProductDao();
-Product product = (Product) productDao.getProductsByProductId(productId);
-%>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>View Product</title>
-<%@include file="Components/common_css_js.jsp"%>
-<style type="text/css">
-.real-price {
-	font-size: 26px !important;
-	font-weight: 600;
-}
+	// Get active user (if any)
+	User currentUserForViewProducts = (User) session.getAttribute("activeUser");
 
-.product-price {
-	font-size: 18px !important;
-	text-decoration: line-through;
-}
+	// Get Product ID from request and validate
+	Product product = null;
+	int productId = 0;
+	String pidParam = request.getParameter("pid");
+	String errorMessage = null;
+	String categoryName = "N/A"; // Default category name
 
-.product-discount {
-	font-size: 16px !important;
-	color: #027a3e;
-}
-</style>
-</head>
-<body>
-
-	<!--navbar -->
-	<%@include file="Components/navbar.jsp"%>
-
-	<div class="container mt-5">
-			<%@include file="Components/alert_message.jsp"%>
-		<div class="row border border-3">
-			<div class="col-md-6">
-				<div class="container-fluid text-end my-3">
-					<img src="Product_imgs\<%=product.getProductImages()%>"
-						class="card-img-top"
-						style="max-width: 100%; max-height: 500px; width: auto;">
-				</div>
-			</div>
-			<div class="col-md-6">
-				<div class="container-fluid my-5">
-					<h4><%=product.getProductName()%></h4>
-					<span class="fs-5"><b>Description</b></span><br> <span><%=product.getProductDescription()%></span><br>
-					<span class="real-price">&#8377;<%=product.getProductPriceAfterDiscount()%></span>&ensp;
-					<span class="product-price">&#8377;<%=product.getProductPrice()%></span>&ensp;
-					<span class="product-discount"><%=product.getProductDiscount()%>&#37;off</span><br>
-					<span class="fs-5"><b>Status : </b></span> <span id="availability">
-						<%
-						if (product.getProductQuantity() > 0) {
-							out.println("Available");
-						} else {
-							out.println("Currently Out of stock");
-						}
-						%>
-					</span><br> <span class="fs-5"><b>Category : </b></span> <span><%=catDao.getCategoryName(product.getCategoryId())%></span>
-					<form method="post">
-						<div class="container-fluid text-center mt-3">
-							<%
-							if (user == null) {
-							%>
-							<button type="button" onclick="window.open('login.jsp', '_self')"
-								class="btn btn-primary text-white btn-lg">Add to Cart</button>
-							&emsp;
-							<button type="button" onclick="window.open('login.jsp', '_self')"
-								class="btn btn-info text-white btn-lg">Buy Now</button>
-							<%
-							} else {
-							%>
-							<button type="submit"
-								formaction="./AddToCartServlet?uid=<%=user.getUserId()%>&pid=<%=product.getProductId()%>"
-								class="btn btn-primary text-white btn-lg">Add to Cart</button>
-							&emsp; <a
-								href="checkout.jsp" id="buy-btn"
-								class="btn btn-info text-white btn-lg" role="button"
-								aria-disabled="true">Buy Now</a> 
-							<%
-							}
-							%>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script>
-		$(document).ready(function() {
-			if ($('#availability').text().trim() == "Currently Out of stock") {
-				$('#availability').css('color', 'red');
-				$('.btn').addClass('disabled');
+	if (pidParam != null && !pidParam.trim().isEmpty()) {
+		try {
+			productId = Integer.parseInt(pidParam.trim());
+			if (productId > 0) {
+				ProductDao productDao = new ProductDao();
+				product = productDao.getProductsByProductId(productId);
+				if (product == null) {
+					errorMessage = "Product not found.";
+				} else {
+					// Fetch category name if product found
+					CategoryDao categoryDao = new CategoryDao();
+					categoryName = categoryDao.getCategoryName(product.getCategoryId());
+					if (categoryName == null) categoryName = "Unknown"; // Handle null category name
+				}
+			} else {
+				errorMessage = "Invalid Product ID specified.";
 			}
-			$('#buy-btn').click(function(){
-				<%
-				session.setAttribute("pid", productId);
-				session.setAttribute("from", "buy");
-				%>	
-				});
-		});
-	</script>
+		} catch (NumberFormatException e) {
+			errorMessage = "Invalid Product ID format.";
+		} catch (Exception e) {
+			System.err.println("Error fetching product details: " + e.getMessage());
+			e.printStackTrace();
+			errorMessage = "Could not load product details.";
+		}
+	} else {
+		errorMessage = "No Product ID specified.";
+	}
+
+	// Fetch user's wishlist efficiently (only if logged in and product found)
+	Set<Integer> userWishlistProductIds = new HashSet<>();
+	if (currentUserForViewProducts != null && product != null) {
+		WishlistDao wishlistDao = new WishlistDao();
+		List<com.phong.entities.Wishlist> userWishlist = wishlistDao.getListByUserId(currentUserForViewProducts.getUserId());
+		if (userWishlist != null) {
+			userWishlistProductIds = userWishlist.stream()
+					.map(com.phong.entities.Wishlist::getProductId)
+					.collect(Collectors.toSet());
+		} else {
+			System.err.println("Warning: Could not retrieve wishlist for user " + currentUserForViewProducts.getUserId());
+		}
+	}
+
+	// Set attributes for EL access
+	request.setAttribute("product", product);
+	request.setAttribute("categoryName", categoryName);
+	request.setAttribute("userWishlistPids", userWishlistProductIds);
+
+	// Redirect if product not found or ID invalid
+	if (errorMessage != null) {
+		pageContext.setAttribute("errorMessage", errorMessage, PageContext.SESSION_SCOPE);
+		pageContext.setAttribute("errorType", "error", PageContext.SESSION_SCOPE);
+		pageContext.setAttribute("errorClass", "alert-danger", PageContext.SESSION_SCOPE);
+		response.sendRedirect("products.jsp"); // Go back to product list
+		return;
+	}
+
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<%-- Set title dynamically --%>
+	<title><c:out value="${product.productName}"/> - Phong Shop</title>
+	<%@include file="Components/common_css_js.jsp"%>
+	<style>
+		body {
+			background-color: #f8f9fa;
+		}
+		.product-view-container {
+			background-color: #fff;
+			padding: 2rem;
+			border-radius: 0.5rem;
+			box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+		}
+		.product-image-container {
+			text-align: center; /* Center image within column */
+			position: relative; /* For wishlist icon */
+		}
+		.product-image {
+			max-width: 100%;
+			max-height: 450px; /* Limit image height */
+			object-fit: contain;
+			border: 1px solid #eee;
+			padding: 10px;
+			border-radius: 0.375rem;
+		}
+		.product-details h4 {
+			font-weight: 600;
+			margin-bottom: 1rem;
+			color: #212529;
+		}
+		.product-details .description-title,
+		.product-details .status-title,
+		.product-details .category-title {
+			font-weight: 600;
+			font-size: 1.1rem;
+			color: #495057;
+			margin-top: 1.2rem;
+			margin-bottom: 0.3rem;
+		}
+		.product-details .description-text {
+			line-height: 1.6;
+			color: #343a40;
+		}
+		.price-section {
+			margin-top: 1.5rem;
+			padding-top: 1.5rem;
+			border-top: 1px solid #eee;
+		}
+		.price-section .final-price {
+			font-size: 2rem; /* Larger final price */
+			font-weight: 700;
+			color: #dc3545; /* Red price */
+			margin-right: 0.75rem;
+		}
+		.price-section .original-price {
+			font-size: 1.2rem;
+			text-decoration: line-through;
+			color: #6c757d;
+			margin-right: 0.75rem;
+		}
+		.price-section .discount-percent {
+			font-size: 1.1rem;
+			color: #198754; /* Green discount */
+			font-weight: 600;
+		}
+		.status-text {
+			font-weight: 500;
+			font-size: 1.1rem;
+		}
+		.status-text.available {
+			color: #198754; /* Green */
+		}
+		.status-text.out-of-stock {
+			color: #dc3545; /* Red */
+		}
+		.category-text {
+			color: #0d6efd; /* Blue */
+			font-weight: 500;
+		}
+		.action-buttons {
+			margin-top: 2rem;
+			padding-top: 1.5rem;
+			border-top: 1px solid #eee;
+		}
+		.action-buttons .btn {
+			font-size: 1.1rem;
+			padding: 0.7rem 1.5rem;
+			margin: 0 0.5rem;
+		}
+
+		/* Wishlist Icon */
+		.wishlist-icon-container {
+			position: absolute;
+			top: 15px;
+			right: 15px;
+			z-index: 10;
+		}
+		.wishlist-btn {
+			background-color: rgba(255, 255, 255, 0.8);
+			border: 1px solid #eee;
+			border-radius: 50%;
+			width: 40px; /* Slightly larger */
+			height: 40px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+		}
+		.wishlist-btn i { font-size: 1.2rem; } /* Larger icon */
+		.wishlist-btn .fa-heart.in-wishlist { color: #dc3545; }
+		.wishlist-btn .fa-heart.not-in-wishlist { color: #adb5bd; }
+		.wishlist-btn:hover .fa-heart.not-in-wishlist { color: #6c757d; }
+
+	</style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<%-- Navbar --%>
+<%@include file="Components/navbar.jsp"%>
+
+<%-- Main Content Wrapper --%>
+<main class="container flex-grow-1 my-5"> <%-- Increased margin --%>
+
+	<%-- Display Messages --%>
+	<%@include file="Components/alert_message.jsp"%>
+
+	<%-- Check if product exists (handled by redirect earlier, but good practice) --%>
+	<c:if test="${not empty product}">
+		<div class="product-view-container">
+			<div class="row g-4"> <%-- Add gap between columns --%>
+					<%-- Image Column --%>
+				<div class="col-md-6">
+					<div class="product-image-container">
+							<%-- Wishlist Button --%>
+						<div class="wishlist-icon-container">
+							<c:choose>
+								<c:when test="${empty sessionScope.activeUser}">
+									<a href="login.jsp" class="btn wishlist-btn" title="Login to add to wishlist">
+										<i class="fa-regular fa-heart not-in-wishlist"></i>
+									</a>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isInWishlist" value="${userWishlistPids.contains(product.productId)}"/>
+									<c:choose>
+										<c:when test="${isInWishlist}">
+											<a href="WishlistServlet?pid=${product.productId}&op=remove" class="btn wishlist-btn" title="Remove from Wishlist">
+												<i class="fa-solid fa-heart in-wishlist"></i>
+											</a>
+										</c:when>
+										<c:otherwise>
+											<a href="WishlistServlet?pid=${product.productId}&op=add" class="btn wishlist-btn" title="Add to Wishlist">
+												<i class="fa-regular fa-heart not-in-wishlist"></i>
+											</a>
+										</c:otherwise>
+									</c:choose>
+								</c:otherwise>
+							</c:choose>
+						</div> <%-- End wishlist container --%>
+
+							<%-- Use forward slash --%>
+						<img src="Product_imgs/${product.productImages}" class="product-image" alt="${product.productName}">
+					</div>
+				</div>
+
+					<%-- Details Column --%>
+				<div class="col-md-6 product-details">
+					<h4><c:out value="${product.productName}"/></h4>
+
+						<%-- Price Section --%>
+					<div class="price-section">
+                            <span class="final-price">
+                                <fmt:setLocale value="en_GB"/>
+                                <fmt:formatNumber value="${product.productPriceAfterDiscount}" type="currency" currencySymbol="£"/>
+                            </span>
+						<c:if test="${product.productDiscount > 0}">
+                                <span class="original-price">
+                                    <fmt:formatNumber value="${product.productPrice}" type="currency" currencySymbol="£"/>
+                                </span>
+							<span class="discount-percent">
+                                    (${product.productDiscount}% off)
+                                </span>
+						</c:if>
+					</div>
+
+						<%-- Description --%>
+					<h6 class="description-title">Description</h6>
+					<p class="description-text"><c:out value="${product.productDescription}"/></p>
+
+						<%-- Status --%>
+					<h6 class="status-title">Status</h6>
+					<c:choose>
+						<c:when test="${product.productQuantity > 0}">
+                                 <span class="status-text available">
+                                     <i class="fa-solid fa-check-circle"></i> Available
+                                 </span>
+						</c:when>
+						<c:otherwise>
+                                 <span class="status-text out-of-stock">
+                                     <i class="fa-solid fa-times-circle"></i> Out of stock
+                                 </span>
+						</c:otherwise>
+					</c:choose>
+
+						<%-- Category --%>
+					<h6 class="category-title">Category</h6>
+					<span class="category-text"><c:out value="${categoryName}"/></span>
+
+						<%-- Action Buttons Form --%>
+						<%-- Use forms for actions that change county (Add to Cart) --%>
+					<div class="action-buttons text-center"> <%-- Center buttons --%>
+						<c:choose>
+							<c:when test="${empty sessionScope.activeUser}"> <%-- User Logged Out --%>
+								<button type="button" onclick="window.location.href='login.jsp'" class="btn btn-primary">
+									<i class="fa-solid fa-cart-plus"></i> Add to Cart
+								</button>
+								<button type="button" onclick="window.location.href='login.jsp'" class="btn btn-success">
+									<i class="fa-solid fa-bolt"></i> Buy Now
+								</button>
+							</c:when>
+							<c:otherwise> <%-- User Logged In --%>
+								<%-- Add to Cart Form --%>
+								<form action="AddToCartServlet" method="post" style="display: inline-block;">
+									<input type="hidden" name="pid" value="${product.productId}">
+										<%-- uid is taken from session in servlet --%>
+									<button type="submit" class="btn btn-primary" ${product.productQuantity <= 0 ? 'disabled' : ''}>
+										<i class="fa-solid fa-cart-plus"></i> Add to Cart
+									</button>
+								</form>
+
+								<%-- Buy Now Form (posts to a servlet to set session attrs) --%>
+								<form action="SetCheckoutAttributesServlet" method="post" style="display: inline-block;">
+									<input type="hidden" name="from" value="buy">
+									<input type="hidden" name="pid" value="${product.productId}">
+									<input type="hidden" name="buyNowPrice" value="${product.productPriceAfterDiscount}">
+									<button type="submit" class="btn btn-success" ${product.productQuantity <= 0 ? 'disabled' : ''}>
+										<i class="fa-solid fa-bolt"></i> Buy Now
+									</button>
+								</form>
+							</c:otherwise>
+						</c:choose>
+					</div>
+				</div> <%-- End details column --%>
+			</div> <%-- End row --%>
+		</div> <%-- End product-view-container --%>
+	</c:if> <%-- End check if product is not empty --%>
+
+	<%-- Display error message if product wasn't found initially --%>
+	<c:if test="${empty product and not empty errorMessage}">
+		<div class="alert alert-danger text-center" role="alert">
+			<c:out value="${errorMessage}"/> Please <a href="products.jsp" class="alert-link">return to products</a>.
+		</div>
+	</c:if>
+
+</main> <%-- End main wrapper --%>
+
+<%-- Footer --%>
+<%@include file="footer.jsp"%>
+
+<%-- Remove the invalid JavaScript --%>
+
 </body>
 </html>

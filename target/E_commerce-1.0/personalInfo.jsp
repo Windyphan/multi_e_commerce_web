@@ -1,166 +1,177 @@
-<%@page import="com.phong.entities.Message"%>
-<%@page import="com.phong.entities.User"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@page import="com.phong.entities.User"%> <%-- Keep for session check --%>
+<%@page import="com.phong.entities.Message"%> <%-- Keep for session check --%>
+
+<%-- Security Check (already done in provided snippet, kept for context) --%>
 <%
-User user1 = (User) session.getAttribute("activeUser");
-if (user1 == null) {
-	Message message = new Message("You are not logged in! Login first!!", "error", "alert-danger");
-	session.setAttribute("message", message);
-	response.sendRedirect("login.jsp");
-	return;
-}
+	User currentUserForInfo = (User) session.getAttribute("activeUser");
+	if (currentUserForInfo == null) {
+		// Use JSTL for setting session attributes and redirecting
+		pageContext.setAttribute("errorMessage", "You are not logged in! Login first!!", PageContext.SESSION_SCOPE);
+		pageContext.setAttribute("errorType", "error", PageContext.SESSION_SCOPE);
+		pageContext.setAttribute("errorClass", "alert-danger", PageContext.SESSION_SCOPE);
+		response.sendRedirect("login.jsp");
+		return;
+	}
 %>
 
+<%-- Assume ukCountiesList is set as a request attribute earlier on the page --%>
+
 <style>
-label {
-	font-weight: bold;
-}
+	/* Reuse styles from other forms or define specific ones */
+	.profile-form .form-label {
+		font-weight: 600;
+		margin-bottom: 0.5rem;
+		color: #495057;
+	}
+	.profile-form .form-control, .profile-form .form-select {
+		border-radius: 0.375rem;
+		border: 1px solid #ced4da;
+	}
+	.profile-form .form-control:focus, .profile-form .form-select:focus {
+		border-color: #86b7fe;
+		outline: 0;
+		box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+	}
+	.gender-options .form-check {
+		display: inline-block; /* Display radio buttons horizontally */
+		margin-right: 1.5rem;
+	}
+	.gender-options .form-check-label {
+		font-weight: normal; /* Normal weight for radio labels */
+		margin-left: 0.25rem;
+	}
+	.profile-form .btn {
+		padding: 0.5rem 1.2rem;
+		font-weight: 500;
+	}
 </style>
-<div class="container px-3 py-3">
-	<h3>Personal Information</h3>
-	<form id="update-user" action="UpdateUserServlet" method="post">
+
+<div class="container px-0 px-md-3 py-3 profile-form"> <%-- Reduced horizontal padding on small screens --%>
+	<h3 class="mb-4">Personal Information</h3>
+	<%-- Point form to the correct servlet --%>
+	<form id="update-user-form" action="UpdateUserServlet" method="post" class="needs-validation" novalidate>
 		<input type="hidden" name="operation" value="updateUser">
-		<div class="row">
-			<div class="col-md-6 mt-2">
-				<label class="form-label">Your name</label> <input type="text"
-					name="name" class="form-control" placeholder="First and last name"
-					value="<%=user1.getUserName()%>">
-			</div>
-			<div class="col-md-6 mt-2">
-				<label class="form-label">Email</label> <input type="email"
-					name="email" placeholder="Email address" class="form-control"
-					value="<%=user1.getUserEmail()%>">
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-6 mt-2">
-				<label class="form-label">Mobile number</label> <input type="number"
-					name="mobile_no" placeholder="Mobile number" class="form-control"
-					value="<%=user1.getUserPhone()%>">
-			</div>
-			<div class="col-md-6 mt-5">
-				<label class="form-label pe-3">Gender</label>
-				<%
-					String gender = user1.getUserGender();
-					if (gender.trim().equals("Male")) {
-				%>
-				<input class="form-check-input" type="radio" name="gender" value="Male" checked>
-				<span class="form-check-label pe-3 ps-1">Male</span>
-				<input class="form-check-input" type="radio" name="gender" value="Female">
-				<span class="form-check-label ps-1">Female</span>
-				<input class="form-check-input" type="radio" name="gender" value="Other">
-				<span class="form-check-label ps-1">Other</span>
 
-				<%
-				} else if (gender.trim().equals("Female")) {
-				%>
-				<input class="form-check-input" type="radio" name="gender" value="Male">
-				<span class="form-check-label pe-3 ps-1">Male</span>
-				<input class="form-check-input" type="radio" name="gender" value="Female" checked>
-				<span class="form-check-label ps-1">Female</span>
-				<input class="form-check-input" type="radio" name="gender" value="Other">
-				<span class="form-check-label ps-1">Other</span>
-
-				<%
-				} else {
-				%>
-				<input class="form-check-input" type="radio" name="gender" value="Male">
-				<span class="form-check-label pe-3 ps-1">Male</span>
-				<input class="form-check-input" type="radio" name="gender" value="Female">
-				<span class="form-check-label ps-1">Female</span>
-				<input class="form-check-input" type="radio" name="gender" value="Other" checked>
-				<span class="form-check-label ps-1">Other</span>
-				<%
-					}
-				%>
-			</div>
-		</div>
-		<div class="mt-2">
-			<label class="form-label">Address</label> <input type="text"
-				name="address" placeholder="Enter Address(Area and Street))"
-				class="form-control" value="<%=user1.getUserAddress()%>">
-		</div>
 		<div class="row">
-			<div class="col-md-6 mt-2">
-				<label class="form-label">City</label> <input class="form-control"
-					type="text" name="city" placeholder="City/District/Town"
-					value="<%=user1.getUserCity()%>">
+			<div class="col-md-6 mb-3">
+				<label for="userNameInput" class="form-label">Your name</label>
+				<input type="text" class="form-control" id="userNameInput" name="name"
+					   placeholder="First and last name" required
+					   value="<c:out value='${sessionScope.activeUser.userName}'/>">
+				<div class="invalid-feedback">Please enter your name.</div>
 			</div>
-			<div class="col-md-6 mt-2">
-				<label class="form-label">Pincode</label> <input
-					class="form-control" type="number" name="pincode"
-					placeholder="Pincode" maxlength="6"
-					value="<%=user1.getUserPincode()%>">
-			</div>
-		</div>
-		<div class="row mt-2">
-			<label class="form-label">State</label>
-			<div class="input-group mb-3">
-				<input class="form-control" type="text"
-					value="<%=user1.getUserState()%>">
-					 <select name="state"
-					id="state-list" class="form-select">
-					<option selected>--Select County--</option>
-					<option value="Andaman &amp; Nicobar Islands">Andaman
-						&amp; Nicobar Islands</option>
-					<option value="Andhra Pradesh">Andhra Pradesh</option>
-					<option value="Arunachal Pradesh">Arunachal Pradesh</option>
-					<option value="Assam">Assam</option>
-					<option value="Bihar">Bihar</option>
-					<option value="Chandigarh">Chandigarh</option>
-					<option value="Chhattisgarh">Chhattisgarh</option>
-					<option value="Dadra &amp; Nagar Haveli &amp; Daman &amp; Diu">Dadra
-						&amp; Nagar Haveli &amp; Daman &amp; Diu</option>
-					<option value="Delhi">Delhi</option>
-					<option value="Goa">Goa</option>
-					<option value="Gujarat">Gujarat</option>
-					<option value="Haryana">Haryana</option>
-					<option value="Himachal Pradesh">Himachal Pradesh</option>
-					<option value="Jammu &amp; Kashmir">Jammu &amp; Kashmir</option>
-					<option value="Jharkhand">Jharkhand</option>
-					<option value="Karnataka">Karnataka</option>
-					<option value="Kerala">Kerala</option>
-					<option value="Ladakh">Ladakh</option>
-					<option value="Lakshadweep">Lakshadweep</option>
-					<option value="Madhya Pradesh">Madhya Pradesh</option>
-					<option value="Maharashtra">Maharashtra</option>
-					<option value="Manipur">Manipur</option>
-					<option value="Meghalaya">Meghalaya</option>
-					<option value="Mizoram">Mizoram</option>
-					<option value="Nagaland">Nagaland</option>
-					<option value="Odisha">Odisha</option>
-					<option value="Puducherry">Puducherry</option>
-					<option value="Punjab">Punjab</option>
-					<option value="Rajasthan">Rajasthan</option>
-					<option value="Sikkim">Sikkim</option>
-					<option value="Tamil Nadu">Tamil Nadu</option>
-					<option value="Telangana">Telangana</option>
-					<option value="Tripura">Tripura</option>
-					<option value="Uttarakhand">Uttarakhand</option>
-					<option value="Uttar Pradesh">Uttar Pradesh</option>
-					<option value="West Bengal">West Bengal</option>
-				</select>
+			<div class="col-md-6 mb-3">
+				<label for="userEmailInput" class="form-label">Email</label>
+				<%-- Consider making email read-only if changing email requires verification --%>
+				<input type="email" class="form-control" id="userEmailInput" name="email"
+					   placeholder="Email address" required
+					   value="<c:out value='${sessionScope.activeUser.userEmail}'/>">
+				<div class="invalid-feedback">Please enter a valid email address.</div>
 			</div>
 		</div>
-		<div id="submit-btn" class="container text-center mt-3">
-			<button type="submit" class="btn btn-outline-primary me-3">Update</button>
-			<button type="reset" class="btn btn-outline-primary">Reset</button>
+
+		<div class="row align-items-center"> <%-- Align items vertically --%>
+			<div class="col-md-6 mb-3">
+				<label for="userMobileInput" class="form-label">Mobile number</label>
+				<input type="tel" class="form-control" id="userMobileInput" name="mobile_no"
+					   placeholder="Enter mobile number" required pattern="[0-9\s\-+()]*"
+					   title="Enter a valid phone number"
+					   value="<c:out value='${sessionScope.activeUser.userPhone}'/>">
+				<div class="invalid-feedback">Please enter a valid phone number.</div>
+			</div>
+			<div class="col-md-6 mb-3">
+				<label class="form-label d-block mb-2">Gender</label> <%-- Use d-block for spacing --%>
+				<div class="gender-options">
+					<%-- Use JSTL choose/when/otherwise to check the gender --%>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="gender" id="genderMale" value="Male"
+							   <c:if test="${sessionScope.activeUser.userGender == 'Male'}">checked</c:if> required>
+						<label class="form-check-label" for="genderMale">Male</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="gender" id="genderFemale" value="Female"
+							   <c:if test="${sessionScope.activeUser.userGender == 'Female'}">checked</c:if> required>
+						<label class="form-check-label" for="genderFemale">Female</label>
+					</div>
+					<div class="form-check form-check-inline">
+						<input class="form-check-input" type="radio" name="gender" id="genderOther" value="Other"
+							   <c:if test="${sessionScope.activeUser.userGender != 'Male' && sessionScope.activeUser.userGender != 'Female'}">checked</c:if> required>
+						<label class="form-check-label" for="genderOther">Other</label>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="mb-3">
+			<label for="userAddressInput" class="form-label">Address (Street, House No)</label>
+			<%-- Assumes field name is userAddress --%>
+			<input type="text" class="form-control" id="userAddressInput" name="address"
+				   placeholder="e.g., 10 Downing Street" required
+				   value="<c:out value='${sessionScope.activeUser.userAddress}'/>">
+			<div class="invalid-feedback">Please enter your street address.</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-6 mb-3">
+				<label for="cityInput" class="form-label">Town / City</label>
+				<%-- Assumes field name is userCity --%>
+				<input class="form-control" type="text" name="city" id="cityInput"
+					   placeholder="e.g., London" required
+					   value="<c:out value='${sessionScope.activeUser.userCity}'/>">
+				<div class="invalid-feedback">Please enter your town/city.</div>
+			</div>
+			<div class="col-md-6 mb-3">
+				<label for="postcodeInput" class="form-label">Postcode</label>
+				<%-- Assumes field name is userPostcode & form field name is postcode --%>
+				<input class="form-control" type="text" name="postcode" id="postcodeInput"
+					   placeholder="e.g., SW1A 0AA" required
+					   pattern="[A-Za-z]{1,2}[0-9Rr][0-9A-Za-z]? [0-9][A-Za-z]{2}"
+					   title="Enter a valid UK Postcode (e.g., SW1A 0AA)"
+					   maxlength="9"
+					   value="<c:out value='${sessionScope.activeUser.userPostcode}'/>">
+				<div class="invalid-feedback">Please enter a valid UK postcode.</div>
+			</div>
+		</div>
+
+		<div class="mb-4"> <%-- More bottom margin before buttons --%>
+			<label for="countySelect" class="form-label">County</label>
+			<%-- Assumes field name is userCounty & form field name is county --%>
+			<select name="county" id="countySelect" class="form-select" required>
+				<option value="" disabled ${empty sessionScope.activeUser.userCounty ? 'selected' : ''}>-- Select County --</option>
+				<%-- Loop through counties prepared earlier --%>
+				<c:forEach var="county" items="${ukCountiesList}">
+					<option value="${county}" ${sessionScope.activeUser.userCounty == county ? 'selected' : ''}>${county}</option>
+				</c:forEach>
+			</select>
+			<div class="invalid-feedback">Please select your county.</div>
+		</div>
+
+		<div class="container text-center mt-4">
+			<button type="submit" class="btn btn-primary me-2">
+				<i class="fa-solid fa-save"></i> Update Profile
+			</button>
+			<button type="reset" class="btn btn-outline-secondary">
+				<i class="fa-solid fa-times"></i> Reset Changes
+			</button>
 		</div>
 	</form>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<script>
+	// Include the Bootstrap validation script here or ensure it runs globally
+	(() => {
+		'use strict'
+		const forms = document.querySelectorAll('.needs-validation')
+		Array.from(forms).forEach(form => {
+			form.addEventListener('submit', event => {
+				if (!form.checkValidity()) {
+					event.preventDefault()
+					event.stopPropagation()
+				}
+				form.classList.add('was-validated')
+			}, false)
+		})
+	})()
+</script>
