@@ -1,251 +1,277 @@
+<%-- JSTL Core tag library --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%-- Import necessary entity (only Message used directly here, others via session EL) --%>
 <%@page import="com.phong.entities.Message"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%-- Admin check is now better done using JSTL below --%>
+
+<%-- Set Error Page --%>
 <%@page errorPage="error_exception.jsp"%>
-<%
-Admin activeAdmin = (Admin) session.getAttribute("activeAdmin");
-if (activeAdmin == null) {
-	Message message = new Message("You are not logged in! Login first!!", "error", "alert-danger");
-	session.setAttribute("message", message);
-	response.sendRedirect("adminlogin.jsp");
-	return;
-}
-%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%--
+    SECURITY CHECK using JSTL and redirecting immediately if not admin.
+    This replaces the scriptlet check.
+--%>
+<c:if test="${empty sessionScope.activeAdmin}">
+	<c:set var="errorMessage" value="You are not logged in! Login first!!" scope="session"/>
+	<c:set var="errorType" value="error" scope="session"/>
+	<c:set var="errorClass" value="alert-danger" scope="session"/>
+	<c:redirect url="adminlogin.jsp"/>
+	<%-- Use c:redirect which handles response commit; no 'return' needed --%>
+</c:if>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Admin Page</title>
-<%@include file="Components/common_css_js.jsp"%>
-<style type="text/css">
-.cus-active {
-	background-color: #e6eefa !important;
-	width: 100%;
-}
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin Dashboard - Phong Shop</title>
+	<%@include file="Components/common_css_js.jsp"%>
+	<style>
+		body {
+			background-color: #f8f9fa; /* Light background for the whole page */
+		}
+		.admin-welcome {
+			margin-bottom: 2rem;
+		}
+		.admin-welcome img {
+			max-width: 150px;
+			margin-bottom: 1rem;
+		}
+		.admin-welcome h3 {
+			font-weight: 500;
+			color: #343a40;
+		}
 
-.list-btn {
-	font-size: 18px !important;
-}
-
-.list-btn:hover {
-	color: #2874f0 !important;
-}
-
-.no-border {
-	border: 0;
-	box-shadow: none;
-}
-
-a {
-	text-decoration: none;
-}
-</style>
+		/* Dashboard Cards Styling */
+		.dashboard-card {
+			transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+			border: none; /* Remove default card border */
+			border-radius: 0.5rem; /* Slightly more rounded */
+			background-color: #ffffff; /* White background */
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+		}
+		.dashboard-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+		}
+		.dashboard-card a {
+			text-decoration: none;
+			color: #343a40; /* Dark text for title */
+		}
+		.dashboard-card .card-body {
+			padding: 1.5rem;
+		}
+		.dashboard-card img {
+			max-width: 65px; /* Slightly smaller icons */
+			margin-bottom: 0.75rem;
+			opacity: 0.8;
+		}
+		.dashboard-card .card-title {
+			font-size: 1.2rem;
+			font-weight: 600;
+			margin-top: 0.5rem;
+		}
+		.modal-header {
+			background-color: #f1f1f1; /* Light header for modals */
+		}
+		.modal-footer {
+			background-color: #f8f9fa;
+		}
+	</style>
 </head>
 <body>
-	<!--navbar -->
-	<%@include file="Components/navbar.jsp"%>
+<%-- Navbar --%>
+<%@include file="Components/navbar.jsp"%>
 
-	<!--admin dashboard -->
-	<div class="container-fluid py-4 px-3">
-		<%@include file="Components/alert_message.jsp"%>
-		<div class="row">
-			<div class="container text-center" id="details">
-				<img src="Images/admin.png" style="max-width: 180px;"
-					class="img-fluid">
-				<h3>
-					Welcome "<%=activeAdmin.getName()%>"
-				</h3>
+<div class="container mt-4"> <%-- Use container for padding --%>
+
+	<%-- Display Messages --%>
+	<%@include file="Components/alert_message.jsp"%>
+
+	<%-- Welcome Section --%>
+	<div class="text-center admin-welcome">
+		<img src="Images/admin.png" class="img-fluid rounded-circle mb-3" alt="Admin Icon">
+		<%-- Access admin name safely from session scope --%>
+		<h3>Welcome, <c:out value="${sessionScope.activeAdmin.name}"/>!</h3>
+	</div>
+
+	<%-- Dashboard Links --%>
+	<div class="row g-4 justify-content-center"> <%-- g-4 for gap, justify-content-center --%>
+		<div class="col-12 col-sm-6 col-md-4 col-lg-3">
+			<div class="card dashboard-card text-center h-100">
+				<a href="display_category.jsp">
+					<div class="card-body">
+						<img src="Images/categories.png" alt="Category Icon">
+						<h4 class="card-title">Categories</h4>
+					</div>
+				</a>
 			</div>
 		</div>
-		<div class="container">
-			<div class="row px-3 py-3">
-				<div class="col-md-4">
-					<a href="display_category.jsp">
-						<div class="card text-bg-light mb-3 text-center">
-							<div class="card-body">
-								<img src="Images/categories.png" style="max-width: 80px;"
-									class="img-fluid">
-								<h4 class="card-title mt-3">Category</h4>
-							</div>
-						</div>
-					</a>
-				</div>
-				<div class="col-md-4">
-					<a href="display_products.jsp">
-						<div class="card text-bg-light mb-3 text-center">
-							<div class="card-body">
-								<img src="Images/products.png" style="max-width: 80px;"
-									class="img-fluid">
-								<h4 class="card-title mt-3">Products</h4>
-							</div>
-						</div>
-					</a>
-				</div>
-				<div class="col-md-4">
-					<a href="display_orders.jsp">
-						<div class="card text-bg-light mb-3 text-center">
-							<div class="card-body">
-								<img src="Images/order.png" style="max-width: 80px;"
-									class="img-fluid">
-								<h4 class="card-title mt-3">Order</h4>
-							</div>
-						</div>
-					</a>
-				</div>
+		<div class="col-12 col-sm-6 col-md-4 col-lg-3">
+			<div class="card dashboard-card text-center h-100">
+				<a href="display_products.jsp">
+					<div class="card-body">
+						<img src="Images/products.png" alt="Product Icon">
+						<h4 class="card-title">Products</h4>
+					</div>
+				</a>
 			</div>
 		</div>
-		<div class="container">
-			<div class="row px-3">
-				<div class="col-md-4 offset-md-2">
-					<a href="display_users.jsp">
-						<div class="card text-bg-light mb-3 text-center">
-							<div class="card-body">
-								<img src="Images/users.png" style="max-width: 80px;"
-									class="img-fluid">
-								<h4 class="card-title mt-3">User's</h4>
-							</div>
-						</div>
-					</a>
-				</div>
-				<div class="col-md-4">
-					<a href="display_admin.jsp">
-						<div class="card text-bg-light mb-3 text-center">
-							<div class="card-body">
-								<img src="Images/add-admin.png" style="max-width: 80px;"
-									class="img-fluid">
-								<h4 class="card-title mt-3">Admin</h4>
-							</div>
-						</div>
-					</a>
-				</div>
+		<div class="col-12 col-sm-6 col-md-4 col-lg-3">
+			<div class="card dashboard-card text-center h-100">
+				<a href="display_orders.jsp">
+					<div class="card-body">
+						<img src="Images/order.png" alt="Order Icon">
+						<h4 class="card-title">Orders</h4>
+					</div>
+				</a>
 			</div>
+		</div>
+		<div class="col-12 col-sm-6 col-md-4 col-lg-3">
+			<div class="card dashboard-card text-center h-100">
+				<a href="display_users.jsp">
+					<div class="card-body">
+						<img src="Images/users.png" alt="User Icon">
+						<h4 class="card-title">Users</h4>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="col-12 col-sm-6 col-md-4 col-lg-3">
+			<div class="card dashboard-card text-center h-100">
+				<a href="display_admin.jsp">
+					<div class="card-body">
+						<img src="Images/add-admin.png" alt="Admin Icon">
+						<h4 class="card-title">Admins</h4>
+					</div>
+				</a>
+			</div>
+		</div>
+		<%-- Add more cards here if needed --%>
+	</div>
+	<hr class="my-4"> <%-- Add a separator --%>
+</div>
+
+<%-- Modals (Keep the existing structure, but ensure categoryList is available for Add Product) --%>
+
+<!-- Add Category Modal -->
+<div class="modal fade" id="add-category" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="addCategoryModalLabel">Add New Category</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<%-- Action points to the servlet --%>
+			<form action="AddOperationServlet" method="post" enctype="multipart/form-data">
+				<div class="modal-body">
+					<input type="hidden" name="operation" value="addCategory">
+					<div class="mb-3">
+						<label for="categoryNameInput" class="form-label"><b>Category Name</b></label>
+						<input type="text" name="category_name" id="categoryNameInput" placeholder="Enter category name" class="form-control" required>
+					</div>
+					<div class="mb-3">
+						<label for="categoryImageInput" class="form-label"><b>Category Image</b></label>
+						<input class="form-control" type="file" name="category_img" id="categoryImageInput" required accept="image/*">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Category</button>
+				</div>
+			</form>
 		</div>
 	</div>
-	<!--end-->
+</div>
+<!-- End Add Category Modal -->
 
-	<!-- add category modal-->
-	<div class="modal fade" id="add-category" tabindex="-1"
-		aria-labelledby="addCategoryModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="addCategoryModalLabel">Add
-						Category Here</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close"></button>
-				</div>
-				<form action="AddOperationServlet" method="post"
-					enctype="multipart/form-data">
-					<div class="modal-body">
-						<input type="hidden" name="operation" value="addCategory">
-
-						<div class="mb-3">
-							<label class="form-label"><b>Category Name</b></label> <input
-								type="text" name="category_name"
-								placeholder="Enter category here" class="form-control" required>
-						</div>
-						<div class="mb-3">
-							<label for="formFile" class="form-label"><b>Category
-									Image</b></label> <input class="form-control" type="file"
-								name="category_img" id="formFile">
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-bs-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary me-3">Add
-							Category</button>
-					</div>
-				</form>
+<!-- Add Product Modal -->
+<div class="modal fade" id="add-product" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="addProductModalLabel">Add New Product</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
+			<%-- Action points to the servlet --%>
+			<form action="AddOperationServlet" method="post" name="addProductForm" enctype="multipart/form-data" onsubmit="return validateDiscount()">
+				<div class="modal-body">
+					<input type="hidden" name="operation" value="addProduct">
+					<div class="mb-3"> <%-- Changed to mb-3 --%>
+						<label for="productNameInput" class="form-label"><b>Product Name</b></label>
+						<input type="text" name="name" id="productNameInput" placeholder="Enter product name" class="form-control" required>
+					</div>
+					<div class="mb-3"> <%-- Changed to mb-3 --%>
+						<label for="productDescInput" class="form-label"><b>Product Description</b></label>
+						<textarea class="form-control" name="description" id="productDescInput" rows="4" placeholder="Enter product description" required></textarea>
+					</div>
+					<div class="row">
+						<div class="col-md-6 mb-3"> <%-- Changed to mb-3 --%>
+							<label for="productPriceInput" class="form-label"><b>Unit Price (£)</b></label>
+							<input type="number" name="price" id="productPriceInput" placeholder="e.g., 199.99" class="form-control" required min="0" step="0.01">
+						</div>
+						<div class="col-md-6 mb-3"> <%-- Changed to mb-3 --%>
+							<label for="productDiscountInput" class="form-label"><b>Discount (%)</b></label>
+							<input type="number" name="discount" id="productDiscountInput" placeholder="e.g., 10 (0-100)" class="form-control" min="0" max="100" value="0">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 mb-3"> <%-- Changed to mb-3 --%>
+							<label for="productQuantityInput" class="form-label"><b>Stock Quantity</b></label>
+							<input type="number" name="quantity" id="productQuantityInput" placeholder="Enter stock quantity" class="form-control" required min="0">
+						</div>
+						<div class="col-md-6 mb-3"> <%-- Changed to mb-3 --%>
+							<label for="productCategorySelect" class="form-label"><b>Category</b></label>
+							<select name="categoryType" id="productCategorySelect" class="form-select" required> <%-- Use form-select --%>
+								<option value="" selected disabled>-- Select Category --</option>
+								<%-- Use JSTL to populate options --%>
+								<c:if test="${not empty navbarCategoryList}">
+									<c:forEach var="cat" items="${navbarCategoryList}">
+										<option value="${cat.categoryId}">${cat.categoryName}</option>
+									</c:forEach>
+								</c:if>
+							</select>
+						</div>
+					</div>
+					<div class="mb-3"> <%-- Changed to mb-3 --%>
+						<label for="productPhotoInput" class="form-label"><b>Product Image</b></label>
+						<input type="file" name="photo" id="productPhotoInput" class="form-control" required accept="image/*">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Product</button>
+				</div>
+			</form>
 		</div>
 	</div>
-	<!-- end of modal -->
+</div>
+<!-- End Add Product Modal -->
 
-	<!-- add product modal-->
-	<div class="modal fade" id="add-product" tabindex="-1"
-		aria-labelledby="addProductModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="addProductModalLabel">Add
-						Product Here</h1>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close"></button>
-				</div>
-				<form action="AddOperationServlet" method="post"
-					name="addProductForm" enctype="multipart/form-data">
-					<div class="modal-body">
-						<input type="hidden" name="operation" value="addProduct">
-						<div>
-							<label class="form-label"><b>Product Name</b></label> <input
-								type="text" name="name" placeholder="Enter product name"
-								class="form-control" required>
-						</div>
-						<div class="mb-2">
-							<label class="form-label"><b>Product Description</b></label>
-							<textarea class="form-control" name="description" rows="4"
-								placeholder="Enter product description"></textarea>
-						</div>
-						<div class="row">
-							<div class="col-md-6 mb-2">
-								<label class="form-label"><b>Unit Price</b></label> <input
-									type="number" name="price" placeholder="Enter price"
-									class="form-control" required>
-							</div>
-							<div class="col-md-6 mb-2">
-								<label class="form-label"><b>Discount Percentage</b></label> <input
-									type="number" name="discount" onblur="validate()"
-									placeholder="Enter discount if any!" class="form-control">
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-6 mb-2">
-								<label class="form-label"><b>Product Quantity</b></label> <input
-									type="number" name="quantity"
-									placeholder="Enter product quantity" class="form-control">
-							</div>
-							<div class="col-md-6 mb-2">
-								<label class="form-label"><b>Select Category Type</b></label> <select
-									name="categoryType" class="form-control">
-									<option value="0">--Select Category--</option>
-									<%
-									for (Category c : categoryList) {
-									%>
-									<option value="<%=c.getCategoryId()%>">
-										<%=c.getCategoryName()%></option>
-									<%
-									}
-									%>
-								</select>
-							</div>
-						</div>
-						<div class="mb-2">
-							<label class="form-label"><b>Product Image</b></label> <input
-								type="file" name="photo" class="form-control" required>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-bs-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary me-3">Add
-							Product</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<!-- end of modal -->
+<script type="text/javascript">
+	// Renamed function for clarity and improved validation logic
+	function validateDiscount() {
+		const discountInput = document.forms["addProductForm"]["discount"];
+		const discountValue = parseInt(discountInput.value, 10); // Always specify radix
 
-	<script type="text/javascript">
-		function validate() {
-			var dis = document.addProductForm.discount.value;
-			if (dis > 100 || dis < 0) {
-				alert("Discount need tobe between 0-100 !");
-				//document.addProductForm.discount.focus();
-				return false;
-			}
+		if (isNaN(discountValue) || discountValue < 0 || discountValue > 100) {
+			alert("Discount must be a number between 0 and 100!");
+			discountInput.focus(); // Focus the input field
+			discountInput.value = "0"; // Optionally reset to 0
+			return false; // Prevent form submission if validation added to onsubmit
 		}
-	</script>
+		return true; // Allow form submission
+	}
+
+	// Optional: Add this validation to the form's onsubmit event
+	// document.forms["addProductForm"].onsubmit = validateDiscount;
+	// Or modify the input tag: <input type="number" name="discount" onblur="validateDiscount()" ...>
+	// Note: onblur only validates when leaving the field, onsubmit validates before sending.
+
+</script>
+<%-- Footer --%>
+ <%@include file="footer.jsp"%>
 </body>
 </html>

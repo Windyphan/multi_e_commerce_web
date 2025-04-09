@@ -1,145 +1,323 @@
-<%@page import="com.phong.entities.Message"%>
-<%@page import="com.phong.entities.Product"%>
-<%@page import="com.phong.dao.ProductDao"%>
-<%@page import="com.phong.entities.Cart"%>
-<%@page import="com.phong.dao.CartDao"%>
-<%@page errorPage="error_exception.jsp"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@page import="com.phong.dao.ProductDao"%>
+<%@page import="com.phong.entities.Product"%>
+<%@page import="com.phong.dao.CartDao"%>
+<%@page import="com.phong.entities.Cart"%>
+<%@page import="com.phong.entities.User"%>
+<%@page import="com.phong.entities.Message"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%> <%-- Import ArrayList for creating detailed list --%>
+<%@page import="java.util.Collections"%> <%-- Import Collections for emptyList --%>
+
+<%@page errorPage="error_exception.jsp"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%-- Security Check & Initial Data Fetching --%>
 <%
-User activeUser = (User) session.getAttribute("activeUser");
-if (activeUser == null) {
-	Message message = new Message("You are not logged in! Login first!!", "error", "alert-danger");
-	session.setAttribute("message", message);
-	response.sendRedirect("login.jsp");
-	return;  
-}
+	User currentUserForCart = (User) session.getAttribute("activeUser");
+	if (currentUserForCart == null) {
+		// Use JSTL for setting session attributes and redirecting
+		pageContext.setAttribute("errorMessage", "You are not logged in! Login first!!", PageContext.SESSION_SCOPE);
+		pageContext.setAttribute("errorType", "error", PageContext.SESSION_SCOPE);
+		pageContext.setAttribute("errorClass", "alert-danger", PageContext.SESSION_SCOPE);
+		response.sendRedirect("login.jsp"); // Standard redirect needed here before response commit
+		return; // Stop processing further
+	}
+
+	// Fetch Cart and Product Data
+	CartDao cartDaoForCart = new CartDao();
+	ProductDao productDao = new ProductDao();
+	List<Cart> cartItems = cartDaoForCart.getCartListByUserId(currentUserForCart.getUserId());
+
+	// Create a list to hold detailed cart item info (Cart + Product)
+	// This helps handle cases where a product might have been deleted
+	List<CartItemDetail> detailedCartItems = new ArrayList<>();
+	float calculatedTotalPrice = 0;
+
+	if (cartItems != null) {
+		for (Cart cartItem : cartItems) {
+			Product product = productDao.getProductsByProductId(cartItem.getProductId());
+			if (product != null) { // Only add if product exists
+				detailedCartItems.add(new CartItemDetail(cartItem, product));
+				calculatedTotalPrice += cartItem.getQuantity() * product.getProductPriceAfterDiscount();
+			} else {
+				// Optionally log or inform user about items linked to deleted products
+				System.err.println("Warning: Cart item ID " + cartItem.getCartId() + " refers to non-existent product ID " + cartItem.getProductId());
+				// Consider automatically removing such items from the cart here?
+				// cartDao.removeProduct(cartItem.getCartId());
+			}
+		}
+	} else {
+		// Handle case where getCartListByUserId itself returned null (DB error)
+		detailedCartItems = Collections.emptyList(); // Ensure list is not null
+		// Set an error message maybe?
+		pageContext.setAttribute("errorMessage", "Error retrieving cart items.", PageContext.SESSION_SCOPE);
+		pageContext.setAttribute("errorType", "error", PageContext.SESSION_SCOPE);
+		pageContext.setAttribute("errorClass", "alert-danger", PageContext.SESSION_SCOPE);
+	}
+
+	// Make detailed list and total price available for EL
+	request.setAttribute("cartContent", detailedCartItems);
+	request.setAttribute("cartTotalPrice", calculatedTotalPrice);
+
 %>
+<%-- Helper Inner Class (Place this definition within the <%! ... %> declaration block) --%>
+<%!
+	// Simple helper class to combine Cart and Product info
+	public static class CartItemDetail {
+		private Cart cart;
+		private Product product;
+
+		public CartItemDetail(Cart cart, Product product) {
+			this.cart = cart;
+			this.product = product;
+		}
+		public Cart getCart() { return cart; }
+		public Product getProduct() { return product; }
+	}
+%>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>Shopping cart</title>
-<%@include file="Components/common_css_js.jsp"%>
-<style type="text/css">
-.qty {
-	display: inline-block;
-	padding: 3px 6px;
-	width: 46px;
-	height: 32px;
-	border-radius: 2px;
-	background-color: #fff;
-	border: 1px solid #c2c2c2;
-	margin: 0 5px;
-}
-</style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Shopping Cart - Phong Shop</title>
+	<%@include file="Components/common_css_js.jsp"%>
+	<style>
+		body {
+			background-color: #f8f9fa;
+		}
+		.cart-table th {
+			font-weight: 600;
+			background-color: #e9ecef; /* Light header */
+			vertical-align: middle;
+		}
+		.cart-table td {
+			vertical-align: middle;
+		}
+		.cart-item-img {
+			width: 60px;
+			height: 60px;
+			object-fit: contain;
+			margin-right: 10px;
+		}
+		.cart-item-name {
+			font-weight: 500;
+			color: #333;
+		}
+		.quantity-controls {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.quantity-input { /* Changed from div.qty to an actual input for potential JS updates */
+			width: 50px;
+			text-align: center;
+			border: 1px solid #ced4da;
+			border-radius: 0.25rem;
+			margin: 0 8px;
+			/* Prevent browser default spinners */
+			-moz-appearance: textfield;
+		}
+		.quantity-input::-webkit-outer-spin-button,
+		.quantity-input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		.quantity-btn {
+			border: 1px solid #ced4da;
+			background-color: #fff;
+			color: #495057;
+			width: 32px;
+			height: 32px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			line-height: 1;
+			padding: 0;
+			border-radius: 50%; /* Circular buttons */
+			transition: background-color 0.2s ease;
+		}
+		.quantity-btn:hover {
+			background-color: #e9ecef;
+		}
+		.quantity-btn i {
+			font-size: 0.8rem; /* Adjust icon size */
+		}
+		.btn-remove {
+			font-size: 0.9rem;
+			padding: 0.3rem 0.7rem;
+		}
+		.total-price-row td {
+			font-size: 1.2rem;
+			font-weight: 700;
+			text-align: right;
+			padding-top: 1rem;
+			padding-bottom: 1rem;
+		}
+		.cart-actions {
+			margin-top: 1.5rem;
+		}
+		.empty-cart-container {
+			padding: 4rem 1rem;
+		}
+		.empty-cart-container img {
+			max-width: 200px;
+			opacity: 0.7;
+		}
+		.empty-cart-container h4 {
+			margin-top: 1.5rem;
+			color: #6c757d;
+		}
+		.empty-cart-container p {
+			color: #6c757d;
+		}
+	</style>
 </head>
 <body>
-	<!--navbar -->
-	<%@include file="Components/navbar.jsp"%>
+<%-- Navbar --%>
+<%@include file="Components/navbar.jsp"%>
 
-	<%
-	float totalPrice = 0;
-	CartDao cartDao = new CartDao();
-	List<Cart> listOfCart = cartDao.getCartListByUserId(user.getUserId());
-	if (listOfCart == null || listOfCart.size() == 0) {
-	%>
-	<div class="container text-center py-5 px-5">
-		<img src="Images/empty-cart.png" style="max-width: 250px;"
-			class="img-fluid">
-		<h4 class="mt-5">Your cart is empty!</h4>
-		<p>Add items to it now.</p>
-		<a href="products.jsp" class="btn btn-primary btn-lg" role="button"
-			aria-disabled="true">Shop Now</a>
-	</div>
-	<%
-	} else {
-	%>
-	
-	<div class="container mt-5">
-		<%@include file="Components/alert_message.jsp"%>
-		<div class="card px-3 py-3">
-			<table class="table table-hover">
-				<thead>
-					<tr class="table-primary text-center" style="font-size: 18px;">
-						<th>Item</th>
-						<th>Item Name</th>
-						<th>Price</th>
-						<th>Quantity</th>
-						<th>Total price</th>
-						<th>Remove</th>
-					</tr>
-				</thead>
-				<tbody>
-					<%
-					ProductDao productDao = new ProductDao();
-					for (Cart c : listOfCart) {
-						Product prod = productDao.getProductsByProductId(c.getProductId());						
-					%>
-					<tr class="text-center">
-						<td><img src="Product_imgs\<%=prod.getProductImages()%>"
-							style="width: 50px; height: 50px; width: auto;"></td>
-						<td class="text-start"><%=prod.getProductName()%></td>
-						<td>&#8377;<%=prod.getProductPriceAfterDiscount()%></td>
-						<td><a
-							href="CartOperationServlet?cid=<%=c.getCartId()%>&opt=1"
-							role="button" class="btn btn-light"
-							style="border-radius: 50%; font-size: 8px;"> <i
-								class="fa-regular fa-plus fa-2xl"></i>
-						</a>
-						<div class="qty"><%=c.getQuantity()%></div>
-							<%if(c.getQuantity() > 1){ %>
-							<a href="CartOperationServlet?cid=<%=c.getCartId()%>&opt=2"
-							role="button" class="btn btn-light" id="qtyDesc"
-							style="border-radius: 50%; font-size: 8px;"> <i
-								class="fa-solid fa-minus fa-2xl"></i></a>
-							<%}else{ %>
-							<a href="CartOperationServlet?cid=<%=c.getCartId()%>&opt=2"
-							role="button" class="btn btn-light disabled" id="qtyDesc"
-							style="border-radius: 50%; font-size: 8px;"> <i
-								class="fa-solid fa-minus fa-2xl"></i></a>
-							<%} %>
-						</td>
+<div class="container mt-4 mb-5">
 
-						<td>&#8377;<%=c.getQuantity() * prod.getProductPriceAfterDiscount()%></td>
-						<td><a
-							href="CartOperationServlet?cid=<%=c.getCartId()%>&opt=3"
-							class="btn btn-secondary" role="button">Remove</a></td>
-					</tr>
-					<%
-					totalPrice += c.getQuantity() * prod.getProductPriceAfterDiscount();
-					}
-					%>
-					<tr>
-						<td class="text-end" colspan="8"><h4 class='pe-5'>
-								Total Amount : &#8377;
-								<%=totalPrice%></h4></td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="text-end">
-				<a href="products.jsp" class="btn btn-outline-primary" role="button"
-					aria-disabled="true">Continue Shopping</a>&nbsp; 
-					<a href="checkout.jsp" id="checkout-btn"
-					class="btn btn-outline-primary" role="button" aria-disabled="true">Checkout</a>
+	<%-- Display Messages --%>
+	<%@include file="Components/alert_message.jsp"%>
+
+	<h2 class="mb-4">Your Shopping Cart</h2>
+
+	<%-- Use c:choose for conditional rendering --%>
+	<c:choose>
+		<%-- Case 1: Cart is empty --%>
+		<c:when test="${empty cartContent}">
+			<div class="text-center empty-cart-container">
+				<img src="Images/empty-cart.png" alt="Empty Cart" class="img-fluid">
+				<h4>Your cart is empty!</h4>
+				<p>Looks like you haven't added anything yet.</p>
+				<a href="products.jsp" class="btn btn-primary btn-lg mt-3" role="button">
+					<i class="fa-solid fa-shopping-bag"></i> Shop Now
+				</a>
 			</div>
+		</c:when>
 
-		</div>
-	</div>
-	<%
-	}
-	%>
-	<script>
-		$(document).ready(function(){
-			$('#checkout-btn').click(function(){
-			<%
-			session.setAttribute("totalPrice", totalPrice);
-			session.setAttribute("from", "cart");
-			%>	
-			});
-		});
-	</script>
-	
+		<%-- Case 2: Cart has items --%>
+		<c:otherwise>
+			<div class="card shadow-sm">
+				<div class="card-body p-0"> <%-- Remove card body padding for table --%>
+					<div class="table-responsive"> <%-- Make table scroll on small screens --%>
+						<table class="table cart-table mb-0"> <%-- Remove bottom margin --%>
+							<thead>
+							<tr class="text-center">
+								<th scope="col" class="text-start ps-3" style="width: 45%;">Product</th>
+								<th scope="col" style="width: 15%;">Price</th>
+								<th scope="col" style="width: 15%;">Quantity</th>
+								<th scope="col" style="width: 15%;">Total</th>
+								<th scope="col" style="width: 10%;" class="pe-3">Action</th>
+							</tr>
+							</thead>
+							<tbody>
+							<c:forEach var="itemDetail" items="${cartContent}">
+								<tr class="text-center">
+										<%-- Product Column --%>
+									<td class="text-start ps-3">
+										<div class="d-flex align-items-center">
+												<%-- Use forward slash --%>
+											<img src="Product_imgs/${itemDetail.product.productImages}" alt="${itemDetail.product.productName}" class="cart-item-img">
+											<a href="viewProduct.jsp?pid=${itemDetail.product.productId}" class="cart-item-name ms-2">${itemDetail.product.productName}</a>
+										</div>
+									</td>
+										<%-- Price Column --%>
+									<td>
+										<fmt:setLocale value="en_GB"/>
+										<fmt:formatNumber value="${itemDetail.product.productPriceAfterDiscount}" type="currency" currencySymbol="£"/>
+									</td>
+										<%-- Quantity Column --%>
+									<td>
+										<div class="quantity-controls">
+												<%-- Decrease Button (conditionally disabled) --%>
+											<a href="CartOperationServlet?cid=${itemDetail.cart.cartId}&opt=2"
+											   role="button"
+											   class="btn quantity-btn ${itemDetail.cart.quantity <= 1 ? 'disabled' : ''}"
+											   title="Decrease quantity">
+												<i class="fa-solid fa-minus"></i>
+											</a>
+
+												<%-- Quantity Display (Readonly Input) --%>
+											<input type="number" class="quantity-input form-control form-control-sm" value="${itemDetail.cart.quantity}" readonly aria-label="Quantity">
+
+												<%-- Increase Button (conditionally disabled based on stock) --%>
+											<a href="CartOperationServlet?cid=${itemDetail.cart.cartId}&opt=1"
+											   role="button"
+											   class="btn quantity-btn ${itemDetail.cart.quantity >= itemDetail.product.productQuantity ? 'disabled' : ''}"
+											   title="Increase quantity">
+												<i class="fa-solid fa-plus"></i>
+											</a>
+										</div>
+											<%-- Optional: Show stock limit if trying to increase beyond stock --%>
+										<c:if test="${itemDetail.cart.quantity >= itemDetail.product.productQuantity}">
+											<small class="text-danger d-block mt-1">Max stock reached</small>
+										</c:if>
+									</td>
+										<%-- Total Price Column --%>
+									<td>
+										<fmt:formatNumber value="${itemDetail.cart.quantity * itemDetail.product.productPriceAfterDiscount}" type="currency" currencySymbol="£"/>
+									</td>
+										<%-- Remove Column --%>
+									<td class="pe-3">
+										<a href="CartOperationServlet?cid=${itemDetail.cart.cartId}&opt=3"
+										   class="btn btn-outline-danger btn-sm btn-remove" role="button" title="Remove item">
+											<i class="fa-solid fa-trash-alt"></i>
+												<%-- <span class="d-none d-md-inline">Remove</span> --%> <%-- Optional text on larger screens --%>
+										</a>
+									</td>
+								</tr>
+							</c:forEach>
+								<%-- Total Price Row --%>
+							<tr class="total-price-row">
+								<td colspan="5" class="pe-3"> <%-- Span 5 columns --%>
+									<strong>Total Amount:
+										<fmt:formatNumber value="${cartTotalPrice}" type="currency" currencySymbol="£"/>
+									</strong>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div><%-- End table-responsive --%>
+				</div> <%-- End card-body --%>
+				<div class="card-footer bg-light d-flex justify-content-between align-items-center cart-actions">
+					<a href="products.jsp" class="btn btn-secondary" role="button">
+						<i class="fa-solid fa-arrow-left"></i> Continue Shopping
+					</a>
+						<%-- Use a form for checkout to set session attributes cleanly --%>
+					<form action="SetCheckoutAttributesServlet" method="POST" style="display: inline;"> <%-- Create a new servlet --%>
+						<input type="hidden" name="from" value="cart">
+							<%-- Total price could be passed or recalculated in servlet --%>
+						<input type="hidden" name="totalPrice" value="${cartTotalPrice}">
+						<button type="submit" class="btn btn-primary">
+							Proceed to Checkout <i class="fa-solid fa-arrow-right"></i>
+						</button>
+					</form>
+				</div>
+			</div><%-- End card --%>
+		</c:otherwise>
+	</c:choose>
+</div> <%-- End container --%>
+
+<%-- Footer --%>
+ <%@include file="footer.jsp"%>
+
+<%-- Remove the JavaScript that incorrectly sets session attributes --%>
+<%--
+<script>
+    $(document).ready(function(){
+        $('#checkout-btn').click(function(){
+        <%-- THIS IS SERVER-SIDE CODE, RUNS ON PAGE LOAD --%>
+<%-- session.setAttribute("totalPrice", totalPrice); --%>
+<%-- session.setAttribute("from", "cart");
+</script>
+--%>
 </body>
 </html>

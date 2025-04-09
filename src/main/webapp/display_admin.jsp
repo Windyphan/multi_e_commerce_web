@@ -1,103 +1,215 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%@page import="com.phong.dao.AdminDao"%>
+<%@page import="com.phong.entities.Admin"%>
+<%@page import="com.phong.entities.Message"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.Collections"%> <%-- Import Collections --%>
+
 <%@page errorPage="error_exception.jsp"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%-- Security Check & Data Fetching --%>
 <%
-Admin activeAdmin = (Admin) session.getAttribute("activeAdmin");
-if (activeAdmin == null) {
-	Message message = new Message("You are not logged in! Login first!!", "error", "alert-danger");
-	session.setAttribute("message", message);
-	response.sendRedirect("adminlogin.jsp");
-	return;
-}
-AdminDao adminDao = new AdminDao();
-List<Admin> adminList = adminDao.getAllAdmin();
+	Admin activeAdminForAdminDisplay = (Admin) session.getAttribute("activeAdmin");
+	if (activeAdminForAdminDisplay == null) {
+		pageContext.setAttribute("errorMessage", "You are not logged in! Login first!!", PageContext.SESSION_SCOPE);
+		pageContext.setAttribute("errorType", "error", PageContext.SESSION_SCOPE);
+		pageContext.setAttribute("errorClass", "alert-danger", PageContext.SESSION_SCOPE);
+		response.sendRedirect("adminlogin.jsp");
+		return;
+	}
+
+	// Fetch Admin List
+	AdminDao adminDao = new AdminDao();
+	List<Admin> adminList = adminDao.getAllAdmin();
+	if (adminList == null) { // Handle potential DB error
+		adminList = Collections.emptyList();
+		pageContext.setAttribute("errorMessage", "Could not retrieve admin list.", PageContext.SESSION_SCOPE);
+		pageContext.setAttribute("errorType", "error", PageContext.SESSION_SCOPE);
+		pageContext.setAttribute("errorClass", "alert-danger", PageContext.SESSION_SCOPE);
+	}
+
+	// Make list available for EL
+	request.setAttribute("listOfAdmins", adminList);
 %>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="ISO-8859-1">
-<title>View Admin's</title>
-<%@include file="Components/common_css_js.jsp"%>
-<style>
-label {
-	font-weight: bold;
-}
-</style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Manage Admins - Phong Shop</title>
+	<%@include file="Components/common_css_js.jsp"%>
+	<style>
+		body {
+			background-color: #f8f9fa;
+		}
+		.card {
+			border: none;
+			border-radius: 0.5rem;
+			box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+			margin-bottom: 1.5rem; /* Add space between cards */
+		}
+		.card-header {
+			background-color: #e9ecef;
+			font-weight: 600;
+			padding: 1rem 1.25rem;
+			border-bottom: 1px solid #dee2e6;
+		}
+		.form-label {
+			font-weight: 600;
+			margin-bottom: 0.5rem;
+			color: #495057;
+		}
+		.admin-table th {
+			font-weight: 600;
+			background-color: #ddeeff; /* Light blue header */
+			vertical-align: middle;
+		}
+		.admin-table td {
+			vertical-align: middle;
+		}
+		.btn-remove {
+			font-size: 0.85rem;
+			padding: 0.25rem 0.6rem;
+		}
+		.add-admin-form img {
+			max-width: 80px;
+			margin-bottom: 1rem;
+		}
+		.add-admin-form h3 {
+			margin-bottom: 1.5rem;
+			font-weight: 500;
+		}
+	</style>
 </head>
-<body>
-	<!--navbar -->
-	<%@include file="Components/navbar.jsp"%>
+<body class="d-flex flex-column min-vh-100">
+<%-- Navbar --%>
+<%@include file="Components/navbar.jsp"%>
 
-	<div class="container-fluid px-5 py-3">
-		<div class="row">
-			<div class="col-md-4">
-				<div class="card">
-					<div class="card-body px-3">
-						<div class="container text-center">
-							<img src="Images/admin.png" style="max-width: 100px;"
-								class="img-fluid">
-						</div>
-						<h3 class="text-center">Add Admin</h3>
-						<%@include file="Components/alert_message.jsp"%>
+<%-- Main Content Wrapper --%>
+<main class="container flex-grow-1 my-4">
 
-						<!--admin-form-->
-						<form action="AdminServlet?operation=save" method="post">
-							<div class="mb-3">
-								<label class="form-label">Name</label> <input type="text"
-									name="name" placeholder="Enter name" class="form-control"
-									required>
-							</div>
-							<div class="mb-3">
-								<label class="form-label">Email</label> <input type="email"
-									name="email" placeholder="Email address" class="form-control"
-									required>
-							</div>
-							<div class="mb-3">
-								<label class="form-label">Password</label> <input
-									type="password" name="password" placeholder="Enter password"
-									class="form-control" required>
-							</div>
-							<div class="mb-3">
-								<label class="form-label">Phone</label> <input type="number"
-									name="phone" placeholder="Enter phone number"
-									class="form-control" required>
-							</div>
-							<div class="d-grid gap-2 col-6 mx-auto py-3">
-								<button type="submit" class="btn btn-primary me-3">Register</button>
-							</div>
-						</form>
+	<h2 class="mb-4">Manage Administrators</h2>
+
+	<%-- Display Messages --%>
+	<%@include file="Components/alert_message.jsp"%>
+
+	<div class="row">
+		<%-- Column 1: Add Admin Form --%>
+		<div class="col-lg-4">
+			<div class="card">
+				<div class="card-header">Add New Admin</div>
+				<div class="card-body p-4 add-admin-form">
+					<div class="text-center">
+						<img src="Images/admin.png" alt="Admin Icon">
 					</div>
-
+					<%-- Add Admin Form --%>
+					<form action="AdminServlet?operation=save" method="post" class="needs-validation" novalidate>
+						<div class="mb-3">
+							<label for="adminName" class="form-label">Name</label>
+							<input type="text" class="form-control" id="adminName" name="name" placeholder="Enter full name" required>
+							<div class="invalid-feedback">Please enter the admin's name.</div>
+						</div>
+						<div class="mb-3">
+							<label for="adminEmail" class="form-label">Email</label>
+							<input type="email" class="form-control" id="adminEmail" name="email" placeholder="Enter email address" required>
+							<div class="invalid-feedback">Please enter a valid email address.</div>
+						</div>
+						<div class="mb-3">
+							<label for="adminPassword" class="form-label">Password</label>
+							<input type="password" class="form-control" id="adminPassword" name="password" placeholder="Enter password" required minlength="8"> <%-- Example min length --%>
+							<div class="invalid-feedback">Password must be at least 8 characters.</div>
+						</div>
+						<div class="mb-3">
+							<label for="adminPhone" class="form-label">Phone</label>
+							<input type="tel" class="form-control" id="adminPhone" name="phone" placeholder="Enter phone number" required pattern="[0-9\s\-+()]*" title="Enter a valid phone number"> <%-- Basic pattern --%>
+							<div class="invalid-feedback">Please enter a valid phone number.</div>
+						</div>
+						<div class="d-grid pt-2"> <%-- Use grid for full width button --%>
+							<button type="submit" class="btn btn-primary">
+								<i class="fa-solid fa-user-plus"></i> Register Admin
+							</button>
+						</div>
+					</form>
 				</div>
 			</div>
-			<div class="col-md-8">
-				<div class="card">
-					<div class="card-body px-3">
-						<table class="table table-hover">
-							<tr class="text-center table-primary" style="font-size: 18px;">
+		</div> <%-- End Add Admin Column --%>
+
+		<%-- Column 2: Admin List Table --%>
+		<div class="col-lg-8">
+			<div class="card">
+				<div class="card-header">Existing Admins</div>
+				<div class="card-body p-0"> <%-- Remove padding for table --%>
+					<div class="table-responsive">
+						<table class="table table-hover admin-table mb-0"> <%-- Remove bottom margin --%>
+							<thead>
+							<tr class="text-center">
 								<th>Name</th>
 								<th>Email</th>
 								<th>Phone</th>
 								<th>Action</th>
 							</tr>
-							<%
-							for (Admin a : adminList) {
-							%>
-							<tr class="text-center">
-								<td><%=a.getName() %></td>
-								<td><%=a.getEmail() %></td>
-								<td><%=a.getPhone() %></td>
-								<td><a href="AdminServlet?operation=delete&id=<%=a.getId()%>" role="button" class="btn btn-danger">Remove</a></td>
-							</tr>
-							<%
-							}
-							%>
+							</thead>
+							<tbody>
+							<%-- Check if list is empty --%>
+							<c:if test="${empty listOfAdmins}">
+								<tr>
+									<td colspan="4" class="text-center text-muted p-4">No admins found.</td>
+								</tr>
+							</c:if>
+							<%-- Loop through admins using JSTL --%>
+							<c:forEach var="admin" items="${listOfAdmins}">
+								<tr class="text-center">
+									<td><c:out value="${admin.name}"/></td>
+									<td><c:out value="${admin.email}"/></td>
+									<td><c:out value="${admin.phone}"/></td>
+									<td>
+											<%-- Add confirmation to delete button --%>
+										<a href="AdminServlet?operation=delete&id=${admin.id}"
+										   role="button"
+										   class="btn btn-danger btn-sm btn-remove"
+										   onclick="return confirm('Are you sure you want to remove admin \'${admin.name}\'?');">
+											<i class="fa-solid fa-trash-alt"></i> Remove
+										</a>
+									</td>
+								</tr>
+							</c:forEach>
+							</tbody>
 						</table>
 					</div>
-				</div>
+				</div> <%-- End card-body --%>
 			</div>
-		</div>
-	</div>
+		</div> <%-- End Admin List Column --%>
+	</div> <%-- End row --%>
+</main> <%-- End main content wrapper --%>
+
+<%-- Footer --%>
+<%@include file="footer.jsp"%>
+
+<script>
+	// Example starter JavaScript for disabling form submissions if there are invalid fields
+	// (From Bootstrap docs)
+	(() => {
+		'use strict'
+
+		// Fetch all the forms we want to apply custom Bootstrap validation styles to
+		const forms = document.querySelectorAll('.needs-validation')
+
+		// Loop over them and prevent submission
+		Array.from(forms).forEach(form => {
+			form.addEventListener('submit', event => {
+				if (!form.checkValidity()) {
+					event.preventDefault()
+					event.stopPropagation()
+				}
+
+				form.classList.add('was-validated')
+			}, false)
+		})
+	})()
+</script>
+
 </body>
 </html>
