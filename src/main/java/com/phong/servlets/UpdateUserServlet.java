@@ -58,14 +58,14 @@ public class UpdateUserServlet extends HttpServlet {
 				// Get address parameters
 				String userAddress = request.getParameter("user_address");
 				String userCity = request.getParameter("city");
-				String userPincode = request.getParameter("pincode");
-				String userState = request.getParameter("state");
+				String userPostcode = request.getParameter("postcode");
+				String userCounty = request.getParameter("county");
 
 				// Basic validation for address fields (add more as needed)
 				if (userAddress == null || userAddress.trim().isEmpty() ||
 						userCity == null || userCity.trim().isEmpty() ||
-						userPincode == null || userPincode.trim().isEmpty() ||
-						userState == null || userState.trim().isEmpty()) {
+						userPostcode == null || userPostcode.trim().isEmpty() ||
+						userCounty == null || userCounty.trim().isEmpty()) {
 
 					message = new Message("All address fields are required.", "error", "alert-warning");
 					session.setAttribute("message", message);
@@ -78,8 +78,8 @@ public class UpdateUserServlet extends HttpServlet {
 				// Alternatively, update the activeUser object directly
 				activeUser.setUserAddress(userAddress.trim());
 				activeUser.setUserCity(userCity.trim());
-				activeUser.setUserPincode(userPincode.trim());
-				activeUser.setUserState(userState.trim());
+				activeUser.setUserPostcode(userPostcode.trim());
+				activeUser.setUserCounty(userCounty.trim());
 
 				// Call DAO method (assuming it returns boolean for success)
 				boolean success = userDao.updateUserAddresss(activeUser);
@@ -116,8 +116,8 @@ public class UpdateUserServlet extends HttpServlet {
 				String userGender = request.getParameter("gender");
 				String userAddress = request.getParameter("address");
 				String userCity = request.getParameter("city");
-				String userPincode = request.getParameter("pincode");
-				String userState = request.getParameter("state");
+				String userPostcode = request.getParameter("postcode");
+				String userCounty = request.getParameter("county");
 
 				// Basic validation (add more as needed)
 				if (userName == null || userName.trim().isEmpty() ||
@@ -137,8 +137,8 @@ public class UpdateUserServlet extends HttpServlet {
 				activeUser.setUserGender((userGender != null) ? userGender.trim() : activeUser.getUserGender()); // Keep old if null
 				activeUser.setUserAddress((userAddress != null) ? userAddress.trim() : activeUser.getUserAddress());
 				activeUser.setUserCity((userCity != null) ? userCity.trim() : activeUser.getUserCity());
-				activeUser.setUserPincode((userPincode != null) ? userPincode.trim() : activeUser.getUserPincode());
-				activeUser.setUserState((userState != null) ? userState.trim() : activeUser.getUserState());
+				activeUser.setUserPostcode((userPostcode != null) ? userPostcode.trim() : activeUser.getUserPostcode());
+				activeUser.setUserCounty((userCounty != null) ? userCounty.trim() : activeUser.getUserCounty());
 				// Keep existing Password and DateTime
 
 				// Call DAO method (assuming it returns boolean for success)

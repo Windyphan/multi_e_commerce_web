@@ -33,7 +33,7 @@ public class UserDao {
 	public boolean saveUser(User user) {
 		boolean flag = false;
 		// Enclose table name "user" in double quotes
-		String query = "insert into \"user\"(name, email, password, phone, gender, address, city, pincode, state) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String query = "insert into \"user\"(name, email, password, phone, gender, address, city, postcode, state) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (Connection con = ConnectionProvider.getConnection();
 			 PreparedStatement psmt = con.prepareStatement(query)) {
@@ -45,8 +45,8 @@ public class UserDao {
 			psmt.setString(5, user.getUserGender());
 			psmt.setString(6, user.getUserAddress());
 			psmt.setString(7, user.getUserCity());
-			psmt.setString(8, user.getUserPincode());
-			psmt.setString(9, user.getUserState());
+			psmt.setString(8, user.getUserPostcode());
+			psmt.setString(9, user.getUserCounty());
 
 			int rowsAffected = psmt.executeUpdate();
 			if (rowsAffected > 0) {
@@ -94,6 +94,37 @@ public class UserDao {
 	}
 
 	/**
+	 * Retrieves a single User by their primary key (userid).
+	 * Manages its own database connection.
+	 * Note: Table name "user" is enclosed in quotes.
+	 *
+	 * @param userId The primary key (userid) of the user.
+	 * @return The User object if found, null otherwise.
+	 */
+	public User getUserById(int userId) {
+		User user = null; // Initialize to null
+		// Enclose table name "user" in double quotes
+		String query = "select * from \"user\" where userid = ?";
+
+		try (Connection con = ConnectionProvider.getConnection();
+			 PreparedStatement psmt = con.prepareStatement(query)) {
+
+			psmt.setInt(1, userId);
+
+			try (ResultSet set = psmt.executeQuery()) {
+				if (set.next()) { // Check if a user was found
+					user = mapResultSetToUser(set); // Use the existing helper method
+				}
+			} // ResultSet automatically closed
+
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error getting user by ID " + userId + ": " + e.getMessage());
+			e.printStackTrace(); // Replace with proper logging
+		}
+		return user; // Return null if not found or error
+	}
+
+	/**
 	 * Retrieves a list of all users from the database.
 	 * Manages its own database connection.
 	 * Note: Table name "user" is enclosed in quotes.
@@ -132,15 +163,15 @@ public class UserDao {
 	public boolean updateUserAddresss(User user) {
 		boolean flag = false;
 		// Enclose table name "user" in double quotes
-		String query = "update \"user\" set address = ?, city = ?, pincode = ?, state = ? where userid = ?";
+		String query = "update \"user\" set address = ?, city = ?, postcode = ?, state = ? where userid = ?";
 
 		try (Connection con = ConnectionProvider.getConnection();
 			 PreparedStatement psmt = con.prepareStatement(query)) {
 
 			psmt.setString(1, user.getUserAddress());
 			psmt.setString(2, user.getUserCity());
-			psmt.setString(3, user.getUserPincode());
-			psmt.setString(4, user.getUserState());
+			psmt.setString(3, user.getUserPostcode());
+			psmt.setString(4, user.getUserCounty());
 			psmt.setInt(5, user.getUserId());
 
 			int rowsAffected = psmt.executeUpdate();
@@ -198,7 +229,7 @@ public class UserDao {
 	public boolean updateUser(User user) {
 		boolean flag = false;
 		// Enclose table name "user" in double quotes
-		String query = "update \"user\" set name = ?, email = ?, phone = ?, gender = ?, address = ?, city = ?, pincode = ?, state = ? where userid = ?";
+		String query = "update \"user\" set name = ?, email = ?, phone = ?, gender = ?, address = ?, city = ?, postcode = ?, state = ? where userid = ?";
 
 		try (Connection con = ConnectionProvider.getConnection();
 			 PreparedStatement psmt = con.prepareStatement(query)) {
@@ -209,8 +240,8 @@ public class UserDao {
 			psmt.setString(4, user.getUserGender());
 			psmt.setString(5, user.getUserAddress());
 			psmt.setString(6, user.getUserCity());
-			psmt.setString(7, user.getUserPincode());
-			psmt.setString(8, user.getUserState());
+			psmt.setString(7, user.getUserPostcode());
+			psmt.setString(8, user.getUserCounty());
 			psmt.setInt(9, user.getUserId());
 
 			int rowsAffected = psmt.executeUpdate();
@@ -286,7 +317,7 @@ public class UserDao {
 	public String getUserAddress(int uid) {
 		String address = null;
 		// Enclose table name "user" in double quotes
-		String query = "select address, city, pincode, state from \"user\" where userid = ?";
+		String query = "select address, city, postcode, state from \"user\" where userid = ?";
 		try (Connection con = ConnectionProvider.getConnection();
 			 PreparedStatement psmt = con.prepareStatement(query)) {
 
@@ -294,7 +325,7 @@ public class UserDao {
 
 			try (ResultSet rs = psmt.executeQuery()) {
 				if (rs.next()) { // Check if user exists
-					address = rs.getString("address") + ", " + rs.getString("city") + "-" + rs.getString("pincode") + ", " + rs.getString("state");
+					address = rs.getString("address") + ", " + rs.getString("city") + "-" + rs.getString("postcode") + ", " + rs.getString("state");
 				}
 			}
 		} catch (SQLException | ClassNotFoundException e) {
@@ -416,8 +447,8 @@ public class UserDao {
 		}
 		user.setUserAddress(set.getString("address"));
 		user.setUserCity(set.getString("city"));
-		user.setUserPincode(set.getString("pincode"));
-		user.setUserState(set.getString("state"));
+		user.setUserPostcode(set.getString("postcode"));
+		user.setUserCounty(set.getString("county"));
 		return user;
 	}
 }
