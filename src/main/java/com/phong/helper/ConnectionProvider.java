@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Date;
 import javax.servlet.http.HttpServlet;
 
 /**
@@ -36,52 +37,46 @@ import javax.servlet.http.HttpServlet;
 //}
 public class ConnectionProvider {
 
-	// Use environment variables for configuration
-	// These names MUST match the names you set in Elastic Beanstalk configuration
 	private static final String DB_HOST_ENV = "DB_HOST";
-	private static final String DB_PORT_ENV = "DB_PORT"; // Usually 5432 for PostgreSQL
-	private static final String DB_NAME_ENV = "DB_NAME"; // Should be "phong"
+	private static final String DB_PORT_ENV = "DB_PORT";
+	private static final String DB_NAME_ENV = "DB_NAME";
 	private static final String DB_USER_ENV = "DB_USER";
 	private static final String DB_PASS_ENV = "DB_PASS";
 
-	// Remove the static connection field. It's bad practice in web apps.
-	// Each request should ideally get a connection from a pool or create/close one.
-
 	public static Connection getConnection() throws SQLException, ClassNotFoundException {
+		// *** START DEBUG LOGGING ***
+		System.out.println("### CONN_PROVIDER [" + new Date() + "]: Attempting getConnection()...");
 
-		// Read configuration from Environment Variables provided by Elastic Beanstalk
 		String dbHost = System.getenv(DB_HOST_ENV);
 		String dbPort = System.getenv(DB_PORT_ENV);
 		String dbName = System.getenv(DB_NAME_ENV);
 		String dbUser = System.getenv(DB_USER_ENV);
+		// Avoid logging password directly in real scenarios
 		String dbPass = System.getenv(DB_PASS_ENV);
+		boolean passPresent = (dbPass != null && !dbPass.isEmpty()); // Log presence, not value
 
-		// Basic validation (add more robust logging in a real app)
+		System.out.println("### CONN_PROVIDER [" + new Date() + "]: Env Vars Read: " +
+				" HOST=" + dbHost +
+				" PORT=" + dbPort +
+				" NAME=" + dbName +
+				" USER=" + dbUser +
+				" PASS_PRESENT=" + passPresent);
+		// *** END DEBUG LOGGING ***
+
 		if (dbHost == null || dbPort == null || dbName == null || dbUser == null || dbPass == null) {
-			System.err.println("CRITICAL ERROR: Database environment variables not set!");
-			System.err.println("Missing: " +
-					(dbHost == null ? DB_HOST_ENV + " " : "") +
-					(dbPort == null ? DB_PORT_ENV + " " : "") +
-					(dbName == null ? DB_NAME_ENV + " " : "") +
-					(dbUser == null ? DB_USER_ENV + " " : "") +
-					(dbPass == null ? DB_PASS_ENV + " " : "")
-			);
+			System.err.println("### CONN_PROVIDER [" + new Date() + "]: CRITICAL ERROR: Database environment variables not set! Throwing SQLException.");
 			throw new SQLException("Database configuration environment variables are missing.");
 		}
 
-		// Construct the JDBC URL dynamically
-		// Example: jdbc:postgresql://your-rds-endpoint:5432/phong
 		String jdbcUrl = String.format("jdbc:postgresql://%s:%s/%s", dbHost, dbPort, dbName);
-
-		// Load the PostgreSQL driver (ensure the driver JAR is in your WAR's WEB-INF/lib)
+		System.out.println("### CONN_PROVIDER [" + new Date() + "]: Loading driver...");
 		Class.forName("org.postgresql.Driver");
-
-		// Get connection - **DO NOT STORE STATICALLY**. Return a new connection.
-		// A Connection Pool (like HikariCP or Tomcat DBCP) is STRONGLY recommended for production.
+		System.out.println("### CONN_PROVIDER [" + new Date() + "]: Driver loaded. Connecting to " + jdbcUrl + " as " + dbUser);
 		Connection connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPass);
-
-		return connection; // Return the newly created connection
+		System.out.println("### CONN_PROVIDER [" + new Date() + "]: Connection SUCCESS!");
+		return connection;
 	}
+
 
 	/**
 	 * Utility method to safely close a Connection, Statement, and ResultSet.
