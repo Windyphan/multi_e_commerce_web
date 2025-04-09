@@ -32,8 +32,8 @@ public class RegisterServlet extends HttpServlet {
 			String userGender = request.getParameter("gender");
 			String userAddress = request.getParameter("user_address");
 			String userCity = request.getParameter("city");
-			String userPincode = request.getParameter("pincode");
-			String userState = request.getParameter("state");
+			String userPostcode = request.getParameter("postcode");
+			String userCounty = request.getParameter("county");
 
 			// --- Basic Input Validation (Add more robust validation as needed) ---
 			if (userName == null || userName.trim().isEmpty() ||
@@ -57,8 +57,8 @@ public class RegisterServlet extends HttpServlet {
 			userGender = (userGender != null) ? userGender.trim() : null;
 			userAddress = (userAddress != null) ? userAddress.trim() : null;
 			userCity = (userCity != null) ? userCity.trim() : null;
-			userPincode = (userPincode != null) ? userPincode.trim() : null;
-			userState = (userState != null) ? userState.trim() : null;
+			userPostcode = (userPostcode != null) ? userPostcode.trim() : null;
+			userCounty = (userCounty != null) ? userCounty.trim() : null;
 
 
 			// --- TODO: Check if user email already exists ---
@@ -72,10 +72,10 @@ public class RegisterServlet extends HttpServlet {
 
 			// --- IMPORTANT: Hash the password before storing ---
 			// String hashedPassword = YourPasswordHashingUtil.hash(userPassword);
-			// User user = new User(userName, userEmail, hashedPassword, userPhone, userGender, userAddress, userCity, userPincode, userState);
+			// User user = new User(userName, userEmail, hashedPassword, userPhone, userGender, userAddress, userCity, userPostcode, userCounty);
 
 			// Creating user with plain text password (NOT RECOMMENDED FOR PRODUCTION)
-			User user = new User(userName, userEmail, userPassword, userPhone, userGender, userAddress, userCity, userPincode, userState);
+			User user = new User(userName, userEmail, userPassword, userPhone, userGender, userAddress, userCity, userPostcode, userCounty);
 
 
 			// --- Save User using DAO ---
