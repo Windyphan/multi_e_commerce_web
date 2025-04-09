@@ -10,45 +10,70 @@
     <packaging>war</packaging>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- *** UPDATED Java Version *** -->
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
     <dependencies>
+        <!-- *** Use javax Servlet API *** -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
+            <version>4.0.1</version> <!-- This is compatible with Tomcat 9 -->
             <scope>provided</scope>
         </dependency>
 
+        <!-- *** Use javax JSP API *** -->
         <dependency>
-            <groupId>jakarta.mail</groupId>
-            <artifactId>jakarta.mail-api</artifactId>
-            <version>2.1.3</version>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.3</version> <!-- This is compatible with Tomcat 9 -->
+            <scope>provided</scope>
         </dependency>
 
+        <!-- *** Use OLD JSTL 1.2 Implementation (includes API) *** -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+            <!-- Default compile scope - WILL be included in WEB-INF/lib -->
+        </dependency>
+        <!-- REMOVE the jakarta.servlet.jsp.jstl dependencies -->
+
+        <!-- Mail Dependencies -->
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>jakarta.mail</artifactId>
             <version>2.0.1</version>
         </dependency>
 
+        <!-- PostgreSQL Driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.3</version> <!-- Use the latest appropriate version -->
+            <version>42.7.3</version>
         </dependency>
 
     </dependencies>
 
     <build>
+        <finalName>E_commerce-1.0</finalName> <!-- Optional: Deploy as ROOT.war by default -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.4.0</version>
+            </plugin>
+            <!-- Ensure compiler plugin uses the properties -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version> <!-- Use a recent version -->
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
