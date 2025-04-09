@@ -39,7 +39,7 @@ public class OrderDao {
 
 			psmt.setString(1, order.getOrderId());
 			psmt.setString(2, order.getStatus());
-			psmt.setString(3, order.getPayementType()); // Ensure getter name matches
+			psmt.setString(3, order.getPaymentType()); // Ensure getter name matches
 			psmt.setInt(4, order.getUserId());
 
 			int affectedRows = psmt.executeUpdate();
@@ -200,7 +200,7 @@ public class OrderDao {
 		if (ts != null) {
 			order.setDate(ts);
 		}
-		order.setPayementType(rs.getString("paymentType")); // Check getter/setter names
+		order.setPaymentType(rs.getString("paymentType")); // Check getter/setter names
 		order.setUserId(rs.getInt("userId"));
 		return order;
 	}
