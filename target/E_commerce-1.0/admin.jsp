@@ -2,8 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%-- Import necessary entity (only Message used directly here, others via session EL) --%>
-<%@page import="com.phong.entities.Message"%>
-<%-- Admin check is now better done using JSTL below --%>
 
 <%-- Set Error Page --%>
 <%@page errorPage="error_exception.jsp"%>
