@@ -1,7 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@page import="com.phong.entities.Admin"%>
-<%@page import="com.phong.entities.Message"%>
 <%@page import="com.phong.entities.Category"%>
 <%@page import="com.phong.dao.CategoryDao"%>
 
@@ -152,7 +151,7 @@
 					<span class="current-img-label">Current Image:</span>
 					<c:choose>
 						<c:when test="${not empty category.categoryImage}">
-							<img src="Product_imgs/${category.categoryImage}" <%-- Use forward slash --%>
+							<img src="${s3BaseUrl}${category.categoryImage}" <%-- Use forward slash --%>
 								 alt="Current image for ${category.categoryName}" class="current-img-preview">
 							<span class="ms-2 fst-italic"><c:out value="${category.categoryImage}"/></span>
 						</c:when>

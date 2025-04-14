@@ -2,12 +2,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@page import="com.phong.entities.Admin"%>
-<%@page import="com.phong.entities.Message"%>
 <%@page import="com.phong.entities.Product"%>
 <%@page import="com.phong.dao.ProductDao"%>
-<%@page import="com.phong.entities.Category"%> <%-- Needed for category list type --%>
-<%@page import="java.util.List"%>
-<%@page import="java.util.Collections"%>
 
 
 <%@page errorPage="error_exception.jsp"%>
@@ -213,7 +209,7 @@
 					<span class="current-img-label">Current Image:</span>
 					<c:choose>
 						<c:when test="${not empty product.productImages}">
-							<img src="Product_imgs/${product.productImages}" <%-- Forward slash --%>
+							<img src="${s3BaseUrl}${product.productImages}" <%-- Forward slash --%>
 								 alt="Current image for ${product.productName}" class="current-img-preview">
 							<span class="ms-2 fst-italic"><c:out value="${product.productImages}"/></span>
 						</c:when>

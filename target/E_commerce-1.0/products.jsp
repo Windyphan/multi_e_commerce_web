@@ -4,7 +4,6 @@
 
 <%@page import="com.phong.dao.ProductDao"%>
 <%-- Remove CategoryDao import if only using list from navbar --%>
-<%-- <%@page import="com.phong.dao.CategoryDao"%> --%>
 <%@page import="com.phong.dao.WishlistDao"%>
 <%@page import="com.phong.entities.Product"%>
 <%@page import="com.phong.entities.User"%> <%-- Keep for session check --%>
@@ -14,7 +13,6 @@
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.stream.Collectors"%>
-<%@page import="java.util.Map"%> <%-- If using Category Map --%>
 <%@ page import="java.util.Date" %> <%-- Added Date import for logging --%>
 
 <%@page errorPage="error_exception.jsp"%>
@@ -222,7 +220,7 @@
 						<%-- Link covering image and title/price area --%>
 					<a href="viewProduct.jsp?pid=${product.productId}">
 						<div class="card-img-container">
-							<img src="Product_imgs/${product.productImages}" class="card-img-top" alt="${product.productName}">
+							<img src="${s3BaseUrl}${product.productImages}" class="card-img-top" alt="${product.productName}">
 						</div>
 						<div class="card-body">
 							<h5 class="card-title" title="${product.productName}"><c:out value="${product.productName}"/></h5>

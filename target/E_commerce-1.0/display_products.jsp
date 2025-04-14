@@ -156,7 +156,7 @@
 						<tr class="text-center">
 							<td>
 									<%-- Use forward slash for path --%>
-								<img src="Product_imgs/${product.productImages}"
+								<img src="${s3BaseUrl}${product.productImages}"
 									 alt="${product.productName}" class="product-img-sm">
 							</td>
 							<td class="text-start product-name">

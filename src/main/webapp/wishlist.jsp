@@ -8,7 +8,6 @@
 <%@page import="com.phong.entities.User"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="java.util.Collections"%>
 
 <%@page errorPage="error_exception.jsp"%>
 <%-- Assuming page encoding set by including page --%>
@@ -135,7 +134,7 @@
 						<tr class="wishlist-item-row">
 							<td class="text-center">
 								<a href="viewProduct.jsp?pid=${product.productId}">
-									<img src="Product_imgs/${product.productImages}" <%-- Forward slash --%>
+									<img src="${s3BaseUrl}${product.productImages}" <%-- Forward slash --%>
 										 alt="${product.productName}" class="wishlist-item-img">
 								</a>
 							</td>

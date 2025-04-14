@@ -5,9 +5,7 @@
 <%@page import="com.phong.dao.CategoryDao"%>
 <%@page import="com.phong.dao.WishlistDao"%> <%-- If showing wishlist status --%>
 <%@page import="com.phong.entities.Product"%>
-<%@page import="com.phong.entities.Category"%>
 <%@page import="com.phong.entities.User"%>
-<%@page import="com.phong.entities.Message"%> <%-- If setting messages --%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.List"%>
@@ -252,7 +250,7 @@
 						</div> <%-- End wishlist container --%>
 
 							<%-- Use forward slash --%>
-						<img src="Product_imgs/${product.productImages}" class="product-image" alt="${product.productName}">
+						<img src="${s3BaseUrl}${product.productImages}" class="product-image" alt="${product.productName}">
 					</div>
 				</div>
 
