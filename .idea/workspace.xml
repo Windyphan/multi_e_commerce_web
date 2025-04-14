@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="99cc4e27-b3cd-4759-ad19-9816ff79b9ba" name="Changes" comment="Change property">
+      <change afterPath="$PROJECT_DIR$/src/main/assembly/lambda-jar-with-classes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phong/lambda/ChatbotHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/SetCheckoutAttributesServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/multi_e_commerce_web.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/phong_maven.sql" beforeDir="false" afterPath="$PROJECT_DIR$/phong_maven.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/AddOperationServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/AddOperationServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/Components/common_css_js.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/Components/common_css_js.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/admin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/cart.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/cart.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/display_category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_category.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/display_orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_orders.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/display_products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_products.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/footer.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/order.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/order.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/personalInfo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/personalInfo.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/products.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/profile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/profile.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/test.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/test.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/update_category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/update_category.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/update_product.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/update_product.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/viewProduct.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/viewProduct.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/wishlist.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/wishlist.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0.war" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/Components/common_css_js.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/Components/common_css_js.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/AddOperationServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/AddOperationServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/admin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/cart.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/cart.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_category.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_orders.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_products.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/order.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/order.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/personalInfo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/personalInfo.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/products.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/profile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/profile.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/update_category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/update_category.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/update_product.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/update_product.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/viewProduct.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/viewProduct.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/wishlist.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/wishlist.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/AddOperationServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/AddOperationServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Jsp File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Windyphan&quot;
+  }
+}</component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="5037c702-ff6d-4898-91db-2bd0ed357a74" />
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Windyphan/multi_e_commerce_web.git&quot;,
+    &quot;accountId&quot;: &quot;5037c702-ff6d-4898-91db-2bd0ed357a74&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/main/webapp/admin.jsp" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="JspContextManager">
+    <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/wishlist.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/profile.jsp" />
+    <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/footer.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/error_exception.jsp" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2ro6gdg0quT92AIhV4iGjE9Xhmi" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Maven.E_commerce [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.E_commerce [mvn,war:war...].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.E_commerce [org.apache.maven.plugins:maven-clean-plugin:3.2.0:clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.E_commerce [org.apache.maven.plugins:maven-deploy-plugin:3.1.2:deploy].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.E_commerce [org.apache.maven.plugins:maven-install-plugin:3.1.2:install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.E_commerce [org.apache.maven.plugins:maven-war-plugin:3.4.0:exploded].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.E_commerce [war:war...].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Laptop/IdeaProjects/multi_e_commerce_web&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Facets&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\webapp\Images" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="E-Commerce-Website" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="E-Commerce-Website" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration name="E_commerce [war:war...]" type="MavenRunConfiguration" factoryName="Maven" nameIsGenerated="true">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="cmdOptions" />
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="war:war" />
+                <option value="org.codehaus.mojo:wagon-maven-plugin:upload-single" />
+                <option value="\" />
+                <option value="-Dwagon.fromFile=C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\target\E_commerce-1.0-SNAPSHOT.war" />
+                <option value="\" />
+                <option value="-Dwagon.url=file://C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps&quot;" />
+              </list>
+            </option>
+            <option name="multimoduleDir" />
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="projectsCmdOptionValues">
+              <list />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="E-Commerce-Website" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="E-Commerce-Website" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-125ca727e0f0-intellij.indexing.shared.core-IU-243.23654.117" />
+        <option value="bundled-js-predefined-d6986cc7102b-822845ee3bb5-JavaScript-IU-243.23654.117" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="StructureViewState">
+    <option name="selectedTab" value="JSP" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="99cc4e27-b3cd-4759-ad19-9816ff79b9ba" name="Changes" comment="" />
+      <created>1737213192410</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1737213192410</updated>
+      <workItem from="1737386366590" duration="7026000" />
+      <workItem from="1737589244617" duration="3731000" />
+      <workItem from="1737729565483" duration="775000" />
+      <workItem from="1738162554935" duration="494000" />
+      <workItem from="1738598458215" duration="882000" />
+      <workItem from="1738811662403" duration="720000" />
+      <workItem from="1738837834861" duration="347000" />
+      <workItem from="1738848659573" duration="302000" />
+      <workItem from="1738969092669" duration="686000" />
+      <workItem from="1739054453458" duration="1039000" />
+      <workItem from="1739195263930" duration="3835000" />
+      <workItem from="1739291859551" duration="40000" />
+      <workItem from="1739806967489" duration="2403000" />
+      <workItem from="1741124206480" duration="7918000" />
+      <workItem from="1742492741914" duration="9404000" />
+      <workItem from="1743101438133" duration="2584000" />
+      <workItem from="1743448605761" duration="333000" />
+      <workItem from="1743463895186" duration="1946000" />
+      <workItem from="1743537844359" duration="868000" />
+      <workItem from="1743607193025" duration="4366000" />
+      <workItem from="1743722842238" duration="18124000" />
+      <workItem from="1743744430796" duration="4098000" />
+      <workItem from="1744054505571" duration="12735000" />
+      <workItem from="1744144143253" duration="24558000" />
+      <workItem from="1744204665084" duration="7864000" />
+      <workItem from="1744315069044" duration="26227000" />
+      <workItem from="1744663603013" duration="326000" />
+      <workItem from="1744663943615" duration="102000" />
+      <workItem from="1744664058739" duration="67000" />
+      <workItem from="1744664140417" duration="123000" />
+    </task>
+    <task id="LOCAL-00001" summary="Initial commit">
+      <option name="closed" value="true" />
+      <created>1737385868608</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1737385868608</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Change name to avoid copyright">
+      <option name="closed" value="true" />
+      <created>1737406143870</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1737406143871</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Change name to avoid copyright">
+      <option name="closed" value="true" />
+      <created>1737406589823</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1737406589823</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Add state and city">
+      <option name="closed" value="true" />
+      <created>1738837897718</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1738837897718</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Add state and city">
+      <option name="closed" value="true" />
+      <created>1738970035848</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1738970035848</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Add gender">
+      <option name="closed" value="true" />
+      <created>1739054838787</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1739054838787</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Replace image with general image">
+      <option name="closed" value="true" />
+      <created>1739197795983</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1739197795983</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Change grammar">
+      <option name="closed" value="true" />
+      <created>1739291888492</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1739291888492</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Migrate mysql into postgresql">
+      <option name="closed" value="true" />
+      <created>1741138036559</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1741138036559</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Overhaul servlet">
+      <option name="closed" value="true" />
+      <created>1744055577601</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1744055577601</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Overhaul DAO file, add close connection mechanic to secure the DB connection">
+      <option name="closed" value="true" />
+      <created>1744055645051</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1744055645051</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Overhaul servlet file, add close connection mechanic to secure the DB connection">
+      <option name="closed" value="true" />
+      <created>1744055668220</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1744055668220</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Overhaul file, add close connection mechanic to secure the DB connection">
+      <option name="closed" value="true" />
+      <created>1744055680767</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1744055680767</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Overhaul file, add close connection mechanic to secure the DB connection">
+      <option name="closed" value="true" />
+      <created>1744055710515</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1744055710515</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Add posgres sql driver">
+      <option name="closed" value="true" />
+      <created>1744055732044</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1744055732044</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Grammar error">
+      <option name="closed" value="true" />
+      <created>1744055751049</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1744055751049</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Add test file">
+      <option name="closed" value="true" />
+      <created>1744055764069</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1744055764069</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Add file">
+      <option name="closed" value="true" />
+      <created>1744168521257</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168521257</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Add file">
+      <option name="closed" value="true" />
+      <created>1744168532761</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168532761</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Re haul jsp file">
+      <option name="closed" value="true" />
+      <created>1744168602459</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168602459</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Re haul jsp file">
+      <option name="closed" value="true" />
+      <created>1744168631561</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168631561</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Re haul file">
+      <option name="closed" value="true" />
+      <created>1744168658325</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168658325</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Add log">
+      <option name="closed" value="true" />
+      <created>1744168675820</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168675820</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Add footer">
+      <option name="closed" value="true" />
+      <created>1744168689986</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168689986</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Re haul jsp file">
+      <option name="closed" value="true" />
+      <created>1744168715996</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168715996</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Re haul jsp file">
+      <option name="closed" value="true" />
+      <created>1744168736043</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168736043</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Fix grammar">
+      <option name="closed" value="true" />
+      <created>1744168755174</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168755174</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Fix grammar">
+      <option name="closed" value="true" />
+      <created>1744168764911</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168764911</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Fix grammar">
+      <option name="closed" value="true" />
+      <created>1744168780309</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168780309</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Add file">
+      <option name="closed" value="true" />
+      <created>1744168797649</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168797649</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Add sql">
+      <option name="closed" value="true" />
+      <created>1744168806750</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168806750</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Add lib">
+      <option name="closed" value="true" />
+      <created>1744168816489</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168816489</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Change property">
+      <option name="closed" value="true" />
+      <created>1744168831425</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168831425</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Change style">
+      <option name="closed" value="true" />
+      <created>1744168844045</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168844045</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Change property">
+      <option name="closed" value="true" />
+      <created>1744168865014</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1744168865014</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial commit" />
+    <MESSAGE value="Change name to avoid copyright" />
+    <MESSAGE value="Add state and city" />
+    <MESSAGE value="Add gender" />
+    <MESSAGE value="Replace image with general image" />
+    <MESSAGE value="Change grammar" />
+    <MESSAGE value="Migrate mysql into postgresql" />
+    <MESSAGE value="Overhaul servlet" />
+    <MESSAGE value="Overhaul DAO file, add close connection mechanic to secure the DB connection" />
+    <MESSAGE value="Overhaul servlet file, add close connection mechanic to secure the DB connection" />
+    <MESSAGE value="Overhaul file, add close connection mechanic to secure the DB connection" />
+    <MESSAGE value="Add posgres sql driver" />
+    <MESSAGE value="Grammar error" />
+    <MESSAGE value="Add test file" />
+    <MESSAGE value="Re haul file" />
+    <MESSAGE value="Add log" />
+    <MESSAGE value="Add footer" />
+    <MESSAGE value="Re haul jsp file" />
+    <MESSAGE value="Fix grammar" />
+    <MESSAGE value="Add file" />
+    <MESSAGE value="Add sql" />
+    <MESSAGE value="Add lib" />
+    <MESSAGE value="Change style" />
+    <MESSAGE value="Change property" />
+    <option name="LAST_COMMIT_MESSAGE" value="Change property" />
+  </component>
+</project>
