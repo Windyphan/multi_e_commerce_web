@@ -14,5 +14,8 @@
 <%-- SweetAlert2 (Keep ONLY this one) --%>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<%-- Your Custom JavaScript (Load last) --%>
+<%-- Custom JavaScript (Load last) --%>
 <script src="JS/script.js"></script> <%-- Verify path --%>
+
+<%-- Define S3 Base URL --%>
+<c:set var="s3BaseUrl" value="https://phong-ecommerce-assets.s3.eu-north-1.amazonaws.com/Product_imgs/" scope="application"/>

@@ -12,8 +12,10 @@ com\phong\entities\Message.class
 com\phong\entities\User.class
 com\phong\servlets\AdminServlet.class
 com\phong\servlets\UpdateOrderServlet.class
+com\phong\lambda\ChatbotHandler.class
 com\phong\servlets\LoginServlet.class
 com\phong\servlets\OrderOperationServlet.class
+com\phong\lambda\ChatbotHandler$RequestBody.class
 com\phong\dao\UserDao.class
 com\phong\helper\Mail$1.class
 com\phong\dao\OrderedProductDao.class
@@ -22,6 +24,7 @@ com\phong\servlets\ChangePasswordServlet.class
 com\phong\servlets\LogoutServlet.class
 com\phong\entities\Category.class
 com\phong\entities\Wishlist.class
+com\phong\servlets\SetCheckoutAttributesServlet.class
 com\phong\entities\Order.class
 com\phong\servlets\AddOperationServlet.class
 com\phong\entities\Admin.class

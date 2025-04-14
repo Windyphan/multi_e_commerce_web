@@ -15,6 +15,19 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>2.25.31</version> <!-- Use a recent SDK version -->
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!-- *** Use javax Servlet API *** -->
         <dependency>
@@ -24,12 +37,54 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- AWS SDK for DynamoDB -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>dynamodb</artifactId>
+        </dependency>
+
+        <!-- Jackson for JSON processing (API Gateway often uses JSON) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.15.3</version> <!-- Use a recent version -->
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.15.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.15.3</version>
+        </dependency>
+
+        <!-- If using Lambda's Java Events library for API Gateway events -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-lambda-java-events</artifactId>
+            <version>3.11.5</version> <!-- Use latest -->
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-lambda-java-core</artifactId>
+            <version>1.2.3</version> <!-- Use latest -->
+        </dependency>
+
         <!-- *** Use javax JSP API *** -->
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>javax.servlet.jsp-api</artifactId>
             <version>2.3.3</version> <!-- This is compatible with Tomcat 9 -->
             <scope>provided</scope>
+        </dependency>
+
+        <!-- AWS SDK for S3 -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <!-- Version managed by BOM -->
         </dependency>
 
         <!-- *** Use OLD JSTL 1.2 Implementation (includes API) *** -->
@@ -58,23 +113,57 @@
     </dependencies>
 
     <build>
-        <finalName>E_commerce-1.0</finalName> <!-- Optional: Deploy as ROOT.war by default -->
+        <finalName>E_commerce-1.0</finalName> <!-- This sets the name for the WAR file -->
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.4.0</version>
-            </plugin>
-            <!-- Ensure compiler plugin uses the properties -->
+            <!-- Compiler Plugin (ensure Java 17) - Declare only ONCE -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version> <!-- Use a recent version -->
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <source>${maven.compiler.source}</source> <!-- Uses the property defined above (17) -->
+                    <target>${maven.compiler.target}</target> <!-- Uses the property defined above (17) -->
                 </configuration>
+            </plugin>
+
+            <!-- WAR Plugin (Needed for main web app) - Declare only ONCE -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml> <!-- If using annotations -->
+                </configuration>
+            </plugin>
+
+            <!-- Shade Plugin (For Lambda JAR) - Keep this -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.6.0</version>
+                <configuration>
+                    <!-- *** Reference the custom descriptor *** -->
+                    <descriptors>
+                        <descriptor>src/main/assembly/lambda-jar-with-classes.xml</descriptor>
+                    </descriptors>
+                    <archive>
+                        <!-- Optional Manifest config -->
+                    </archive>
+                    <!-- Keep classifier or finalName as before -->
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <finalName>${project.artifactId}-${project.version}-lambda</finalName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-lambda-jar</id> <!-- Changed id slightly -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
+
 </project>
