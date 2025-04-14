@@ -1,7 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@page import="com.phong.entities.User"%> <%-- Keep for session check --%>
-<%@page import="com.phong.entities.Message"%> <%-- Keep for session check --%>
 
 <%-- Security Check (already done in provided snippet, kept for context) --%>
 <%

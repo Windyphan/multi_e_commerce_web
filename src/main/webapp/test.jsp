@@ -10,7 +10,7 @@
   long startTime = System.currentTimeMillis();
   try {
     out.println("<p>Attempting to get connection...</p>");
-    testCon = ConnectionProvider.getConnection(); // Call your provider
+    testCon = ConnectionProvider.getConnection();
     long endTime = System.currentTimeMillis();
 
     if (testCon != null && !testCon.isClosed()) {

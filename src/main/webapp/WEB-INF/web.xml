@@ -67,26 +67,6 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>AddressServlet</display-name>
-    <servlet-name>AddressServlet</servlet-name>
-    <servlet-class>com.phong.servlets.AddressServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AddressServlet</servlet-name>
-    <url-pattern>/AddressServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>RemoveAddressServlet</display-name>
-    <servlet-name>RemoveAddressServlet</servlet-name>
-    <servlet-class>com.phong.servlets.RemoveAddressServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>RemoveAddressServlet</servlet-name>
-    <url-pattern>/RemoveAddressServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
     <display-name>AddOperationServlet</display-name>
     <servlet-name>AddOperationServlet</servlet-name>
     <servlet-class>com.phong.servlets.AddOperationServlet</servlet-class>
@@ -127,16 +107,6 @@
   </servlet-mapping>
   <servlet>
     <description></description>
-    <display-name>AdminLoginServlet</display-name>
-    <servlet-name>AdminLoginServlet</servlet-name>
-    <servlet-class>com.phong.servlets.AdminLoginServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AdminLoginServlet</servlet-name>
-    <url-pattern>/AdminLoginServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
     <display-name>OrderOperationServlet</display-name>
     <servlet-name>OrderOperationServlet</servlet-name>
     <servlet-class>com.phong.servlets.OrderOperationServlet</servlet-class>
@@ -174,5 +144,15 @@
   <servlet-mapping>
     <servlet-name>ChangePasswordServlet</servlet-name>
     <url-pattern>/ChangePasswordServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>SetCheckoutAttributesServlet</display-name>
+    <servlet-name>SetCheckoutAttributesServlet</servlet-name>
+    <servlet-class>com.phong.servlets.SetCheckoutAttributesServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SetCheckoutAttributesServlet</servlet-name>
+    <url-pattern>/SetCheckoutAttributesServlet</url-pattern>
   </servlet-mapping>
 </web-app>
