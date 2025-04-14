@@ -2,7 +2,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@page import="com.phong.entities.User"%>
-<%@page import="com.phong.entities.Message"%> <%-- For potential error message --%>
 <%@page import="com.phong.entities.OrderedProduct"%>
 <%@page import="com.phong.entities.Order"%>
 <%@page import="java.util.List"%>
@@ -190,7 +189,7 @@
 								<%-- Loop through products in this order --%>
 								<c:forEach var="orderedProd" items="${productsInThisOrder}">
 									<div class="order-item-row">
-										<img src="Product_imgs/${orderedProd.image}" alt="" class="order-item-img">
+										<img src="${s3BaseUrl}${orderedProd.image}" alt="" class="order-item-img">
 										<div class="order-item-details">
 											<span class="order-item-name"><c:out value="${orderedProd.name}"/></span>
 											<span class="order-item-qty-price">
