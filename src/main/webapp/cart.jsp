@@ -6,7 +6,6 @@
 <%@page import="com.phong.dao.CartDao"%>
 <%@page import="com.phong.entities.Cart"%>
 <%@page import="com.phong.entities.User"%>
-<%@page import="com.phong.entities.Message"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%> <%-- Import ArrayList for creating detailed list --%>
 <%@page import="java.util.Collections"%> <%-- Import Collections for emptyList --%>
@@ -225,7 +224,7 @@
 									<td class="text-start ps-3">
 										<div class="d-flex align-items-center">
 												<%-- Use forward slash --%>
-											<img src="Product_imgs/${itemDetail.product.productImages}" alt="${itemDetail.product.productName}" class="cart-item-img">
+											<img src="${s3BaseUrl}${itemDetail.product.productImages}" alt="${itemDetail.product.productName}" class="cart-item-img">
 											<a href="viewProduct.jsp?pid=${itemDetail.product.productId}" class="cart-item-name ms-2">${itemDetail.product.productName}</a>
 										</div>
 									</td>
