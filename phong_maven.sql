@@ -16,8 +16,8 @@ CREATE TABLE admin (
 
 -- Insert data into 'admin'
 INSERT INTO admin (name, email, password, phone) VALUES
-                                                     ('Phong Phan', 'test@gmail.com', 'abc123', '01614960123'),
-                                                     ('Phong Phan', 'test34@gmail.com', 'abc', '01614960123');
+                                                     ('Phong Phan', 'test@gmail.com', 'hashed_admin_pw1', '01614960123'),
+                                                     ('Phong Phan', 'test34@gmail.com', 'hashed_admin_pw2', '01614960123');
 
 -- Create the 'user' table
 CREATE TABLE "user" (  -- Enclose "user" in quotes as it's a reserved word.  Much better to rename the table.
