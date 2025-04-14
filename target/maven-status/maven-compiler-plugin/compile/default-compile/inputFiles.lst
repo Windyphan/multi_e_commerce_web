@@ -21,11 +21,13 @@ C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\entiti
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\helper\OrderIdGenerator.java
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\dao\OrderedProductDao.java
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\servlets\UpdateUserServlet.java
+C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\servlets\ReviewServlet.java
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\entities\Cart.java
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\helper\MailMessenger.java
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\dao\UserDao.java
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\entities\Category.java
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\servlets\CartOperationServlet.java
+C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\entities\Review.java
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\servlets\WishlistServlet.java
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\servlets\ChangePasswordServlet.java
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\helper\ConnectionProvider.java
@@ -33,3 +35,4 @@ C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\dao\Ad
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\servlets\AddOperationServlet.java
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\dao\OrderDao.java
 C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\entities\Product.java
+C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\java\com\phong\dao\ReviewDao.java

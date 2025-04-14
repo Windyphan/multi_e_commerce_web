@@ -4,6 +4,7 @@ com\phong\servlets\CartOperationServlet.class
 com\phong\servlets\AddToCartServlet.class
 com\phong\servlets\UpdateUserServlet.class
 com\phong\entities\Product.class
+com\phong\entities\Review.class
 com\phong\helper\OrderIdGenerator.class
 com\phong\dao\CartDao.class
 com\phong\servlets\RegisterServlet.class
@@ -26,6 +27,7 @@ com\phong\entities\Category.class
 com\phong\entities\Wishlist.class
 com\phong\servlets\SetCheckoutAttributesServlet.class
 com\phong\entities\Order.class
+com\phong\dao\ReviewDao.class
 com\phong\servlets\AddOperationServlet.class
 com\phong\entities\Admin.class
 com\phong\helper\MailMessenger.class
@@ -33,5 +35,6 @@ com\phong\servlets\WishlistServlet.class
 com\phong\dao\AdminDao.class
 com\phong\dao\OrderDao.class
 com\phong\helper\ConnectionProvider.class
+com\phong\servlets\ReviewServlet.class
 com\phong\dao\CategoryDao.class
 com\phong\entities\Cart.class

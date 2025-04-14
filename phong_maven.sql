@@ -148,3 +148,20 @@ CREATE TABLE wishlist (
 -- Insert data into 'wishlist'
 INSERT INTO wishlist (iduser, idproduct) VALUES
     (1, 10);
+
+-- Create the 'review' table
+CREATE TABLE review (
+                        review_id SERIAL PRIMARY KEY,
+                        rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5), -- Rating from 1 to 5 stars
+                        comment TEXT,                                    -- User's review text (can be long)
+                        review_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                        user_id INTEGER NOT NULL,                      -- Foreign key to the user who wrote the review
+                        product_id INTEGER NOT NULL,                   -- Foreign key to the product being reviewed
+                        FOREIGN KEY (user_id) REFERENCES "user" (userid) ON DELETE CASCADE, -- If user deleted, remove their reviews
+                        FOREIGN KEY (product_id) REFERENCES product (pid) ON DELETE CASCADE, -- If product deleted, remove its reviews
+                        UNIQUE (user_id, product_id) -- Ensure a user can only review a product once
+);
+
+-- Optional: Add indexes for faster querying
+CREATE INDEX idx_review_product_id ON review (product_id);
+CREATE INDEX idx_review_user_id ON review (user_id);

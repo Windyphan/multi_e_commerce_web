@@ -155,4 +155,14 @@
     <servlet-name>SetCheckoutAttributesServlet</servlet-name>
     <url-pattern>/SetCheckoutAttributesServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ReviewServlet</display-name>
+    <servlet-name>ReviewServlet</servlet-name>
+    <servlet-class>com.phong.servlets.ReviewServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReviewServlet</servlet-name>
+    <url-pattern>/ReviewServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

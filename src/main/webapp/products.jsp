@@ -5,6 +5,7 @@
 <%@page import="com.phong.dao.ProductDao"%>
 <%-- Remove CategoryDao import if only using list from navbar --%>
 <%@page import="com.phong.dao.WishlistDao"%>
+<%@page import="com.phong.dao.ReviewDao"%>
 <%@page import="com.phong.entities.Product"%>
 <%@page import="com.phong.entities.User"%> <%-- Keep for session check --%>
 <%@page import="com.phong.entities.Wishlist"%>
@@ -14,6 +15,8 @@
 <%@page import="java.util.Collections"%>
 <%@page import="java.util.stream.Collectors"%>
 <%@ page import="java.util.Date" %> <%-- Added Date import for logging --%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.HashMap"%>
 
 <%@page errorPage="error_exception.jsp"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -114,11 +117,20 @@
 	}
 	System.out.println("### PRODUCTS_JSP [" + new Date() + "]: Final userWishlistProductIds size: " + userWishlistProductIds.size());
 
+	Map<Integer, Float> averageRatingsMap = new HashMap<>();
+	if (productList != null && !productList.isEmpty()) {
+		ReviewDao reviewDao = new ReviewDao();
+		for (Product p : productList) {
+			averageRatingsMap.put(p.getProductId(), reviewDao.getAverageRatingByProductId(p.getProductId()));
+		}
+	}
+
 	// Set attributes for EL access
 	request.setAttribute("productsToDisplay", productList);
 	request.setAttribute("pageDisplayMessage", displayMessage);
 	request.setAttribute("pageTitle", pageTitle);
 	request.setAttribute("userWishlistPids", userWishlistProductIds);
+	request.setAttribute("averageRatings", averageRatingsMap);
 
 	// !!! Confirmation log !!!
 	System.out.println("### PRODUCTS_JSP [" + new Date() + "]: FINISHED setup. 'message' attribute in session is: " + (session.getAttribute("message") != null ? "PRESENT" : "ABSENT"));
@@ -236,7 +248,19 @@
                                             ${product.productDiscount}% off
                                         </span>
 								</c:if>
+									<%--Show rating--%>
+								<c:set var="avgRating" value="${averageRatings[product.productId]}"/>
+								<c:if test="${not empty avgRating and avgRating > 0}">
+									<div class="star-rating mb-1" title="${avgRating} out of 5 stars">
+										<small> <%-- Use small tag --%>
+											<c:forEach var="i" begin="1" end="5">
+												<i class="fa-${avgRating >= i ? 'solid' : (avgRating >= i-0.5 ? 'solid fa-star-half-stroke' : 'regular')} fa-star text-warning"></i>
+											</c:forEach>
+										</small>
+									</div>
+								</c:if>
 							</div>
+
 						</div>
 					</a>
 				</div> <%-- End card --%>

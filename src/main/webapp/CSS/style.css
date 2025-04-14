@@ -240,3 +240,46 @@
 	border-color: rgba(255,255,255, 0.5);
 	color: #ffffff !important;
 }
+
+/* Star Rating Display */
+.star-rating i {
+	font-size: 1.1rem; /* Adjust star size */
+	margin-right: 2px;
+}
+.star-rating .text-warning {
+	color: #ffc107 !important; /* Ensure warning color is used */
+}
+
+/* Star Rating Input (CSS only) */
+.star-rating-input {
+	display: inline-block;
+	direction: rtl; /* Right-to-left to make stars fill correctly on hover */
+	font-size: 1.8rem; /* Make input stars larger */
+	margin-bottom: 0.5rem;
+}
+.star-rating-input input[type="radio"] {
+	display: none; /* Hide the actual radio buttons */
+}
+.star-rating-input label {
+	color: #ddd; /* Default star color */
+	cursor: pointer;
+	padding: 0 1px;
+	transition: color 0.2s ease;
+}
+/* Color stars on hover (and previous stars) */
+.star-rating-input label:hover,
+.star-rating-input label:hover ~ label,
+.star-rating-input input[type="radio"]:checked ~ label {
+	color: #ffc107; /* Hover/selected color */
+}
+
+/* Remove hover effect once a selection is made */
+.star-rating-input:has(input:checked) label:hover,
+.star-rating-input:has(input:checked) label:hover ~ label {
+	/* Optional: Disable hover effect after checking? Might be confusing */
+	/* color: #ddd; /* Back to default */
+}
+/* Keep checked stars colored */
+.star-rating-input input[type="radio"]:checked ~ label {
+	color: #ffc107;
+}

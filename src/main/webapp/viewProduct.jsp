@@ -4,8 +4,10 @@
 <%@page import="com.phong.dao.ProductDao"%>
 <%@page import="com.phong.dao.CategoryDao"%>
 <%@page import="com.phong.dao.WishlistDao"%> <%-- If showing wishlist status --%>
+<%@page import="com.phong.dao.ReviewDao"%>
 <%@page import="com.phong.entities.Product"%>
 <%@page import="com.phong.entities.User"%>
+<%@page import="com.phong.entities.Review"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashSet"%>
 <%@page import="java.util.List"%>
@@ -68,10 +70,39 @@
 		}
 	}
 
+	// Fetch Reviews and Average Rating
+	List<Review> reviews = Collections.emptyList();
+	float averageRating = 0.0f;
+	int reviewCount = 0;
+	boolean userHasReviewed = false;
+	Review existingUserReview = null; // Variable to hold existing review
+
+	if (product != null) { // Only fetch if product exists
+		ReviewDao reviewDao = new ReviewDao();
+		List<Review> fetchedReviews = reviewDao.getReviewsByProductId(product.getProductId());
+		if (fetchedReviews != null) {
+			reviews = fetchedReviews;
+			reviewCount = reviews.size();
+		}
+		averageRating = reviewDao.getAverageRatingByProductId(product.getProductId());
+
+		// Check if current logged-in user has reviewed this product
+		if (currentUserForViewProducts != null) {
+			// Use the new DAO method
+			existingUserReview = reviewDao.getReviewByUserIdAndProductId(currentUserForViewProducts.getUserId(), product.getProductId());
+			userHasReviewed = (existingUserReview != null); // Simplified check
+		}
+	}
+
 	// Set attributes for EL access
 	request.setAttribute("product", product);
 	request.setAttribute("categoryName", categoryName);
 	request.setAttribute("userWishlistPids", userWishlistProductIds);
+	request.setAttribute("productReviews", reviews);
+	request.setAttribute("averageRating", averageRating);
+	request.setAttribute("reviewCount", reviewCount);
+	request.setAttribute("userHasReviewed", userHasReviewed);
+	request.setAttribute("existingUserReview", existingUserReview); // Pass existing review
 
 	// Redirect if product not found or ID invalid
 	if (errorMessage != null) {
@@ -274,6 +305,20 @@
 						</c:if>
 					</div>
 
+					<div class="d-flex align-items-center mb-2"> <%-- Flex container for rating --%>
+						<c:if test="${reviewCount > 0}">
+							<div class="star-rating me-2" title="${averageRating} out of 5 stars">
+								<c:forEach var="i" begin="1" end="5">
+									<i class="fa-${averageRating >= i ? 'solid' : (averageRating >= i-0.5 ? 'solid fa-star-half-stroke' : 'regular')} fa-star text-warning"></i>
+								</c:forEach>
+							</div>
+							<span class="text-muted small">(${reviewCount} Review<c:if test="${reviewCount != 1}">s</c:if>)</span>
+						</c:if>
+						<c:if test="${reviewCount == 0}">
+							<span class="text-muted small">No reviews yet</span>
+						</c:if>
+					</div>
+
 						<%-- Description --%>
 					<h6 class="description-title">Description</h6>
 					<p class="description-text"><c:out value="${product.productDescription}"/></p>
@@ -332,6 +377,131 @@
 						</c:choose>
 					</div>
 				</div> <%-- End details column --%>
+				<hr class="my-4">
+
+				<div class="row">
+					<div class="col-12">
+						<h4 class="mb-3">Customer Reviews & Ratings</h4>
+					</div>
+
+						<%-- Column for Average Rating & Form --%>
+					<div class="col-md-5 col-lg-4 mb-4 mb-md-0">
+							<%-- Average Rating Display --%>
+						<div class="card sticky-top" style="top: 20px;"> <%-- Make rating/form sticky? --%>
+							<div class="card-body text-center">
+								<h5>Average Rating</h5>
+								<c:choose>
+									<c:when test="${reviewCount > 0}">
+										<h2 class="display-4 fw-bold"><fmt:formatNumber value="${averageRating}" maxFractionDigits="1"/> / 5</h2>
+										<div class="star-rating mb-2">
+												<%-- Display stars based on average --%>
+											<c:forEach var="i" begin="1" end="5">
+												<i class="fa-${averageRating >= i ? 'solid' : (averageRating >= i-0.5 ? 'solid fa-star-half-stroke' : 'regular')} fa-star text-warning"></i>
+											</c:forEach>
+										</div>
+										<span class="text-muted">Based on ${reviewCount} review<c:if test="${reviewCount != 1}">s</c:if></span>
+									</c:when>
+									<c:otherwise>
+										<p class="text-muted mt-3">No reviews yet.</p>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</div>
+
+							<%-- Review Submission Form --%>
+							<%-- Show only if user is logged in AND hasn't reviewed yet --%>
+							<c:choose>
+								<c:when test="${empty sessionScope.activeUser}">
+									<div class="alert alert-secondary mt-4" role="alert">
+										Please <a href="login.jsp" class="alert-link">login</a> to write or update a review.
+									</div>
+								</c:when>
+								<c:otherwise> <%-- User is logged in --%>
+									<div class="card mt-4">
+										<div class="card-header">
+											<c:choose>
+												<c:when test="${userHasReviewed}">Edit Your Review</c:when>
+												<c:otherwise>Write a Review</c:otherwise>
+											</c:choose>
+										</div>
+										<div class="card-body">
+											<form action="ReviewServlet" method="post" class="needs-validation" novalidate>
+													<%-- Hidden field for operation type --%>
+												<input type="hidden" name="operation" value="${userHasReviewed ? 'update' : 'add'}">
+												<input type="hidden" name="productId" value="${product.productId}">
+													<%-- Include review ID ONLY if updating --%>
+												<c:if test="${userHasReviewed}">
+													<input type="hidden" name="reviewId" value="${existingUserReview.reviewId}">
+												</c:if>
+
+												<div class="mb-3">
+													<label for="ratingInput" class="form-label">Your Rating:</label>
+													<div id="ratingInput" class="star-rating-input">
+															<%-- Add 'checked' based on existingUserReview.rating if updating --%>
+														<input type="radio" id="star5" name="rating" value="5" required ${userHasReviewed && existingUserReview.rating == 5 ? 'checked' : ''}/><label for="star5" title="5 stars">★</label>
+														<input type="radio" id="star4" name="rating" value="4" required ${userHasReviewed && existingUserReview.rating == 4 ? 'checked' : ''}/><label for="star4" title="4 stars">★</label>
+														<input type="radio" id="star3" name="rating" value="3" required ${userHasReviewed && existingUserReview.rating == 3 ? 'checked' : ''}/><label for="star3" title="3 stars">★</label>
+														<input type="radio" id="star2" name="rating" value="2" required ${userHasReviewed && existingUserReview.rating == 2 ? 'checked' : ''}/><label for="star2" title="2 stars">★</label>
+														<input type="radio" id="star1" name="rating" value="1" required ${userHasReviewed && existingUserReview.rating == 1 ? 'checked' : ''}/><label for="star1" title="1 star">★</label>
+													</div>
+													<div class="invalid-feedback d-block">Please select a rating.</div>
+												</div>
+												<div class="mb-3">
+													<label for="commentInput" class="form-label">Your Review:</label>
+														<%-- Pre-fill textarea with existing comment if updating --%>
+													<textarea class="form-control" id="commentInput" name="comment" rows="4"
+															  placeholder="Share your thoughts..."><c:if test="${userHasReviewed}"><c:out value="${existingUserReview.comment}"/></c:if></textarea>
+												</div>
+												<button type="submit" class="btn btn-primary">
+													<c:choose>
+														<c:when test="${userHasReviewed}">Update Review</c:when>
+														<c:otherwise>Submit Review</c:otherwise>
+													</c:choose>
+												</button>
+											</form>
+										</div>
+									</div>
+								</c:otherwise>
+							</c:choose>
+							<%-- Show message if user already reviewed --%>
+						<c:if test="${not empty sessionScope.activeUser and userHasReviewed}">
+							<div class="alert alert-info mt-4" role="alert">
+								You have already submitted a review for this product.
+							</div>
+						</c:if>
+
+					</div>
+
+						<%-- Column for Existing Reviews --%>
+					<div class="col-md-7 col-lg-8">
+						<c:choose>
+							<c:when test="${empty productReviews}">
+								<%-- Message handled by average rating section --%>
+							</c:when>
+							<c:otherwise>
+								<c:forEach var="review" items="${productReviews}">
+									<div class="card mb-3"> <%-- Card per review --%>
+										<div class="card-body">
+											<div class="d-flex justify-content-between align-items-center mb-2">
+												<span class="fw-bold"><c:out value="${review.userName}"/></span>
+												<small class="text-muted">
+													<fmt:formatDate value="${review.reviewDate}" pattern="dd MMM yyyy"/>
+												</small>
+											</div>
+											<div class="star-rating mb-2">
+													<%-- Display stars for this review --%>
+												<c:forEach var="i" begin="1" end="5">
+													<i class="fa-${review.rating >= i ? 'solid' : 'regular'} fa-star text-warning"></i>
+												</c:forEach>
+											</div>
+											<p class="card-text"><c:out value="${review.comment}"/></p>
+										</div>
+									</div>
+								</c:forEach>
+							</c:otherwise>
+						</c:choose>
+					</div>
+				</div><%-- End Review --%>
 			</div> <%-- End row --%>
 		</div> <%-- End product-view-container --%>
 	</c:if> <%-- End check if product is not empty --%>

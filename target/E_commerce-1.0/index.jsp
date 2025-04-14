@@ -4,9 +4,12 @@
 
 <%-- Import necessary classes (still needed for DAO calls within this page) --%>
 <%@page import="com.phong.dao.ProductDao"%>
+<%@page import="com.phong.dao.ReviewDao"%>
 <%@page import="com.phong.entities.Product"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Collections"%> <%-- Import Collections for emptyList --%>
+<%@page import="java.util.Map"%>
+<%@page import="java.util.HashMap"%>
 
 <%-- Set Error Page --%>
 <%@page errorPage="error_exception.jsp"%>
@@ -29,9 +32,18 @@
 		topDeals = Collections.emptyList(); // Use an empty list instead of null
 	}
 
+	Map<Integer, Float> averageRatingsMap = new HashMap<>();
+	if (productList != null && !productList.isEmpty()) {
+		ReviewDao reviewDao = new ReviewDao();
+		for (Product p : productList) {
+			averageRatingsMap.put(p.getProductId(), reviewDao.getAverageRatingByProductId(p.getProductId()));
+		}
+	}
+
 	// Make lists available for Expression Language (EL)
 	request.setAttribute("latestProducts", productList);
 	request.setAttribute("hotDeals", topDeals);
+	request.setAttribute("averageRatings", averageRatingsMap);
 %>
 
 <!DOCTYPE html>
@@ -255,6 +267,17 @@
 											<span class="discount-badge">
                                                      ${product.productDiscount}% off
                                                  </span>
+										</c:if>
+										<%--Show rating--%>
+										<c:set var="avgRating" value="${averageRatings[product.productId]}"/>
+										<c:if test="${not empty avgRating and avgRating > 0}">
+											<div class="star-rating mb-1" title="${avgRating} out of 5 stars">
+												<small> <%-- Use small tag --%>
+													<c:forEach var="i" begin="1" end="5">
+														<i class="fa-${avgRating >= i ? 'solid' : (avgRating >= i-0.5 ? 'solid fa-star-half-stroke' : 'regular')} fa-star text-warning"></i>
+													</c:forEach>
+												</small>
+											</div>
 										</c:if>
 									</div>
 								</div>
