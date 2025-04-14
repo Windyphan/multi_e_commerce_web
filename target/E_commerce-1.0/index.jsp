@@ -189,7 +189,7 @@
 						<a href="products.jsp?category=${cat.categoryId}">
 							<div class="card category-card h-100">
 									<%-- Use forward slashes for web paths --%>
-								<img src="Product_imgs/${cat.categoryImage}" class="card-img-top" alt="${cat.categoryName}">
+								<img src="${s3BaseUrl}${cat.categoryImage}" class="card-img-top" alt="${cat.categoryName}">
 								<div class="card-body">
 									<h6 class="card-title">${cat.categoryName}</h6>
 								</div>
