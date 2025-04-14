@@ -179,12 +179,12 @@
 
 <%-- Category List Section --%>
 <%-- Only render if categoryList is not null and not empty --%>
-<c:if test="${not empty categoryList}">
+<c:if test="${not empty navbarCategoryList}">
 	<section class="section category-section section-bg-accent">
 		<div class="container">
 				<%-- Use responsive columns for categories --%>
 			<div class="row row-cols-3 row-cols-md-4 row-cols-lg-6 g-3 justify-content-center">
-				<c:forEach var="cat" items="${categoryList}">
+				<c:forEach var="cat" items="${navbarCategoryList}">
 					<div class="col">
 						<a href="products.jsp?category=${cat.categoryId}">
 							<div class="card category-card h-100">
@@ -206,11 +206,11 @@
 <section class="section p-0"> <%-- Remove padding if carousel touches edges --%>
 	<div id="carouselAutoplaying" class="carousel slide carousel-dark" data-bs-ride="carousel">
 		<div class="carousel-inner">
-			<div class="carousel-item">
-				<img src="Images/scroll_img1.png" class="d-block w-100" alt="Promotion Banner 2">
+			<div class="carousel-item active">
+				<img src="Images/scroll_img1.png" class="d-block w-100" alt="Promotion Banner 1">
 			</div>
 			<div class="carousel-item">
-				<img src="Images/scroll_img2.png" class="d-block w-100" alt="Promotion Banner 3">
+				<img src="Images/scroll_img2.png" class="d-block w-100" alt="Promotion Banner 2">
 			</div>
 		</div>
 		<button class="carousel-control-prev" type="button" data-bs-target="#carouselAutoplaying" data-bs-slide="prev">
@@ -238,7 +238,7 @@
 							<a href="viewProduct.jsp?pid=${product.productId}">
 								<div class="card-img-container">
 										<%-- Use forward slashes for web paths --%>
-									<img src="Product_imgs/${product.productImages}" class="card-img-top" alt="${product.productName}">
+									<img src="${s3BaseUrl}${product.productImages}" class="card-img-top" alt="${product.productName}">
 								</div>
 								<div class="card-body">
 									<h5 class="card-title" title="${product.productName}">${product.productName}</h5>
@@ -279,7 +279,7 @@
 						<div class="card h-100 product-card">
 							<a href="viewProduct.jsp?pid=${product.productId}">
 								<div class="card-img-container">
-									<img src="Product_imgs/${product.productImages}" class="card-img-top" alt="${product.productName}">
+									<img src="${s3BaseUrl}${product.productImages}" class="card-img-top" alt="${product.productName}">
 								</div>
 								<div class="card-body">
 									<h5 class="card-title" title="${product.productName}">${product.productName}</h5>

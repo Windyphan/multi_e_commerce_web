@@ -179,12 +179,12 @@
 
 <%-- Category List Section --%>
 <%-- Only render if categoryList is not null and not empty --%>
-<c:if test="${not empty categoryList}">
+<c:if test="${not empty navbarCategoryList}">
 	<section class="section category-section section-bg-accent">
 		<div class="container">
 				<%-- Use responsive columns for categories --%>
 			<div class="row row-cols-3 row-cols-md-4 row-cols-lg-6 g-3 justify-content-center">
-				<c:forEach var="cat" items="${categoryList}">
+				<c:forEach var="cat" items="${navbarCategoryList}">
 					<div class="col">
 						<a href="products.jsp?category=${cat.categoryId}">
 							<div class="card category-card h-100">
