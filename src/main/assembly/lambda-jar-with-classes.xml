@@ -25,7 +25,7 @@
 
     <fileSets>
         <fileSet>
-            <!-- Include your project's compiled classes -->
+            <!-- Include project's compiled classes -->
             <directory>${project.build.outputDirectory}</directory>
             <outputDirectory>/</outputDirectory>
         </fileSet>

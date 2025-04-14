@@ -21,8 +21,7 @@ import java.util.List;
 
 public class ChatbotHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-    private static final String DYNAMODB_TABLE_NAME = "ChatbotResponses"; // Match your table name
-    // Define your keywords here OR rely solely on DynamoDB keys
+    private static final String DYNAMODB_TABLE_NAME = "ChatbotResponses"; // Match table name
     private static final List<String> KEYWORDS = Arrays.asList("greeting", "hours", "contact", "help", "bye");
     private static final String DEFAULT_KEYWORD = "default";
 
@@ -33,7 +32,7 @@ public class ChatbotHandler implements RequestHandler<APIGatewayProxyRequestEven
         // Initialize the DynamoDB client. Ensure region is correct.
         // Credentials will be picked up from the Lambda execution environment.
         dynamoDbClient = DynamoDbClient.builder()
-                .region(Region.EU_NORTH_1) // ** SET YOUR REGION **
+                .region(Region.EU_NORTH_1)
                 .build();
     }
 

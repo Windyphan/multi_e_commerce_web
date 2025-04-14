@@ -1,7 +1,6 @@
 <%@page import="java.time.Year" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <% int currentYear = Year.now().getValue(); %>
-<!-- Add somewhere on your page (e.g., bottom right fixed) -->
 <div id="chat-widget" style="position: fixed; bottom: 20px; right: 20px; width: 300px; border: 1px solid #ccc; background-color: white; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 5px; display: none; /* Start hidden */">
     <div id="chat-header" style="background-color: #2c3e50; color: white; padding: 10px; font-weight: bold; cursor: pointer; border-top-left-radius: 5px; border-top-right-radius: 5px;">
         Chat with Us! <span style="float:right;">×</span> <%-- Close button --%>
@@ -36,8 +35,7 @@
         const chatInput = document.getElementById('chat-input');
         const sendBtn = document.getElementById('chat-send-btn');
 
-        // *** IMPORTANT: Replace with YOUR API Gateway Invoke URL ***
-        const API_ENDPOINT = 'https://1s4yyf7g4i.execute-api.eu-north-1.amazonaws.com/chatbot'; // Append your route path
+        const API_ENDPOINT = 'https://1s4yyf7g4i.execute-api.eu-north-1.amazonaws.com/chatbot'; // Append route path
 
         // --- Toggle Chat Widget ---
         openChatBtn.addEventListener('click', () => {
