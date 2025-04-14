@@ -97,7 +97,7 @@
 						<tr class="text-center">
 							<td>
 									<%-- Use forward slash for path --%>
-								<img src="Product_imgs/${category.categoryImage}"
+								<img src="${s3BaseUrl}${category.categoryImage}"
 									 alt="${category.categoryName}" class="category-img">
 							</td>
 							<td class="text-start"> <%-- Align name left --%>

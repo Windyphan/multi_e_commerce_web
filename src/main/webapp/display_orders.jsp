@@ -263,7 +263,7 @@
 											<c:forEach var="orderedProd" items="${productsInOrder}">
 												<tr>
 													<td>
-														<img src="Product_imgs/${orderedProd.image}" alt="" class="product-img-sm">
+														<img src="${s3BaseUrl}${orderedProd.image}" alt="" class="product-img-sm">
 													</td>
 													<td><c:out value="${orderedProd.name}"/></td>
 													<td class="text-center"><c:out value="${orderedProd.quantity}"/></td>
