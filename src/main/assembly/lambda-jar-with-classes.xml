@@ -1,0 +1,33 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/2.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+    <id>lambda-jar-with-classes</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <dependencySets>
+        <dependencySet>
+            <!-- Include all compile and runtime scope dependencies -->
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>/</outputDirectory>
+            <unpack>true</unpack>
+            <scope>runtime</scope>
+            <excludes>
+                <!-- Exclude provided dependencies like Servlet/JSP API -->
+                <exclude>javax.servlet:javax.servlet-api</exclude>
+                <exclude>javax.servlet.jsp:javax.servlet.jsp-api</exclude>
+                <!-- Add excludes for any other 'provided' scope dependencies if needed -->
+            </excludes>
+        </dependencySet>
+    </dependencySets>
+
+    <fileSets>
+        <fileSet>
+            <!-- Include your project's compiled classes -->
+            <directory>${project.build.outputDirectory}</directory>
+            <outputDirectory>/</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>
