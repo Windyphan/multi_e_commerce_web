@@ -38,8 +38,8 @@
 					errorMessage = "Product not found.";
 				} else {
 					// Fetch category name if product found
-					CategoryDao categoryDao = new CategoryDao();
-					categoryName = categoryDao.getCategoryName(product.getCategoryId());
+					CategoryDao categoryDaoForViewProduct = new CategoryDao();
+					categoryName = categoryDaoForViewProduct.getCategoryName(product.getCategoryId());
 					if (categoryName == null) categoryName = "Unknown"; // Handle null category name
 				}
 			} else {

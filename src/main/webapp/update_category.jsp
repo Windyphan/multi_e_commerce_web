@@ -28,8 +28,8 @@
 		try {
 			categoryId = Integer.parseInt(cidParam.trim());
 			if (categoryId > 0) {
-				CategoryDao categoryDao = new CategoryDao(); // Instantiate DAO here
-				categoryToUpdate = categoryDao.getCategoryById(categoryId);
+				CategoryDao categoryDaoForUpdateCategory = new CategoryDao(); // Instantiate DAO here
+				categoryToUpdate = categoryDaoForUpdateCategory.getCategoryById(categoryId);
 				if (categoryToUpdate == null) {
 					errorMessage = "Category with ID " + categoryId + " not found.";
 				}
