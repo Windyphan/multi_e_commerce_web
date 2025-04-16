@@ -31,7 +31,7 @@ public class LoginServlet extends HttpServlet {
 			message = new Message("Login type (user/admin) not specified.", "error", "alert-warning");
 			session.setAttribute("message", message);
 			// Redirect to a default login page or an error page
-			response.sendRedirect("login.jsp"); // Or maybe a more generic error page
+			response.sendRedirect("login.jsp");
 			return;
 		}
 
