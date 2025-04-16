@@ -33,7 +33,7 @@ public class UserDao {
 	public boolean saveUser(User user) {
 		boolean flag = false;
 		// Enclose table name "user" in double quotes
-		String query = "insert into \"user\"(name, email, password, phone, gender, address, city, postcode, state) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String query = "insert into \"user\"(name, email, password, phone, gender, address, city, postcode, county) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (Connection con = ConnectionProvider.getConnection();
 			 PreparedStatement psmt = con.prepareStatement(query)) {
@@ -163,7 +163,7 @@ public class UserDao {
 	public boolean updateUserAddresss(User user) {
 		boolean flag = false;
 		// Enclose table name "user" in double quotes
-		String query = "update \"user\" set address = ?, city = ?, postcode = ?, state = ? where userid = ?";
+		String query = "update \"user\" set address = ?, city = ?, postcode = ?, county = ? where userid = ?";
 
 		try (Connection con = ConnectionProvider.getConnection();
 			 PreparedStatement psmt = con.prepareStatement(query)) {
@@ -229,7 +229,7 @@ public class UserDao {
 	public boolean updateUser(User user) {
 		boolean flag = false;
 		// Enclose table name "user" in double quotes
-		String query = "update \"user\" set name = ?, email = ?, phone = ?, gender = ?, address = ?, city = ?, postcode = ?, state = ? where userid = ?";
+		String query = "update \"user\" set name = ?, email = ?, phone = ?, gender = ?, address = ?, city = ?, postcode = ?, county = ? where userid = ?";
 
 		try (Connection con = ConnectionProvider.getConnection();
 			 PreparedStatement psmt = con.prepareStatement(query)) {
@@ -317,7 +317,7 @@ public class UserDao {
 	public String getUserAddress(int uid) {
 		String address = null;
 		// Enclose table name "user" in double quotes
-		String query = "select address, city, postcode, state from \"user\" where userid = ?";
+		String query = "select address, city, postcode, county from \"user\" where userid = ?";
 		try (Connection con = ConnectionProvider.getConnection();
 			 PreparedStatement psmt = con.prepareStatement(query)) {
 
@@ -325,7 +325,7 @@ public class UserDao {
 
 			try (ResultSet rs = psmt.executeQuery()) {
 				if (rs.next()) { // Check if user exists
-					address = rs.getString("address") + ", " + rs.getString("city") + "-" + rs.getString("postcode") + ", " + rs.getString("state");
+					address = rs.getString("address") + ", " + rs.getString("city") + "-" + rs.getString("postcode") + ", " + rs.getString("county");
 				}
 			}
 		} catch (SQLException | ClassNotFoundException e) {
