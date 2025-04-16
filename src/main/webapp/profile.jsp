@@ -14,7 +14,7 @@
 <%--
     Data Preparation:
     - User is already in sessionScope.activeUser
-    - The included JSPs (wishlist.jsp, order.jsp, personalInfo.jsp)
+    - The included JSPs (wishlist_section.jsp, order_section.jsp, personalInfo.jsp)
       should ideally fetch their own data (or receive it via request attributes
       set by a controller servlet before forwarding here).
     - We can pre-set the active tab based on a request parameter if needed.
@@ -158,10 +158,10 @@
 					<%@include file="personalInfo.jsp"%>
 				</div>
 				<div id="wishlist-content" class="tab-pane ${activeTab == 'wishlist' ? 'active' : ''}">
-					<%@include file="wishlist.jsp"%>
+					<%@include file="wishlist_section.jsp"%>
 				</div>
 				<div id="orders-content" class="tab-pane ${activeTab == 'orders' ? 'active' : ''}">
-					<%@include file="order.jsp"%> <%-- Assumes this is the user order view snippet --%>
+					<%@include file="order_section.jsp"%>
 				</div>
 			</div>
 		</div>
