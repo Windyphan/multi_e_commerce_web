@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
+
 import com.phong.dao.UserDao;
 import com.phong.entities.Message;
 import com.phong.entities.User;
@@ -61,14 +63,14 @@ public class RegisterServlet extends HttpServlet {
 			userCounty = (userCounty != null) ? userCounty.trim() : null;
 
 
-			// --- TODO: Check if user email already exists ---
-			// List<String> existingEmails = userDao.getAllEmail();
-			// if (existingEmails != null && existingEmails.contains(userEmail)) {
-			//     message = new Message("Email address already registered.", "error", "alert-warning");
-			//     session.setAttribute("message", message);
-			//     response.sendRedirect("register.jsp");
-			//     return;
-			// }
+			// --- Check if user email already exists ---
+			 List<String> existingEmails = userDao.getAllEmail();
+			 if (existingEmails != null && existingEmails.contains(userEmail)) {
+			     message = new Message("Email address already registered.", "error", "alert-warning");
+			     session.setAttribute("message", message);
+			     response.sendRedirect("register.jsp");
+			     return;
+			 }
 
 			// --- IMPORTANT: Hash the password before storing ---
 			// String hashedPassword = YourPasswordHashingUtil.hash(userPassword);
@@ -104,7 +106,7 @@ public class RegisterServlet extends HttpServlet {
 		} catch (Exception e) {
 			// Catch any unexpected errors during processing
 			System.err.println("Error in RegisterServlet: " + e.getMessage());
-			e.printStackTrace(); // Log the full error
+			e.printStackTrace(System.err);// Log the full error
 			message = new Message("An unexpected error occurred during registration. Please try again.", "error", "alert-danger");
 			session.setAttribute("message", message);
 			response.sendRedirect("register.jsp"); // Redirect back on error
