@@ -120,7 +120,7 @@
 
 	</style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 <%-- Navbar --%>
 <%@include file="Components/navbar.jsp"%>
 
