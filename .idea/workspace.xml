@@ -5,38 +5,46 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99cc4e27-b3cd-4759-ad19-9816ff79b9ba" name="Changes" comment="Update">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phong/dao/ReviewDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phong/entities/Review.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/ReviewServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/order_section.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/wishlist_section.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phong_maven.sql" beforeDir="false" afterPath="$PROJECT_DIR$/phong_maven.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/assembly/lambda-jar-with-classes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/assembly/lambda-jar-with-classes.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/lambda/ChatbotHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/lambda/ChatbotHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/CSS/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/CSS/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/dao/UserDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/helper/Mail.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/helper/Mail.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/LoginServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/RegisterServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/RegisterServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/admin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/adminlogin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/adminlogin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/cart.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/cart.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/change_password.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/change_password.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/footer.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/order.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/order.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/personalInfo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/personalInfo.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/products.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/profile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/profile.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/update_category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/update_category.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/viewProduct.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/viewProduct.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/wishlist.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/wishlist.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0-lambda.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0-lambda.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0.war" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/lambda/ChatbotHandler$RequestBody.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/lambda/ChatbotHandler$RequestBody.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/lambda/ChatbotHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/lambda/ChatbotHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/web.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/CSS/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/CSS/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/UserDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/UserDao.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/helper/Mail$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/helper/Mail$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/helper/Mail.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/helper/Mail.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/RegisterServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/RegisterServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/admin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/adminlogin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/adminlogin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/cart.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/cart.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/change_password.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/change_password.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/footer.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/index.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/order.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/order.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/personalInfo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/personalInfo.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/products.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/profile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/profile.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/update_category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/update_category.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/viewProduct.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/viewProduct.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/wishlist.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/wishlist.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/lambda/ChatbotHandler$RequestBody.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/lambda/ChatbotHandler$RequestBody.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/lambda/ChatbotHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/lambda/ChatbotHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/dao/UserDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/dao/UserDao.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/helper/Mail$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/helper/Mail$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/helper/Mail.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/helper/Mail.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/RegisterServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/RegisterServlet.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,8 +54,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Jsp File" />
         <option value="Class" />
+        <option value="Jsp File" />
       </list>
     </option>
   </component>
@@ -73,8 +81,9 @@
     <setting file="file://$PROJECT_DIR$/src/main/webapp/admin.jsp" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="JspContextManager">
-    <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/wishlist.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/profile.jsp" />
     <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/footer.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/error_exception.jsp" />
+    <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/order_section.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/profile.jsp" />
+    <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/wishlist_section.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/profile.jsp" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -88,34 +97,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Maven.E_commerce [install].executor": "Run",
-    "Maven.E_commerce [mvn,war:war...].executor": "Run",
-    "Maven.E_commerce [org.apache.maven.plugins:maven-clean-plugin:3.2.0:clean].executor": "Run",
-    "Maven.E_commerce [org.apache.maven.plugins:maven-deploy-plugin:3.1.2:deploy].executor": "Run",
-    "Maven.E_commerce [org.apache.maven.plugins:maven-install-plugin:3.1.2:install].executor": "Run",
-    "Maven.E_commerce [org.apache.maven.plugins:maven-war-plugin:3.4.0:exploded].executor": "Run",
-    "Maven.E_commerce [war:war...].executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Laptop/IdeaProjects/multi_e_commerce_web",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Facets",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Maven.E_commerce [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.E_commerce [mvn,war:war...].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.E_commerce [org.apache.maven.plugins:maven-clean-plugin:3.2.0:clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.E_commerce [org.apache.maven.plugins:maven-deploy-plugin:3.1.2:deploy].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.E_commerce [org.apache.maven.plugins:maven-install-plugin:3.1.2:install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.E_commerce [org.apache.maven.plugins:maven-war-plugin:3.4.0:exploded].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.E_commerce [war:war...].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Laptop/IdeaProjects/multi_e_commerce_web&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Facets&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\webapp\Images" />
@@ -252,47 +261,8 @@
       <workItem from="1744663943615" duration="102000" />
       <workItem from="1744664058739" duration="67000" />
       <workItem from="1744664140417" duration="123000" />
-      <workItem from="1744664619119" duration="6931000" />
-    </task>
-    <task id="LOCAL-00002" summary="Change name to avoid copyright">
-      <option name="closed" value="true" />
-      <created>1737406143870</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1737406143871</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Change name to avoid copyright">
-      <option name="closed" value="true" />
-      <created>1737406589823</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1737406589823</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Add state and city">
-      <option name="closed" value="true" />
-      <created>1738837897718</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1738837897718</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Add state and city">
-      <option name="closed" value="true" />
-      <created>1738970035848</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1738970035848</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Add gender">
-      <option name="closed" value="true" />
-      <created>1739054838787</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1739054838787</updated>
+      <workItem from="1744664619119" duration="7506000" />
+      <workItem from="1744731009701" duration="14613000" />
     </task>
     <task id="LOCAL-00007" summary="Replace image with general image">
       <option name="closed" value="true" />
@@ -646,7 +616,47 @@
       <option name="project" value="LOCAL" />
       <updated>1744665164609</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="Remove redundant code">
+      <option name="closed" value="true" />
+      <created>1744673144489</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1744673144489</updated>
+    </task>
+    <task id="LOCAL-00052" summary="Fix uni code">
+      <option name="closed" value="true" />
+      <created>1744673188315</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1744673188315</updated>
+    </task>
+    <task id="LOCAL-00053" summary="Fix uni code">
+      <option name="closed" value="true" />
+      <created>1744673210261</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1744673210261</updated>
+    </task>
+    <task id="LOCAL-00054" summary="Add review system">
+      <option name="closed" value="true" />
+      <created>1744673249250</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1744673249250</updated>
+    </task>
+    <task id="LOCAL-00055" summary="Update">
+      <option name="closed" value="true" />
+      <created>1744673260560</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1744673260560</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -664,8 +674,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Migrate mysql into postgresql" />
-    <MESSAGE value="Overhaul servlet" />
     <MESSAGE value="Overhaul DAO file, add close connection mechanic to secure the DB connection" />
     <MESSAGE value="Overhaul servlet file, add close connection mechanic to secure the DB connection" />
     <MESSAGE value="Overhaul file, add close connection mechanic to secure the DB connection" />
@@ -686,8 +694,10 @@
     <MESSAGE value="Fix wrong id" />
     <MESSAGE value="Change immage source" />
     <MESSAGE value="Add chatbot system" />
-    <MESSAGE value="Remove redundant code" />
     <MESSAGE value="Add new file" />
+    <MESSAGE value="Remove redundant code" />
+    <MESSAGE value="Fix uni code" />
+    <MESSAGE value="Add review system" />
     <MESSAGE value="Update" />
     <option name="LAST_COMMIT_MESSAGE" value="Update" />
   </component>
