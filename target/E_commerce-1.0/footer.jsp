@@ -24,6 +24,7 @@
 <footer class="footer mt-auto py-3 bg-dark text-white-50"> <%-- mt-auto is key --%>
     <div class="container text-center">
         <span>© <%= currentYear %> Phong Phan. All Rights Reserved.</span>
+    </div>
 </footer>
 
 <script>
