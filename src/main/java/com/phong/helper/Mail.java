@@ -20,12 +20,21 @@ public class Mail {
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.port", "587");
 
-        String emailId = ""; 	     // admin/company mail-id
-        String password = "";		// generated password
+        // Inside Mail.java sendMail method
+        String emailId = System.getenv("MAIL_USER");
+        String password = System.getenv("MAIL_PASSWORD"); // Reads the App Password
+
+// Add null checks for these variables!
+        if (emailId == null || password == null || emailId.isEmpty() || password.isEmpty()) {
+            System.err.println("!!! MAIL ERROR: MAIL_USER or MAIL_PASSWORD environment variables not set!");
+            // Decide how to handle: throw exception, log, return?
+            return; // Stop sending if credentials missing
+        }
 
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
+                // Use the variables read from environment
                 return new PasswordAuthentication(emailId, password);
             }
         });
