@@ -125,9 +125,9 @@ public class Product {
 	}
 
 	//calculate price of product by applying discount
-    public int getProductPriceAfterDiscount(){
-        int discount = (int) ((this.getProductDiscount()/100.0) * this.getProductPrice());
-        return (int) (this.getProductPrice() - discount);
+    public float getProductPriceAfterDiscount(){
+        float discount = (float) ((this.getProductDiscount()/100.0) * this.getProductPrice());
+        return this.getProductPrice() - discount;
     }
 	
 	@Override
