@@ -71,12 +71,6 @@
 			font-weight: 600;
 			margin-top: 0.5rem;
 		}
-		.modal-header {
-			background-color: #f1f1f1; /* Light header for modals */
-		}
-		.modal-footer {
-			background-color: #f8f9fa;
-		}
 	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -87,6 +81,7 @@
 
 	<%-- Display Messages --%>
 	<%@include file="Components/alert_message.jsp"%>
+	<%@include file="Components/admin_modals.jsp"%>
 
 	<%-- Welcome Section --%>
 	<div class="text-center admin-welcome">
@@ -152,123 +147,6 @@
 	<hr class="my-4"> <%-- Add a separator --%>
 </div>
 
-<%-- Modals (Keep the existing structure, but ensure categoryList is available for Add Product) --%>
-
-<!-- Add Category Modal -->
-<div class="modal fade" id="add-category" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h1 class="modal-title fs-5" id="addCategoryModalLabel">Add New Category</h1>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<%-- Action points to the servlet --%>
-			<form action="AddOperationServlet" method="post" enctype="multipart/form-data">
-				<div class="modal-body">
-					<input type="hidden" name="operation" value="addCategory">
-					<div class="mb-3">
-						<label for="categoryNameInput" class="form-label"><b>Category Name</b></label>
-						<input type="text" name="category_name" id="categoryNameInput" placeholder="Enter category name" class="form-control" required>
-					</div>
-					<div class="mb-3">
-						<label for="categoryImageInput" class="form-label"><b>Category Image</b></label>
-						<input class="form-control" type="file" name="category_img" id="categoryImageInput" required accept="image/*">
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Category</button>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-<!-- End Add Category Modal -->
-
-<!-- Add Product Modal -->
-<div class="modal fade" id="add-product" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h1 class="modal-title fs-5" id="addProductModalLabel">Add New Product</h1>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<%-- Action points to the servlet --%>
-			<form action="AddOperationServlet" method="post" name="addProductForm" enctype="multipart/form-data" onsubmit="return validateDiscount()">
-				<div class="modal-body">
-					<input type="hidden" name="operation" value="addProduct">
-					<div class="mb-3"> <%-- Changed to mb-3 --%>
-						<label for="productNameInput" class="form-label"><b>Product Name</b></label>
-						<input type="text" name="name" id="productNameInput" placeholder="Enter product name" class="form-control" required>
-					</div>
-					<div class="mb-3"> <%-- Changed to mb-3 --%>
-						<label for="productDescInput" class="form-label"><b>Product Description</b></label>
-						<textarea class="form-control" name="description" id="productDescInput" rows="4" placeholder="Enter product description" required></textarea>
-					</div>
-					<div class="row">
-						<div class="col-md-6 mb-3"> <%-- Changed to mb-3 --%>
-							<label for="productPriceInput" class="form-label"><b>Unit Price (£)</b></label>
-							<input type="number" name="price" id="productPriceInput" placeholder="e.g., 199.99" class="form-control" required min="0" step="0.01">
-						</div>
-						<div class="col-md-6 mb-3"> <%-- Changed to mb-3 --%>
-							<label for="productDiscountInput" class="form-label"><b>Discount (%)</b></label>
-							<input type="number" name="discount" id="productDiscountInput" placeholder="e.g., 10 (0-100)" class="form-control" min="0" max="100" value="0">
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-6 mb-3"> <%-- Changed to mb-3 --%>
-							<label for="productQuantityInput" class="form-label"><b>Stock Quantity</b></label>
-							<input type="number" name="quantity" id="productQuantityInput" placeholder="Enter stock quantity" class="form-control" required min="0">
-						</div>
-						<div class="col-md-6 mb-3"> <%-- Changed to mb-3 --%>
-							<label for="productCategorySelect" class="form-label"><b>Category</b></label>
-							<select name="categoryType" id="productCategorySelect" class="form-select" required> <%-- Use form-select --%>
-								<option value="" selected disabled>-- Select Category --</option>
-								<%-- Use JSTL to populate options --%>
-								<c:if test="${not empty navbarCategoryList}">
-									<c:forEach var="cat" items="${navbarCategoryList}">
-										<option value="${cat.categoryId}">${cat.categoryName}</option>
-									</c:forEach>
-								</c:if>
-							</select>
-						</div>
-					</div>
-					<div class="mb-3"> <%-- Changed to mb-3 --%>
-						<label for="productPhotoInput" class="form-label"><b>Product Image</b></label>
-						<input type="file" name="photo" id="productPhotoInput" class="form-control" required accept="image/*">
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-					<button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Product</button>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-<!-- End Add Product Modal -->
-
-<script type="text/javascript">
-	// Renamed function for clarity and improved validation logic
-	function validateDiscount() {
-		const discountInput = document.forms["addProductForm"]["discount"];
-		const discountValue = parseInt(discountInput.value, 10); // Always specify radix
-
-		if (isNaN(discountValue) || discountValue < 0 || discountValue > 100) {
-			alert("Discount must be a number between 0 and 100!");
-			discountInput.focus(); // Focus the input field
-			discountInput.value = "0"; // Optionally reset to 0
-			return false; // Prevent form submission if validation added to onsubmit
-		}
-		return true; // Allow form submission
-	}
-
-	// Optional: Add this validation to the form's onsubmit event
-	// document.forms["addProductForm"].onsubmit = validateDiscount;
-	// Or modify the input tag: <input type="number" name="discount" onblur="validateDiscount()" ...>
-	// Note: onblur only validates when leaving the field, onsubmit validates before sending.
-
-</script>
 <%-- Footer --%>
  <%@include file="footer.jsp"%>
 </body>
