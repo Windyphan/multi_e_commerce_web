@@ -5,46 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99cc4e27-b3cd-4759-ad19-9816ff79b9ba" name="Changes" comment="Update">
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/order_section.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/wishlist_section.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/Components/admin_modals.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/dao/UserDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/helper/Mail.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/helper/Mail.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/LoginServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/RegisterServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/RegisterServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/entities/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/entities/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/Components/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/Components/navbar.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/admin.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/adminlogin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/adminlogin.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/cart.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/cart.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/change_password.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/change_password.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/footer.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/order.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/order.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/profile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/profile.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/update_category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/update_category.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/viewProduct.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/viewProduct.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/wishlist.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/wishlist.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0-lambda.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0-lambda.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0.war" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/CSS/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/CSS/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/UserDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/UserDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/helper/Mail$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/helper/Mail$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/helper/Mail.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/helper/Mail.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/RegisterServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/RegisterServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/Components/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/Components/navbar.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/entities/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/entities/Product.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/OrderOperationServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/OrderOperationServlet.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/admin.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/adminlogin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/adminlogin.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/cart.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/cart.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/change_password.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/change_password.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/footer.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/order.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/order.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/profile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/profile.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/update_category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/update_category.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/viewProduct.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/viewProduct.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/wishlist.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/wishlist.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/dao/UserDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/dao/UserDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/helper/Mail$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/helper/Mail$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/helper/Mail.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/helper/Mail.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/RegisterServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/RegisterServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/entities/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/entities/Product.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/OrderOperationServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/OrderOperationServlet.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,6 +55,7 @@
     <setting file="file://$PROJECT_DIR$/src/main/webapp/admin.jsp" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="JspContextManager">
+    <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/Components/admin_modals.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/Components/navbar.jsp" />
     <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/footer.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/error_exception.jsp" />
     <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/order_section.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/profile.jsp" />
     <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/wishlist_section.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/profile.jsp" />
@@ -128,6 +103,9 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\webapp\Images" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\webapp\Components" />
     </key>
   </component>
   <component name="RunManager">
@@ -263,94 +241,7 @@
       <workItem from="1744664140417" duration="123000" />
       <workItem from="1744664619119" duration="7506000" />
       <workItem from="1744731009701" duration="14613000" />
-    </task>
-    <task id="LOCAL-00007" summary="Replace image with general image">
-      <option name="closed" value="true" />
-      <created>1739197795983</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1739197795983</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Change grammar">
-      <option name="closed" value="true" />
-      <created>1739291888492</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1739291888492</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Migrate mysql into postgresql">
-      <option name="closed" value="true" />
-      <created>1741138036559</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1741138036559</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Overhaul servlet">
-      <option name="closed" value="true" />
-      <created>1744055577601</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1744055577601</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Overhaul DAO file, add close connection mechanic to secure the DB connection">
-      <option name="closed" value="true" />
-      <created>1744055645051</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1744055645051</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Overhaul servlet file, add close connection mechanic to secure the DB connection">
-      <option name="closed" value="true" />
-      <created>1744055668220</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1744055668220</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Overhaul file, add close connection mechanic to secure the DB connection">
-      <option name="closed" value="true" />
-      <created>1744055680767</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1744055680767</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Overhaul file, add close connection mechanic to secure the DB connection">
-      <option name="closed" value="true" />
-      <created>1744055710515</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1744055710515</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Add posgres sql driver">
-      <option name="closed" value="true" />
-      <created>1744055732044</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1744055732044</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Grammar error">
-      <option name="closed" value="true" />
-      <created>1744055751049</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1744055751049</updated>
-    </task>
-    <task id="LOCAL-00017" summary="Add test file">
-      <option name="closed" value="true" />
-      <created>1744055764069</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1744055764069</updated>
+      <workItem from="1744822056242" duration="10541000" />
     </task>
     <task id="LOCAL-00018" summary="Add file">
       <option name="closed" value="true" />
@@ -656,7 +547,95 @@
       <option name="project" value="LOCAL" />
       <updated>1744673260560</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="Fix footer to become fixed at the bottom of the screen">
+      <option name="closed" value="true" />
+      <created>1744822621189</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1744822621189</updated>
+    </task>
+    <task id="LOCAL-00057" summary="Close div">
+      <option name="closed" value="true" />
+      <created>1744822635684</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1744822635684</updated>
+    </task>
+    <task id="LOCAL-00058" summary="Remove redundant code">
+      <option name="closed" value="true" />
+      <created>1744822717178</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1744822717178</updated>
+    </task>
+    <task id="LOCAL-00059" summary="Add mail user and password property">
+      <option name="closed" value="true" />
+      <created>1744822750298</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1744822750298</updated>
+    </task>
+    <task id="LOCAL-00060" summary="Add footer and header">
+      <option name="closed" value="true" />
+      <created>1744822777692</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1744822777692</updated>
+    </task>
+    <task id="LOCAL-00061" summary="Add new file without footer and header">
+      <option name="closed" value="true" />
+      <created>1744822816359</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1744822816359</updated>
+    </task>
+    <task id="LOCAL-00062" summary="Add duplicate email validation">
+      <option name="closed" value="true" />
+      <created>1744822845761</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1744822845761</updated>
+    </task>
+    <task id="LOCAL-00063" summary="Add style">
+      <option name="closed" value="true" />
+      <created>1744822885342</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1744822885342</updated>
+    </task>
+    <task id="LOCAL-00064" summary="Change name to avoid duplicate">
+      <option name="closed" value="true" />
+      <created>1744822918839</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1744822918839</updated>
+    </task>
+    <task id="LOCAL-00065" summary="Fix query">
+      <option name="closed" value="true" />
+      <created>1744822951855</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1744822951855</updated>
+    </task>
+    <task id="LOCAL-00066" summary="Update">
+      <option name="closed" value="true" />
+      <created>1744822985594</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1744822985594</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -674,15 +653,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Overhaul DAO file, add close connection mechanic to secure the DB connection" />
-    <MESSAGE value="Overhaul servlet file, add close connection mechanic to secure the DB connection" />
-    <MESSAGE value="Overhaul file, add close connection mechanic to secure the DB connection" />
-    <MESSAGE value="Add posgres sql driver" />
-    <MESSAGE value="Grammar error" />
-    <MESSAGE value="Add test file" />
-    <MESSAGE value="Re haul file" />
-    <MESSAGE value="Add log" />
-    <MESSAGE value="Add footer" />
     <MESSAGE value="Re haul jsp file" />
     <MESSAGE value="Fix grammar" />
     <MESSAGE value="Add file" />
@@ -695,9 +665,18 @@
     <MESSAGE value="Change immage source" />
     <MESSAGE value="Add chatbot system" />
     <MESSAGE value="Add new file" />
-    <MESSAGE value="Remove redundant code" />
     <MESSAGE value="Fix uni code" />
     <MESSAGE value="Add review system" />
+    <MESSAGE value="Fix footer to become fixed at the bottom of the screen" />
+    <MESSAGE value="Close div" />
+    <MESSAGE value="Remove redundant code" />
+    <MESSAGE value="Add mail user and password property" />
+    <MESSAGE value="Add footer and header" />
+    <MESSAGE value="Add new file without footer and header" />
+    <MESSAGE value="Add duplicate email validation" />
+    <MESSAGE value="Add style" />
+    <MESSAGE value="Change name to avoid duplicate" />
+    <MESSAGE value="Fix query" />
     <MESSAGE value="Update" />
     <option name="LAST_COMMIT_MESSAGE" value="Update" />
   </component>
