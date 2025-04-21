@@ -1,42 +1,61 @@
 <%-- Components/admin_modals.jsp --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%-- Add page directive only if this file is accessed directly (unlikely) --%>
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> --%>
+ <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal - Admin modal</title>
+    <%@include file="common_css_js.jsp"%>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .modal-header {
+            background-color: #f8f9fa; /* Light grey header */
+            border-bottom: 1px solid #dee2e6;
+        }
+        .modal-title {
+            font-weight: 500;
+        }
+        .modal-body {
+            background-color: #ffffff; /* Ensure body is white */
+            padding: 1.5rem; /* Add more padding */
+        }
+        .modal-body .form-label { /* Style labels within modals */
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        .modal-body .form-control{
+            background-color: #ffffff; /* Light grey footer */
+            font-size: 0.95rem; /* Slightly smaller font in modals */
+            border-radius: 0.375rem;
+            border: 1px solid #ced4da;
+        }
+        .modal-body .form-select {
+            background-color:  #ffffff;
+            font-size: 0.95rem; /* Slightly smaller font in modals */
+            border-radius: 0.375rem;
+            border: 1px solid #ced4da;
+        }
+        .modal-footer {
+            background-color: #f8f9fa; /* Light grey footer */
+            border-top: 1px solid #dee2e6;
+        }
+        .modal-footer .btn {
+            font-weight: 500;
+        }
+    </style>
+</head>
 
-<style>
-    /* Modal Styling Improvements */
-    .modal-header {
-        background-color: #f8f9fa; /* Light grey header */
-        border-bottom: 1px solid #dee2e6;
-    }
-    .modal-title {
-        font-weight: 500;
-    }
-    .modal-body {
-        background-color: #ffffff; /* Ensure body is white */
-        padding: 1.5rem; /* Add more padding */
-    }
-    .modal-body .form-label { /* Style labels within modals */
-        font-weight: 600;
-        font-size: 0.95rem;
-        color: #495057;
-        margin-bottom: 0.5rem;
-    }
-    .modal-body .form-control, .modal-body .form-select {
-        background-color: #f8f9fa; /* Light grey footer */
-        font-size: 0.95rem; /* Slightly smaller font in modals */
-    }
-    .modal-footer {
-        background-color: #f8f9fa; /* Light grey footer */
-        border-top: 1px solid #dee2e6;
-    }
-    .modal-footer .btn {
-        font-weight: 500;
-    }
-</style>
-
+<body>
 <!-- Add Category Modal -->
-<div class="modal fade" id="add-category" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+<div class="modal fade" id="add-category" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true" data-bs-theme="light">
     <div class="modal-dialog modal-dialog-centered"> <%-- Vertically center --%>
         <div class="modal-content">
             <div class="modal-header">
@@ -68,7 +87,7 @@
 <!-- End Add Category Modal -->
 
 <!-- Add Product Modal -->
-<div class="modal fade" id="add-product" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+<div class="modal fade" id="add-product" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true" data-bs-theme="light">
     <div class="modal-dialog modal-lg modal-dialog-centered"> <%-- Large and centered --%>
         <div class="modal-content">
             <div class="modal-header">
@@ -180,3 +199,5 @@
         })
     })()
 </script>
+</body>
+</html>
