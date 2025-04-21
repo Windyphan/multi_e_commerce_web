@@ -61,108 +61,116 @@
 	System.out.println("### NAVBAR_JSP [" + new Date() + "]: FINISHED setup. 'message' attribute in session is: " + (session.getAttribute("message") != null ? "PRESENT" : "ABSENT"));
 	// *** END NAVBAR LOGGING ***
 %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Navigation bar - Phong Shop</title>
+	<%@include file="common_css_js.jsp"%>
+	<style>
+		/* Basic Professional Navbar Styling */
+		.navbar.custom-color {
+			/* Use a subtle gradient or solid professional color */
+			/* Example: background: linear-gradient(to right, #4e54c8, #8f94fb); */
+			background: #2c3e50; /* Dark blue/grey */
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+			padding-top: 0.8rem;
+			padding-bottom: 0.8rem;
+			font-weight: 500;
+		}
 
-<style>
-	/* Basic Professional Navbar Styling */
-	.navbar.custom-color {
-		/* Use a subtle gradient or solid professional color */
-		/* Example: background: linear-gradient(to right, #4e54c8, #8f94fb); */
-		background: #2c3e50; /* Dark blue/grey */
-		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-		padding-top: 0.8rem;
-		padding-bottom: 0.8rem;
-		font-weight: 500;
-	}
+		.navbar .navbar-brand {
+			font-weight: 600;
+			font-size: 1.4rem;
+			color: #ffffff !important;
+		}
+		.navbar .navbar-brand i {
+			margin-right: 5px;
+		}
 
-	.navbar .navbar-brand {
-		font-weight: 600;
-		font-size: 1.4rem;
-		color: #ffffff !important;
-	}
-	.navbar .navbar-brand i {
-		margin-right: 5px;
-	}
+		.navbar .nav-link {
+			color: rgba(255, 255, 255, 0.85) !important; /* Slightly faded white */
+			margin-right: 5px; /* Add some spacing */
+			margin-left: 5px;
+			transition: color 0.2s ease;
+		}
+		.navbar .nav-link:hover,
+		.navbar .nav-link.active { /* Add .active class where appropriate */
+			color: #ffffff !important;
+		}
+		.navbar .nav-link i {
+			margin-right: 3px;
+		}
 
-	.navbar .nav-link {
-		color: rgba(255, 255, 255, 0.85) !important; /* Slightly faded white */
-		margin-right: 5px; /* Add some spacing */
-		margin-left: 5px;
-		transition: color 0.2s ease;
-	}
-	.navbar .nav-link:hover,
-	.navbar .nav-link.active { /* Add .active class where appropriate */
-		color: #ffffff !important;
-	}
-	.navbar .nav-link i {
-		margin-right: 3px;
-	}
-
-	/* Dropdown styling */
-	.navbar .dropdown-menu {
-		border: none;
-		border-radius: 0.25rem;
-		box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-		background-color: #ffffff !important; /* Keep background white */
-		margin-top: 0.5rem; /* Add space between toggle and menu */
-	}
-	.navbar .dropdown-item {
-		color: #333 !important;
-		padding: 0.5rem 1rem;
-		font-size: 0.95rem;
-		transition: background-color 0.2s ease, color 0.2s ease;
-	}
-	.navbar .dropdown-item:hover,
-	.navbar .dropdown-item:focus {
-		background-color: #f0f0f0 !important; /* Subtle hover */
-		color: #000 !important;
-	}
-	.navbar .dropdown-item:active {
-		background-color: #e0e0e0 !important;
-	}
-
-
-	/* Search Bar */
-	.navbar .form-control {
-		border-radius: 20px; /* Rounded search */
-		border: none;
-		padding-left: 15px;
-	}
-	.navbar .btn-outline-light {
-		border-radius: 20px;
-		border-color: rgba(255, 255, 255, 0.7);
-		color: rgba(255, 255, 255, 0.85);
-	}
-	.navbar .btn-outline-light:hover {
-		border-color: #ffffff;
-		background-color: rgba(255, 255, 255, 0.1);
-		color: #ffffff;
-	}
-
-	/* Cart Badge */
-	.navbar .cart-link .badge {
-		font-size: 0.7em; /* Make badge smaller */
-		padding: 0.3em 0.5em;
-		vertical-align: top; /* Align badge better */
-		margin-left: -5px; /* Adjust position */
-	}
-
-	/* Admin Specific Buttons */
-	.navbar .admin-nav-btn {
-		background-color: rgba(255,255,255, 0.1);
-		border: 1px solid rgba(255,255,255, 0.3);
-		color: rgba(255, 255, 255, 0.85) !important;
-		margin-left: 10px;
-		font-size: 0.9rem;
-		padding: 0.3rem 0.7rem;
-	}
-	.navbar .admin-nav-btn:hover {
-		background-color: rgba(255,255,255, 0.2);
-		border-color: rgba(255,255,255, 0.5);
-		color: #ffffff !important;
-	}
+		/* Dropdown styling */
+		.navbar .dropdown-menu {
+			border: none;
+			border-radius: 0.25rem;
+			box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+			background-color: #ffffff !important; /* Keep background white */
+			margin-top: 0.5rem; /* Add space between toggle and menu */
+		}
+		.navbar .dropdown-item {
+			color: #333 !important;
+			padding: 0.5rem 1rem;
+			font-size: 0.95rem;
+			transition: background-color 0.2s ease, color 0.2s ease;
+		}
+		.navbar .dropdown-item:hover,
+		.navbar .dropdown-item:focus {
+			background-color: #f0f0f0 !important; /* Subtle hover */
+			color: #000 !important;
+		}
+		.navbar .dropdown-item:active {
+			background-color: #e0e0e0 !important;
+		}
 
 
-</style>
+		/* Search Bar */
+		.navbar .form-control {
+			border-radius: 20px; /* Rounded search */
+			border: none;
+			padding-left: 15px;
+		}
+		.navbar .btn-outline-light {
+			border-radius: 20px;
+			border-color: rgba(255, 255, 255, 0.7);
+			color: rgba(255, 255, 255, 0.85);
+		}
+		.navbar .btn-outline-light:hover {
+			border-color: #ffffff;
+			background-color: rgba(255, 255, 255, 0.1);
+			color: #ffffff;
+		}
+
+		/* Cart Badge */
+		.navbar .cart-link .badge {
+			font-size: 0.7em; /* Make badge smaller */
+			padding: 0.3em 0.5em;
+			vertical-align: top; /* Align badge better */
+			margin-left: -5px; /* Adjust position */
+		}
+
+		/* Admin Specific Buttons */
+		.navbar .admin-nav-btn {
+			background-color: rgba(255,255,255, 0.1);
+			border: 1px solid rgba(255,255,255, 0.3);
+			color: rgba(255, 255, 255, 0.85) !important;
+			margin-left: 10px;
+			font-size: 0.9rem;
+			padding: 0.3rem 0.7rem;
+		}
+		.navbar .admin-nav-btn:hover {
+			background-color: rgba(255,255,255, 0.2);
+			border-color: rgba(255,255,255, 0.5);
+			color: #ffffff !important;
+		}
+
+
+	</style>
+
+</head>
 
 <nav class="navbar navbar-expand-lg custom-color" data-bs-theme="dark">
 	<div class="container"> <%-- Use container for padding --%>
@@ -170,7 +178,6 @@
 		<c:choose>
 			<%-- === Admin View === --%>
 			<c:when test="${not empty activeAdminForNav}">
-				<%@include file="admin_modals.jsp"%>
 				<a class="navbar-brand" href="admin.jsp">
 					<i class="fa-solid fa-user-shield" style="color: #ffffff;"></i>Phong Admin
 				</a>
@@ -308,3 +315,4 @@
 
 	</div> <%-- End .container --%>
 </nav>
+</html>
