@@ -145,6 +145,7 @@
 
 <%-- Footer --%>
 <%@include file="footer.jsp"%>
+<%@include file="Components/admin_modals.jsp"%>
 
 </body>
 </html>

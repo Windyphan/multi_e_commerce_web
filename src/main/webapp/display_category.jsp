@@ -128,6 +128,7 @@
 
 <%-- Footer --%>
 <%@include file="footer.jsp"%>
+<%@include file="Components/admin_modals.jsp"%>
 
 <%-- Any page-specific JS can go here --%>
 
