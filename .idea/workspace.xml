@@ -5,20 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99cc4e27-b3cd-4759-ad19-9816ff79b9ba" name="Changes" comment="Update">
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/Components/admin_modals.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/entities/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/entities/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/Components/admin_modals.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/Components/admin_modals.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/Components/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/Components/navbar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/admin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/display_admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_admin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/display_category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_category.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/display_orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_orders.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/display_products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_products.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/display_users.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_users.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/personalInfo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/personalInfo.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0-lambda.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0-lambda.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0.war" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/Components/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/Components/navbar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/entities/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/entities/Product.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/OrderOperationServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/OrderOperationServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/admin.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/entities/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/entities/Product.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/OrderOperationServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/OrderOperationServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/Components/admin_modals.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/Components/admin_modals.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_admin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_category.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_orders.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_products.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_users.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_users.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/personalInfo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/personalInfo.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +60,7 @@
     <setting file="file://$PROJECT_DIR$/src/main/webapp/admin.jsp" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="JspContextManager">
+    <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/personalInfo.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/profile.jsp" />
     <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/Components/admin_modals.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/Components/navbar.jsp" />
     <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/footer.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/error_exception.jsp" />
     <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/order_section.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/profile.jsp" />
@@ -242,30 +248,7 @@
       <workItem from="1744664619119" duration="7506000" />
       <workItem from="1744731009701" duration="14613000" />
       <workItem from="1744822056242" duration="10541000" />
-    </task>
-    <task id="LOCAL-00018" summary="Add file">
-      <option name="closed" value="true" />
-      <created>1744168521257</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1744168521257</updated>
-    </task>
-    <task id="LOCAL-00019" summary="Add file">
-      <option name="closed" value="true" />
-      <created>1744168532761</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1744168532761</updated>
-    </task>
-    <task id="LOCAL-00020" summary="Re haul jsp file">
-      <option name="closed" value="true" />
-      <created>1744168602459</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1744168602459</updated>
+      <workItem from="1744905372412" duration="14643000" />
     </task>
     <task id="LOCAL-00021" summary="Re haul jsp file">
       <option name="closed" value="true" />
@@ -635,7 +618,31 @@
       <option name="project" value="LOCAL" />
       <updated>1744822985594</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="Fix submit form Add product and Add category in admin page">
+      <option name="closed" value="true" />
+      <created>1744905504053</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1744905504053</updated>
+    </task>
+    <task id="LOCAL-00068" summary="Fix price not show pence unit">
+      <option name="closed" value="true" />
+      <created>1744905535207</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1744905535207</updated>
+    </task>
+    <task id="LOCAL-00069" summary="Update">
+      <option name="closed" value="true" />
+      <created>1744905568845</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1744905568845</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -653,8 +660,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Re haul jsp file" />
-    <MESSAGE value="Fix grammar" />
     <MESSAGE value="Add file" />
     <MESSAGE value="Add sql" />
     <MESSAGE value="Add lib" />
@@ -677,6 +682,8 @@
     <MESSAGE value="Add style" />
     <MESSAGE value="Change name to avoid duplicate" />
     <MESSAGE value="Fix query" />
+    <MESSAGE value="Fix submit form Add product and Add category in admin page" />
+    <MESSAGE value="Fix price not show pence unit" />
     <MESSAGE value="Update" />
     <option name="LAST_COMMIT_MESSAGE" value="Update" />
   </component>
