@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%@page import="com.phong.entities.User"%> <%-- Keep for session check --%>
+<%@page import="com.phong.entities.User"%>
+<%@ page import="java.util.Arrays" %> <%-- Keep for session check --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%-- Security Check (already done in provided snippet, kept for context) --%>
@@ -14,9 +15,31 @@
 		response.sendRedirect("login.jsp");
 		return;
 	}
-%>
+	// List of UK Counties / Areas (Add/Refine as needed)
+	List<String> ukCounties = Arrays.asList(
+			// England Ceremonial Counties (Common for Addressing)
+			"Avon", "Bedfordshire", "Berkshire", "Bristol", "Buckinghamshire", "Cambridgeshire",
+			"Cheshire", "Cleveland", "Cornwall", "Cumbria", "Derbyshire", "Devon",
+			"Dorset", "Durham", "East Riding of Yorkshire", "East Sussex", "Essex", "Gloucestershire", "Greater London",
+			"Greater Manchester", "Hampshire", "Herefordshire", "Hertfordshire", "Isle of Wight",
+			"Kent", "Lancashire", "Leicestershire", "Lincolnshire", "Merseyside", "Norfolk",
+			"North Yorkshire", "Northamptonshire", "Northumberland", "Nottinghamshire",
+			"Oxfordshire", "Rutland", "Shropshire", "Somerset", "South Yorkshire", "Staffordshire",
+			"Suffolk", "Surrey", "Tyne and Wear", "Warwickshire", "West Midlands",
+			"West Sussex", "West Yorkshire", "Wiltshire", "Worcestershire",
+			// Scotland Council Areas
+			"Aberdeenshire", "City of Edinburgh", "Glasgow City", "Highland", "Fife", "Stirling",
+			// Wales Principal Areas
+			"Cardiff", "Swansea", "Gwynedd", "Powys", "Pembrokeshire",
+			// Northern Ireland Counties
+			"County Antrim", "County Armagh", "County Down", "County Fermanagh", "County Londonderry", "County Tyrone"
+			// Add others if needed
+	);
+	Collections.sort(ukCounties); // Sort the list alphabetically
 
-<%-- Assume ukCountiesList is set as a request attribute earlier on the page --%>
+	// Set attribute with a suitable name for UK
+	request.setAttribute("ukCountiesList", ukCounties);
+%>
 
 <style>
 	/* Reuse styles from other forms or define specific ones */
