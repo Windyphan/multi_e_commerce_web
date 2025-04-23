@@ -81,7 +81,6 @@
 
 	<%-- Display Messages --%>
 	<%@include file="Components/alert_message.jsp"%>
-	<%@include file="Components/admin_modals.jsp"%>
 
 	<%-- Welcome Section --%>
 	<div class="text-center admin-welcome">
@@ -138,6 +137,16 @@
 					<div class="card-body">
 						<img src="Images/add-admin.png" alt="Admin Icon">
 						<h4 class="card-title">Admins</h4>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="col-12 col-sm-6 col-md-4 col-lg-3">
+			<div class="card dashboard-card text-center h-100">
+				<a href="display_vendors.jsp">
+					<div class="card-body">
+						<img src="Images/add-admin.png" alt="Admin Icon">
+						<h4 class="card-title">Vendors</h4>
 					</div>
 				</a>
 			</div>
