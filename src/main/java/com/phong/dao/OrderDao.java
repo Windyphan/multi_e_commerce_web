@@ -189,6 +189,43 @@ public class OrderDao {
 		return flag;
 	}
 
+	/**
+	 * Retrieves all Orders that contain at least one item fulfilled by the specified vendor.
+	 * Orders are typically sorted by date descending.
+	 * Manages its own database connection.
+	 *
+	 * @param vendorId The ID of the vendor.
+	 * @return A List of Order objects relevant to the vendor, may be empty. Returns null on error.
+	 */
+	public List<Order> getAllOrderByVendorId(int vendorId) {
+		List<Order> list = new ArrayList<>();
+		// Select distinct orders where at least one associated ordered_product matches the vendor ID
+		// Using EXISTS is generally efficient.
+		String query = "SELECT o.* FROM \"order\" o WHERE EXISTS (" +
+				"  SELECT 1 FROM ordered_product op " +
+				"  WHERE op.orderid = o.id AND op.vendor_id = ?" +
+				") ORDER BY o.date DESC";
+
+		try (Connection con = ConnectionProvider.getConnection();
+			 PreparedStatement psmt = con.prepareStatement(query)) {
+
+			psmt.setInt(1, vendorId);
+
+			try (ResultSet rs = psmt.executeQuery()) {
+				while (rs.next()) {
+					// Reuse your existing helper method to map the main order details
+					list.add(mapResultSetToOrder(rs));
+				}
+			} // ResultSet automatically closed
+
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error getting orders for vendor ID " + vendorId + ": " + e.getMessage());
+			e.printStackTrace(); // Replace with proper logging
+			return null; // Indicate error
+		}
+		return list;
+	}
+
 	// --- Helper method to map ResultSet row to Order object ---
 	private Order mapResultSetToOrder(ResultSet rs) throws SQLException {
 		Order order = new Order();

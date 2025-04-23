@@ -31,17 +31,17 @@ public class OrderedProductDao {
 	 */
 	public boolean insertOrderedProduct(OrderedProduct ordProduct) {
 		boolean flag = false;
-		String query = "insert into ordered_product(name, quantity, price, image, orderid) values(?, ?, ?, ?, ?)";
+		String query = "insert into ordered_product(name, quantity, price, image, orderid, vendor_id) values(?, ?, ?, ?, ?, ?)";
 
 		try (Connection con = ConnectionProvider.getConnection();
 			 PreparedStatement psmt = con.prepareStatement(query)) {
 
 			psmt.setString(1, ordProduct.getName());
 			psmt.setInt(2, ordProduct.getQuantity());
-			// Assuming getPrice() returns float, adjust if needed (e.g., BigDecimal for currency)
 			psmt.setFloat(3, ordProduct.getPrice());
 			psmt.setString(4, ordProduct.getImage());
 			psmt.setInt(5, ordProduct.getOrderId()); // Foreign key to the 'order' table's primary key 'id'
+			psmt.setInt(6, ordProduct.getVendorId());
 
 			int rowsAffected = psmt.executeUpdate();
 			if (rowsAffected > 0) {
@@ -89,13 +89,12 @@ public class OrderedProductDao {
 	// --- Helper method to map ResultSet row to OrderedProduct object ---
 	private OrderedProduct mapResultSetToOrderedProduct(ResultSet rs, int orderId) throws SQLException {
 		OrderedProduct orderProd = new OrderedProduct();
-		// Assuming OrderedProduct entity doesn't have its own primary key field 'oid' from the DB
-		// If it does, add: orderProd.setOid(rs.getInt("oid"));
 		orderProd.setName(rs.getString("name"));
 		orderProd.setQuantity(rs.getInt("quantity"));
 		orderProd.setPrice(rs.getFloat("price"));
 		orderProd.setImage(rs.getString("image"));
 		orderProd.setOrderId(orderId); // Set the order ID (foreign key) from the parameter
+		orderProd.setVendorId(rs.getInt("vendor_id"));
 		return orderProd;
 	}
 }

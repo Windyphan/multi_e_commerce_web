@@ -30,7 +30,7 @@ public class ProductDao {
 	 */
 	public boolean saveProduct(Product product) {
 		boolean flag = false;
-		String query = "insert into product(name, description, price, quantity, discount, image, cid) values(?, ?, ?, ?, ?, ?, ?)";
+		String query = "insert into product(name, description, price, quantity, discount, image, cid, vendor_id) values(?, ?, ?, ?, ?, ?, ?, ?)";
 
 		try (Connection con = ConnectionProvider.getConnection();
 			 PreparedStatement psmt = con.prepareStatement(query)) {
@@ -38,11 +38,11 @@ public class ProductDao {
 			psmt.setString(1, product.getProductName());
 			psmt.setString(2, product.getProductDescription());
 			psmt.setFloat(3, product.getProductPrice());
-			// Assuming the correct getter is getProductQuantity() - adjust if needed
 			psmt.setInt(4, product.getProductQuantity());
 			psmt.setInt(5, product.getProductDiscount());
 			psmt.setString(6, product.getProductImages());
 			psmt.setInt(7, product.getCategoryId());
+			psmt.setInt(8, product.getVendorId());
 
 			int rowsAffected = psmt.executeUpdate();
 			if (rowsAffected > 0) {
@@ -200,7 +200,6 @@ public class ProductDao {
 	 */
 	public List<Product> getDiscountedProducts() {
 		List<Product> list = new ArrayList<>();
-		// Assuming discount is stored as an integer percentage (e.g., 30 for 30%)
 		String query = "select * from product where discount >= 30 order by discount desc";
 
 		try (Connection con = ConnectionProvider.getConnection();
@@ -236,7 +235,7 @@ public class ProductDao {
 			psmt.setString(1, product.getProductName());
 			psmt.setString(2, product.getProductDescription());
 			psmt.setFloat(3, product.getProductPrice());
-			psmt.setInt(4, product.getProductQuantity()); // Assuming correct getter name
+			psmt.setInt(4, product.getProductQuantity());
 			psmt.setInt(5, product.getProductDiscount());
 			psmt.setString(6, product.getProductImages());
 			psmt.setInt(7, product.getProductId());
@@ -403,6 +402,34 @@ public class ProductDao {
 		return qty;
 	}
 
+	/**
+	 * Retrieves all products belonging to a specific vendor.
+	 * Manages its own database connection.
+	 *
+	 * @param vendorId The vendor ID.
+	 * @return A List of Product objects for the vendor, which may be empty. Returns null on major error.
+	 */
+	public List<Product> getAllProductsByVendorId(int vendorId) {
+		List<Product> list = new ArrayList<>();
+		String query = "select * from product where vendor_id = ?";
+
+		try (Connection con = ConnectionProvider.getConnection();
+			 PreparedStatement psmt = con.prepareStatement(query)) {
+
+			psmt.setInt(1, vendorId);
+			try (ResultSet rs = psmt.executeQuery()) {
+				while (rs.next()) {
+					list.add(mapResultSetToProduct(rs)); // Use helper method
+				}
+			} // ResultSet automatically closed
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error getting products for vendor ID " + vendorId + ": " + e.getMessage());
+			e.printStackTrace(); // Replace with proper logging
+			return null; // Indicate error
+		}
+		return list;
+	}
+
 
 	// --- Helper method to map ResultSet row to Product object ---
 	private Product mapResultSetToProduct(ResultSet rs) throws SQLException {
@@ -411,11 +438,11 @@ public class ProductDao {
 		product.setProductName(rs.getString("name"));
 		product.setProductDescription(rs.getString("description"));
 		product.setProductPrice(rs.getFloat("price"));
-		// Assuming the correct setter is setProductQuantity() - adjust if needed
 		product.setProductQuantity(rs.getInt("quantity"));
 		product.setProductDiscount(rs.getInt("discount"));
 		product.setProductImages(rs.getString("image"));
 		product.setCategoryId(rs.getInt("cid"));
+		product.setVendorId(rs.getInt("vendor_id"));
 		// You might want to set the calculated discounted price here too if the entity supports it
 		// product.setPriceAfterDiscount(product.calculateDiscountedPrice()); // Example
 		return product;
