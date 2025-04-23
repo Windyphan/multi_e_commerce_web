@@ -1,4 +1,7 @@
 package com.phong.helper;
+import com.phong.entities.OrderedProduct;
+
+import java.util.List;
 
 public class MailMessenger {
 
@@ -58,4 +61,52 @@ public class MailMessenger {
 		}
 	}
 
+	public static void notifyVendorOfStatusUpdate(String vendorShopName, String vendorEmail, String orderId,
+												  String newStatus, String customerName, List<OrderedProduct> vendorItems) {
+
+		String subject = "Order Update [" + orderId + "] - Status: " + newStatus;
+
+		// Build the email body
+		StringBuilder bodyBuilder = new StringBuilder();
+		bodyBuilder.append("Hi ").append(vendorShopName).append(",<br><br>");
+		bodyBuilder.append("The status for order <strong>#").append(orderId).append("</strong> placed by customer '")
+				.append(customerName).append("' has been updated to: <strong>").append(newStatus).append("</strong><br><br>");
+
+		if ("Shipped".equalsIgnoreCase(newStatus) || "Out For Delivery".equalsIgnoreCase(newStatus)) {
+			bodyBuilder.append("Please ensure you have updated tracking information if applicable.<br><br>");
+		} else if ("Delivered".equalsIgnoreCase(newStatus)) {
+			bodyBuilder.append("The order has been marked as delivered.<br><br>");
+		} else if ("Order Confirmed".equalsIgnoreCase(newStatus)) {
+			bodyBuilder.append("The order has been confirmed and you may prepare the items for shipment.<br><br>");
+		} else {
+			bodyBuilder.append("Please review the order details in your dashboard.<br><br>");
+		}
+
+
+		// List the specific items for this vendor in this order
+		if (vendorItems != null && !vendorItems.isEmpty()) {
+			bodyBuilder.append("The following item(s) from your shop are included in this update:<br>");
+			bodyBuilder.append("<ul>");
+			for (OrderedProduct item : vendorItems) {
+				bodyBuilder.append("<li>").append(item.getName())
+						.append(" (Qty: ").append(item.getQuantity())
+						.append(")</li>");
+			}
+			bodyBuilder.append("</ul><br>");
+		}
+
+		bodyBuilder.append("Please log in to your vendor dashboard for more details.<br><br>");
+		bodyBuilder.append("Thank you,<br>Phong Shop Platform");
+
+		String body = bodyBuilder.toString();
+
+		try {
+			System.out.println("Attempting to send vendor status update to: " + vendorEmail); // Log attempt
+			Mail.sendMail(vendorEmail, subject, body);
+			System.out.println("Vendor status update email presumably sent to: " + vendorEmail); // Log success assumption
+		} catch (Exception e) {
+			System.err.println("Failed sending vendor status update to " + vendorEmail + " : " + e.getMessage());
+			e.printStackTrace(); // Log error
+		}
+	}
 }

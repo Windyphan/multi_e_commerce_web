@@ -28,6 +28,11 @@ public class LogoutServlet extends HttpServlet {
 			Message message = new Message("Logout successfully!!", "success", "alert-success");
 			session.setAttribute("message", message);
 			response.sendRedirect("adminlogin.jsp");
+		}else if(user.trim().equals("vendor")) {
+			session.removeAttribute("activeVendor");
+			Message message = new Message("Logout successfully!!", "success", "alert-success");
+			session.setAttribute("message", message);
+			response.sendRedirect("vendor_login.jsp");
 		}
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
