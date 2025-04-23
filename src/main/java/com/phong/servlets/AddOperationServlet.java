@@ -18,6 +18,7 @@ import java.util.UUID; // For unique filenames
 
 import com.phong.dao.CategoryDao;
 import com.phong.dao.ProductDao;
+import com.phong.dao.VendorDao;
 import com.phong.entities.Category;
 import com.phong.entities.Message;
 import com.phong.entities.Product;
@@ -145,6 +146,7 @@ public class AddOperationServlet extends HttpServlet {
 		// DAOs
 		CategoryDao categoryDao = new CategoryDao();
 		ProductDao productDao = new ProductDao();
+		VendorDao vendorDao = new VendorDao();
 
 		// Operation
 		String operation = request.getParameter("operation");
@@ -192,42 +194,7 @@ public class AddOperationServlet extends HttpServlet {
 					message = new Message("Failed to upload category image.", "error", "alert-danger");
 				}
 
-			} else if (operation.equals("addProduct")) {
-				redirectPage = "admin.jsp";
-				String pName = request.getParameter("name");
-				String pDesc = request.getParameter("description");
-				Part part = request.getPart("photo");
-				// ... (Get and validate other parameters: price, discount, quantity, categoryType) ...
-				if (/*... validation fails ...*/ false) { throw new ServletException("Required product fields missing."); }
-				if (part == null || part.getSize() == 0 || part.getSubmittedFileName() == null || part.getSubmittedFileName().trim().isEmpty()) { throw new ServletException("Product image is required."); }
-
-				float pPrice = Float.parseFloat(request.getParameter("price").trim());
-				int pDiscount = Integer.parseInt(request.getParameter("discount").trim());
-				int pQuantity = Integer.parseInt(request.getParameter("quantity").trim());
-				int categoryType = Integer.parseInt(request.getParameter("categoryType").trim());
-				if (pPrice < 0 || pQuantity < 0) throw new ServletException("Price and Quantity cannot be negative.");
-				if (pDiscount < 0 || pDiscount > 100) pDiscount = 0;
-
-				// 1. Upload file to S3 first
-				fileNameForDb = uploadFileToS3(part, null);
-				fileOpSuccess = (fileNameForDb != null);
-
-				// 2. If upload succeeded, save to DB
-				if (fileOpSuccess) {
-					Product product = new Product(pName.trim(), pDesc.trim(), pPrice, pDiscount, pQuantity, fileNameForDb, categoryType);
-					dbSuccess = productDao.saveProduct(product);
-					if (dbSuccess) {
-						message = new Message("Product added successfully!", "success", "alert-success");
-					} else {
-						message = new Message("Image uploaded to S3, but failed to save product to database!", "error", "alert-danger");
-						deleteFileFromS3(fileNameForDb); // Attempt rollback
-					}
-				} else {
-					message = new Message("Failed to upload product image.", "error", "alert-danger");
-				}
-
-
-			} else if (operation.equals("updateCategory")) {
+			}else if (operation.equals("updateCategory")) {
 				redirectPage = "display_category.jsp";
 				int cid = Integer.parseInt(request.getParameter("cid").trim());
 				String name = request.getParameter("category_name");
@@ -308,14 +275,22 @@ public class AddOperationServlet extends HttpServlet {
 				redirectPage = "display_products.jsp";
 				int pid = Integer.parseInt(request.getParameter("pid").trim());
 				String name = request.getParameter("name");
+				String priceStr = request.getParameter("price");
+				String description = request.getParameter("description");
+				String quantityStr = request.getParameter("quantity");
+				String discountStr = request.getParameter("discount");
+				String categoryTypeStr = request.getParameter("categoryType");
 				Part part = request.getPart("product_img");
 				String existingImage = request.getParameter("image");
 				// ... Get and validate other parameters: price, desc, qty, discount, cid ...
-				if (/*... validation fails ...*/ false) { throw new ServletException("Required product fields missing for update."); }
-				float price = Float.parseFloat(request.getParameter("price").trim());
-				String description = request.getParameter("description");
-				int quantity = Integer.parseInt(request.getParameter("quantity").trim());
-				int discount = Integer.parseInt(request.getParameter("discount").trim());
+				if (name == null || name.trim().isEmpty() || priceStr == null || priceStr.trim().isEmpty() ||
+						description == null || description.trim().isEmpty() || discountStr == null || discountStr.trim().isEmpty() ||
+						quantityStr == null || quantityStr.trim().isEmpty() || categoryTypeStr == null || categoryTypeStr.trim().isEmpty() ||
+						part == null || part.getSize() == 0 || part.getSubmittedFileName() == null || part.getSubmittedFileName().trim().isEmpty())
+				{ throw new ServletException("Required fields missing for update."); }
+				float price = Float.parseFloat(priceStr.trim());
+				int quantity = Integer.parseInt(quantityStr.trim());
+				int discount = Integer.parseInt(discountStr.trim());
 				int cid = /*... logic to determine category ID from request ...*/ 0;
 				if (price < 0 || quantity < 0) throw new ServletException("Price and Quantity cannot be negative.");
 				if (discount < 0 || discount > 100) discount = 0;
@@ -341,8 +316,10 @@ public class AddOperationServlet extends HttpServlet {
 				}
 
 				// 2. Update database record
-				Product product = new Product(pid, name.trim(), description.trim(), price, discount, quantity, fileNameForDb, cid);
-				dbSuccess = productDao.updateProduct(product);
+				Product existingProduct = productDao.getProductsByProductId(pid);
+				Product productToUpdate = new Product(pid, name.trim(), description.trim(), price, discount, quantity, fileNameForDb, cid, existingProduct.getVendorId()); // Keep original vendor ID
+				if (existingProduct == null) throw new ServletException("Product to update not found.");
+				dbSuccess = productDao.updateProduct(productToUpdate);
 
 				if (dbSuccess) {
 					if (fileOpSuccess) {
@@ -383,6 +360,32 @@ public class AddOperationServlet extends HttpServlet {
 					message = new Message("Failed to delete product. It might be in use or not exist.", "error", "alert-danger");
 				}
 
+			} else if (operation.equals("approveVendor")) {
+				redirectPage = "display_vendors.jsp";
+				try {
+					int vendorId = Integer.parseInt(request.getParameter("vid"));
+					if (vendorDao.approveVendor(vendorId)) {
+						message = new Message("Vendor approved successfully.", "success", "alert-success");
+						// TODO: Maybe send an approval email to the vendor?
+					} else {
+						message = new Message("Failed to approve vendor (maybe already approved or error occurred).", "error", "alert-danger");
+					}
+				} catch (NumberFormatException nfe) {
+					message = new Message("Invalid Vendor ID for approval.", "error", "alert-warning");
+				}
+			} else if (operation.equals("suspendVendor")) {
+					redirectPage = "display_vendors.jsp";
+					try {
+						int vendorId = Integer.parseInt(request.getParameter("vid"));
+						if (vendorDao.suspendVendor(vendorId)) {
+							message = new Message("Vendor suspended successfully.", "success", "alert-success");
+							// TODO: Maybe send an approval email to the vendor?
+						} else {
+							message = new Message("Failed to suspend vendor (maybe already approved or error occurred).", "error", "alert-danger");
+						}
+					} catch (NumberFormatException nfe) {
+						message = new Message("Invalid Vendor ID for suspend.", "error", "alert-warning");
+					}
 			} else {
 				message = new Message("Unknown operation: " + operation, "error", "alert-warning");
 				redirectPage = "admin.jsp";
@@ -424,7 +427,6 @@ public class AddOperationServlet extends HttpServlet {
 		if (operation == null) return "admin.jsp";
 		switch (operation) {
 			case "addCategory":
-			case "addProduct":
 				return "admin.jsp";
 			case "updateCategory":
 			case "deleteCategory":
@@ -432,6 +434,8 @@ public class AddOperationServlet extends HttpServlet {
 			case "updateProduct":
 			case "deleteProduct":
 				return "display_products.jsp";
+			case "approveVendor":
+				return "display_vendors.jsp";
 			default:
 				return "admin.jsp";
 		}
