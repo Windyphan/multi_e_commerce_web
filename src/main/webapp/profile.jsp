@@ -17,7 +17,7 @@
     - The included JSPs (wishlist_section.jsp, order_section.jsp, personalInfo.jsp)
       should ideally fetch their own data (or receive it via request attributes
       set by a controller servlet before forwarding here).
-    - We can pre-set the active tab based on a request parameter if needed.
+    - Can pre-set the active tab based on a request parameter if needed.
 --%>
 <c:set var="activeTab" value="${empty param.tab ? 'profile' : param.tab}" scope="request"/> <%-- Default to profile, allow tab parameter --%>
 

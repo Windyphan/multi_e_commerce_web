@@ -195,7 +195,7 @@
 						<select name="categoryType" id="productCategorySelect" class="form-select" required>
 							<option value="" disabled>-- Select Category --</option>
 							<%-- Loop through categories, pre-select current one --%>
-							<c:forEach var="cat" items="${navbarCategoryList}"> <%-- Assumes list from navbar --%>
+							<c:forEach var="cat" items="${navbarCategoryList}">
 								<option value="${cat.categoryId}" ${product.categoryId == cat.categoryId ? 'selected' : ''}>
 									<c:out value="${cat.categoryName}"/>
 								</option>
@@ -249,7 +249,7 @@
 			return true;
 		} else {
 			discountInput.setCustomValidity("Discount must be a number between 0 and 100.");
-			// We don't alert here, rely on Bootstrap validation display
+			// Don't alert here, rely on Bootstrap validation display
 			// discountInput.focus();
 			return false;
 		}

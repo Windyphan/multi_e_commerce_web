@@ -129,7 +129,6 @@
 
 		<div class="mb-3">
 			<label for="userAddressInput" class="form-label">Address (Street, House No)</label>
-			<%-- Assumes field name is userAddress --%>
 			<input type="text" class="form-control" id="userAddressInput" name="address"
 				   placeholder="e.g., 10 Downing Street" required
 				   value="<c:out value='${sessionScope.activeUser.userAddress}'/>">
@@ -139,7 +138,6 @@
 		<div class="row">
 			<div class="col-md-6 mb-3">
 				<label for="cityInput" class="form-label">Town / City</label>
-				<%-- Assumes field name is userCity --%>
 				<input class="form-control" type="text" name="city" id="cityInput"
 					   placeholder="e.g., London" required
 					   value="<c:out value='${sessionScope.activeUser.userCity}'/>">
@@ -147,7 +145,6 @@
 			</div>
 			<div class="col-md-6 mb-3">
 				<label for="postcodeInput" class="form-label">Postcode</label>
-				<%-- Assumes field name is userPostcode & form field name is postcode --%>
 				<input class="form-control" type="text" name="postcode" id="postcodeInput"
 					   placeholder="e.g., SW1A 0AA" required
 					   pattern="[A-Za-z]{1,2}[0-9Rr][0-9A-Za-z]? [0-9][A-Za-z]{2}"
@@ -160,7 +157,6 @@
 
 		<div class="mb-4"> <%-- More bottom margin before buttons --%>
 			<label for="countySelect" class="form-label">County</label>
-			<%-- Assumes field name is userCounty & form field name is county --%>
 			<select name="county" id="countySelect" class="form-select" required>
 				<option value="" disabled ${empty sessionScope.activeUser.userCounty ? 'selected' : ''}>-- Select County --</option>
 				<%-- Loop through counties prepared earlier --%>

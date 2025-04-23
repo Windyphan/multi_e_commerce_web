@@ -229,8 +229,6 @@ public class CartDao {
 			psmt.setInt(1, userId);
 
 			// executeUpdate returns the number of rows affected.
-			// It doesn't matter if 0 rows were affected (empty cart) or many.
-			// We consider it successful unless an exception occurs.
 			psmt.executeUpdate();
 			flag = true; // Success if no exception
 

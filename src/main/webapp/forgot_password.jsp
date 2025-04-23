@@ -118,7 +118,6 @@
 
 					<%-- Email Form --%>
 					<form action="ChangePasswordServlet" method="post" class="needs-validation" novalidate>
-						<%-- Assuming ChangePasswordServlet handles this stage based on referrer or lack of other params --%>
 						<%-- No hidden operation needed if servlet logic checks referrer --%>
 
 						<div class="mb-4"> <%-- More bottom margin --%>

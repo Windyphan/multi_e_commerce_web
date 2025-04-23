@@ -24,7 +24,6 @@ public class WishlistDao {
 
 	/**
 	 * Adds a product to a user's wishlist.
-	 * Assumes the combination of (iduser, idproduct) should be unique.
 	 * Manages its own database connection.
 	 *
 	 * @param w The Wishlist object containing userId and productId.
@@ -70,7 +69,7 @@ public class WishlistDao {
 	 */
 	public boolean getWishlist(int uid, int pid) {
 		boolean exists = false;
-		// Select a constant value (1) for efficiency, we only care if a row exists
+		// Select a constant value (1) for efficiency
 		String query = "select 1 from wishlist where iduser = ? and idproduct = ?";
 
 		try (Connection con = ConnectionProvider.getConnection();
