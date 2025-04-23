@@ -165,4 +165,44 @@
     <servlet-name>ReviewServlet</servlet-name>
     <url-pattern>/ReviewServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>VendorLoginServlet</display-name>
+    <servlet-name>VendorLoginServlet</servlet-name>
+    <servlet-class>com.phong.servlets.VendorLoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VendorLoginServlet</servlet-name>
+    <url-pattern>/VendorLoginServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>VendorRegisterServlet</display-name>
+    <servlet-name>VendorRegisterServlet</servlet-name>
+    <servlet-class>com.phong.servlets.VendorRegisterServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VendorRegisterServlet</servlet-name>
+    <url-pattern>/VendorRegisterServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>VendorProductServlet</display-name>
+    <servlet-name>VendorProductServlet</servlet-name>
+    <servlet-class>com.phong.servlets.VendorProductServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VendorProductServlet</servlet-name>
+    <url-pattern>/VendorProductServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>VendorProfileServlet</display-name>
+    <servlet-name>VendorProfileServlet</servlet-name>
+    <servlet-class>com.phong.servlets.VendorProfileServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>VendorProfileServlet</servlet-name>
+    <url-pattern>/VendorProfileServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

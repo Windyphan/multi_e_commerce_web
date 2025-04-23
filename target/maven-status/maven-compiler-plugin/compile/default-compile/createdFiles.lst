@@ -3,7 +3,9 @@ com\phong\dao\WishlistDao.class
 com\phong\servlets\CartOperationServlet.class
 com\phong\servlets\AddToCartServlet.class
 com\phong\servlets\UpdateUserServlet.class
+com\phong\servlets\VendorProfileServlet.class
 com\phong\entities\Product.class
+com\phong\entities\Vendor.class
 com\phong\entities\Review.class
 com\phong\helper\OrderIdGenerator.class
 com\phong\dao\CartDao.class
@@ -15,12 +17,15 @@ com\phong\servlets\AdminServlet.class
 com\phong\servlets\UpdateOrderServlet.class
 com\phong\lambda\ChatbotHandler.class
 com\phong\servlets\LoginServlet.class
+com\phong\servlets\VendorRegisterServlet.class
 com\phong\servlets\OrderOperationServlet.class
 com\phong\lambda\ChatbotHandler$RequestBody.class
 com\phong\dao\UserDao.class
 com\phong\helper\Mail$1.class
+com\phong\helper\PasswordUtil.class
 com\phong\dao\OrderedProductDao.class
 com\phong\dao\ProductDao.class
+com\phong\servlets\VendorProductServlet.class
 com\phong\servlets\ChangePasswordServlet.class
 com\phong\servlets\LogoutServlet.class
 com\phong\entities\Category.class
@@ -34,7 +39,9 @@ com\phong\helper\MailMessenger.class
 com\phong\servlets\WishlistServlet.class
 com\phong\dao\AdminDao.class
 com\phong\dao\OrderDao.class
+com\phong\servlets\VendorLoginServlet.class
 com\phong\helper\ConnectionProvider.class
+com\phong\dao\VendorDao.class
 com\phong\servlets\ReviewServlet.class
 com\phong\dao\CategoryDao.class
 com\phong\entities\Cart.class
