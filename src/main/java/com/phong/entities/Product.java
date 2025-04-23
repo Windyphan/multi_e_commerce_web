@@ -10,13 +10,14 @@ public class Product {
     private int productQuantity;
     private String productImages;
     private int categoryId;
+	private int vendorId;
     
 	public Product() {
 		super();
 	}
 	
 	public Product(int productId, String productName, String productDescription, float productPrice,
-			int productDiscount, int productQuantity, String productImages, int categoryId) {
+			int productDiscount, int productQuantity, String productImages, int categoryId, int vendorId) {
 		super();
 		this.productId = productId;
 		this.productName = productName;
@@ -26,6 +27,7 @@ public class Product {
 		this.productQuantity = productQuantity;
 		this.productImages = productImages;
 		this.categoryId = categoryId;
+		this.vendorId = vendorId;
 	}
 
 	public Product(String productName, String productDescription, float productPrice, int productDiscount,
@@ -40,7 +42,7 @@ public class Product {
 	}
 
 	public Product(String productName, String productDescription, float productPrice, int productDiscount,
-			int productQuantity, String productImages, int categoryId) {
+			int productQuantity, String productImages, int categoryId, int vendorId) {
 		super();
 		this.productName = productName;
 		this.productDescription = productDescription;
@@ -49,6 +51,7 @@ public class Product {
 		this.productQuantity = productQuantity;
 		this.productImages = productImages;
 		this.categoryId = categoryId;
+		this.vendorId = vendorId;
 	}
 	
 	public Product(int productId, String productName, float productPrice, int productDiscount, int productQuantity) {
@@ -124,6 +127,14 @@ public class Product {
 		this.categoryId = categoryId;
 	}
 
+	public int getVendorId() {
+		return vendorId;
+	}
+
+	public void setVendorId(int vendorId) {
+		this.vendorId = vendorId;
+	}
+
 	//calculate price of product by applying discount
     public float getProductPriceAfterDiscount(){
         float discount = (float) ((this.getProductDiscount()/100.0) * this.getProductPrice());
@@ -135,7 +146,7 @@ public class Product {
 		return "Product [productId=" + productId + ", productName=" + productName + ", productDescription="
 				+ productDescription + ", productPrice=" + productPrice + ", productDiscount=" + productDiscount
 				+ ", productQuantity=" + productQuantity + ", productImages=" + productImages + ", categoryId="
-				+ categoryId + "]";
+				+ categoryId + ", vendorId=" + vendorId + "]";
 	}
     
     
