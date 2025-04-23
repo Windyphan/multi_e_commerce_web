@@ -2,7 +2,6 @@ package com.phong.servlets;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,8 +13,6 @@ import com.phong.entities.Message;
 import com.phong.entities.User;
 import com.phong.entities.Vendor;
 import com.phong.helper.PasswordUtil;
-// Import password hashing utility
-// import com.phong.helper.PasswordUtil;
 
 
 public class VendorLoginServlet extends HttpServlet {
