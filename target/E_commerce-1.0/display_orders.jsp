@@ -44,7 +44,7 @@
 		for (Order order : orderList) {
 			// Fetch User if not already fetched
 			if (!userMap.containsKey(order.getUserId())) {
-				User orderUser = userDao.getUserById(order.getUserId()); // Assuming UserDao has getUserById
+				User orderUser = userDao.getUserById(order.getUserId());
 				if (orderUser != null) {
 					userMap.put(order.getUserId(), orderUser);
 				} else {
@@ -311,7 +311,6 @@
 
 <%-- Footer --%>
 <%@include file="footer.jsp"%>
-<%@include file="Components/admin_modals.jsp"%>
 
 </body>
 </html>

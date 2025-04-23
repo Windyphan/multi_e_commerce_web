@@ -119,10 +119,6 @@
 
 	<div class="page-header">
 		<h2>Manage Products</h2>
-		<%-- Button to trigger the Add Product modal (defined in admin.jsp or navbar.jsp) --%>
-		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-product">
-			<i class="fa-solid fa-plus"></i> Add New Product
-		</button>
 	</div>
 
 	<%-- Display Messages --%>
@@ -202,7 +198,6 @@
 
 <%-- Footer --%>
 <%@include file="footer.jsp"%>
-<%@include file="Components/admin_modals.jsp"%>
 
 </body>
 </html>

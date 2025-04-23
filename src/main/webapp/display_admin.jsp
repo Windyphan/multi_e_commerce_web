@@ -188,7 +188,6 @@
 <%-- Footer --%>
 <%@include file="footer.jsp"%>
 <%-- Conditionally include only if admin is logged in --%>
-<%@include file="Components/admin_modals.jsp"%>
 
 <script>
 	// Example starter JavaScript for disabling form submissions if there are invalid fields
