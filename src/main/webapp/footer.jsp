@@ -24,6 +24,12 @@
 <footer class="footer mt-auto py-3 bg-dark text-white-50"> <%-- mt-auto is key --%>
     <div class="container text-center">
         <span>© <%= currentYear %> Phong Phan. All Rights Reserved.</span>
+        <span class="ms-3 border-start border-secondary ps-3">
+         <a href="vendor_register.jsp" class="text-white-50">Become a Seller</a>
+        </span>
+        <span class="ms-3 border-start border-secondary ps-3">
+         <a href="vendor_login.jsp" class="text-white-50">Vendor Login</a>
+        </span>
     </div>
 </footer>
 

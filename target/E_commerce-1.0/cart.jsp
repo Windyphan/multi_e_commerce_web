@@ -2,13 +2,13 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@page import="com.phong.dao.ProductDao"%>
+<%@page import="com.phong.dao.VendorDao"%>
 <%@page import="com.phong.entities.Product"%>
+<%@page import="com.phong.entities.Vendor"%>
 <%@page import="com.phong.dao.CartDao"%>
 <%@page import="com.phong.entities.Cart"%>
 <%@page import="com.phong.entities.User"%>
-<%@page import="java.util.List"%>
-<%@page import="java.util.ArrayList"%> <%-- Import ArrayList for creating detailed list --%>
-<%@page import="java.util.Collections"%> <%-- Import Collections for emptyList --%>
+<%@page import="java.util.*"%>
 
 <%@page errorPage="error_exception.jsp"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -28,24 +28,39 @@
 	// Fetch Cart and Product Data
 	CartDao cartDaoForCart = new CartDao();
 	ProductDao productDao = new ProductDao();
+	VendorDao vendorDao = new VendorDao();
 	List<Cart> cartItems = cartDaoForCart.getCartListByUserId(currentUserForCart.getUserId());
 
 	// Create a list to hold detailed cart item info (Cart + Product)
 	// This helps handle cases where a product might have been deleted
 	List<CartItemDetail> detailedCartItems = new ArrayList<>();
 	float calculatedTotalPrice = 0;
-
+	Map<Integer, String> cartVendorNameMap = new HashMap<>();
+	Set<Integer> vendorIdsInCart = new HashSet<>();
 	if (cartItems != null) {
 		for (Cart cartItem : cartItems) {
 			Product product = productDao.getProductsByProductId(cartItem.getProductId());
 			if (product != null) { // Only add if product exists
 				detailedCartItems.add(new CartItemDetail(cartItem, product));
 				calculatedTotalPrice += cartItem.getQuantity() * product.getProductPriceAfterDiscount();
+				if (product.getVendorId() > 0) { // Collect valid vendor IDs
+					vendorIdsInCart.add(product.getVendorId());
+				}
 			} else {
 				// Optionally log or inform user about items linked to deleted products
 				System.err.println("Warning: Cart item ID " + cartItem.getCartId() + " refers to non-existent product ID " + cartItem.getProductId());
 				// Consider automatically removing such items from the cart here?
 				// cartDao.removeProduct(cartItem.getCartId());
+			}
+		}
+		if (!vendorIdsInCart.isEmpty()) {
+			for (int vid : vendorIdsInCart) {
+				Vendor vendor = vendorDao.getVendorById(vid);
+				if (vendor != null && vendor.isApproved()) { // Only get approved vendors
+					cartVendorNameMap.put(vid, vendor.getShopName());
+				} else {
+					cartVendorNameMap.put(vid, "Phong Shop"); // Fallback name? Or null?
+				}
 			}
 		}
 	} else {
@@ -60,6 +75,7 @@
 	// Make detailed list and total price available for EL
 	request.setAttribute("cartContent", detailedCartItems);
 	request.setAttribute("cartTotalPrice", calculatedTotalPrice);
+	request.setAttribute("cartVendorNames", cartVendorNameMap);
 
 %>
 <%-- Helper Inner Class (Place this definition within the <%! ... %> declaration block) --%>
@@ -175,6 +191,15 @@
 		.empty-cart-container p {
 			color: #6c757d;
 		}
+		.product-vendor-info {
+			font-size: 0.95rem;
+		}
+		.product-vendor-info a {
+			text-decoration: none;
+		}
+		.product-vendor-info a:hover {
+			text-decoration: underline;
+		}
 	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -226,6 +251,15 @@
 												<%-- Use forward slash --%>
 											<img src="${s3BaseUrl}${itemDetail.product.productImages}" alt="${itemDetail.product.productName}" class="cart-item-img">
 											<a href="viewProduct.jsp?pid=${itemDetail.product.productId}" class="cart-item-name ms-2">${itemDetail.product.productName}</a>
+														<%-- *** NEW: Display Vendor Name *** --%>
+													<small class="text-muted product-vendor">
+														Sold by:
+														<c:set var="vendorName" value="${cartVendorNames[itemDetail.product.vendorId]}" />
+														<a href="vendor_store.jsp?vid=${itemDetail.product.vendorId}" class="link-secondary">
+															<c:out value="${not empty vendorName ? vendorName : 'Phong Shop'}"/>
+														</a>
+													</small>
+														<%-- *** End Vendor Name Display *** --%>
 										</div>
 									</td>
 										<%-- Price Column --%>

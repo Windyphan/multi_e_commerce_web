@@ -5,6 +5,8 @@
 <%@page import="com.phong.dao.CategoryDao"%>
 <%@page import="com.phong.dao.WishlistDao"%> <%-- If showing wishlist status --%>
 <%@page import="com.phong.dao.ReviewDao"%>
+<%@page import="com.phong.dao.VendorDao"%>
+<%@page import="com.phong.entities.Vendor"%>
 <%@page import="com.phong.entities.Product"%>
 <%@page import="com.phong.entities.User"%>
 <%@page import="com.phong.entities.Review"%>
@@ -23,6 +25,7 @@
 
 	// Get Product ID from request and validate
 	Product product = null;
+	Vendor vendor = null;
 	int productId = 0;
 	String pidParam = request.getParameter("pid");
 	String errorMessage = null;
@@ -41,6 +44,17 @@
 					CategoryDao categoryDaoForViewProduct = new CategoryDao();
 					categoryName = categoryDaoForViewProduct.getCategoryName(product.getCategoryId());
 					if (categoryName == null) categoryName = "Unknown"; // Handle null category name
+					if (product.getVendorId() > 0) { // Check if vendor ID is valid
+						VendorDao vendorDao = new VendorDao();
+						vendor = vendorDao.getVendorById(product.getVendorId());
+						// If vendor is null or not approved, hide the product
+						if (vendor != null && !vendor.isApproved()) {
+							System.err.println("Warning: Product PID " + productId + " belongs to unapproved vendor ID " + vendor.getVendorId());
+							// Optionally nullify vendor so it doesn't display as "Sold by"
+						}
+					} else {
+						System.err.println("Warning: Product PID " + productId + " has missing or invalid vendor ID: " + product.getVendorId());
+					}
 				}
 			} else {
 				errorMessage = "Invalid Product ID specified.";
@@ -97,6 +111,7 @@
 	// Set attributes for EL access
 	request.setAttribute("product", product);
 	request.setAttribute("categoryName", categoryName);
+	request.setAttribute("vendor", vendor);
 	request.setAttribute("userWishlistPids", userWishlistProductIds);
 	request.setAttribute("productReviews", reviews);
 	request.setAttribute("averageRating", averageRating);
@@ -233,6 +248,15 @@
 		.wishlist-btn .fa-heart.in-wishlist { color: #dc3545; }
 		.wishlist-btn .fa-heart.not-in-wishlist { color: #adb5bd; }
 		.wishlist-btn:hover .fa-heart.not-in-wishlist { color: #6c757d; }
+		.product-vendor-info {
+			font-size: 0.95rem;
+		}
+		.product-vendor-info a {
+			text-decoration: none;
+		}
+		.product-vendor-info a:hover {
+			text-decoration: underline;
+		}
 
 	</style>
 </head>
@@ -288,6 +312,17 @@
 					<%-- Details Column --%>
 				<div class="col-md-6 product-details">
 					<h4><c:out value="${product.productName}"/></h4>
+
+						<%-- Display Vendor Info --%>
+					<c:if test="${not empty vendor}"> <%-- Check if vendor object exists and is valid --%>
+						<div class="product-vendor-info mb-3"> <%-- Add margin --%>
+							<span class="text-muted">Sold by:</span>
+							<a href="vendor_store.jsp?vid=${vendor.vendorId}" class="link-primary fw-medium ms-1">
+								<c:out value="${vendor.shopName}"/>
+							</a>
+						</div>
+					</c:if>
+						<%-- If vendor is null or unapproved, this section won't show --%>
 
 						<%-- Price Section --%>
 					<div class="price-section">

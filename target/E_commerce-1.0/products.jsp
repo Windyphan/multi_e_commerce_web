@@ -6,9 +6,11 @@
 <%-- Remove CategoryDao import if only using list from navbar --%>
 <%@page import="com.phong.dao.WishlistDao"%>
 <%@page import="com.phong.dao.ReviewDao"%>
+<%@page import="com.phong.dao.VendorDao"%>
 <%@page import="com.phong.entities.Product"%>
 <%@page import="com.phong.entities.User"%> <%-- Keep for session check --%>
 <%@page import="com.phong.entities.Wishlist"%>
+<%@page import="com.phong.entities.Vendor"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.HashSet"%>
@@ -125,6 +127,31 @@
 		}
 	}
 
+	Map<Integer, String> vendorNameMap = new HashMap<>();
+	if (productList != null && !productList.isEmpty()) {
+		VendorDao vendorDao = new VendorDao(); // Instantiate VendorDao
+		// Get unique vendor IDs from the product list
+		Set<Integer> vendorIds = productList.stream()
+				.map(Product::getVendorId)
+				.filter(vid -> vid > 0) // Filter out potential 0 or negative IDs
+				.collect(Collectors.toSet());
+
+		// Fetch details only for the vendors present in the current product list
+		if (!vendorIds.isEmpty()) {
+			for (int vid : vendorIds) {
+				if (!vendorNameMap.containsKey(vid)) { // Avoid refetching if already got
+					Vendor vendor = vendorDao.getVendorById(vid);
+					if (vendor != null) {
+						vendorNameMap.put(vid, vendor.getShopName());
+					} else {
+						vendorNameMap.put(vid, "Unknown Seller"); // Fallback
+					}
+				}
+			}
+		}
+	}
+	request.setAttribute("vendorNames", vendorNameMap); // Set attribute for EL
+
 	// Set attributes for EL access
 	request.setAttribute("productsToDisplay", productList);
 	request.setAttribute("pageDisplayMessage", displayMessage);
@@ -171,6 +198,13 @@
 		.no-products-found { padding: 3rem 1rem; text-align: center; }
 		.no-products-found img { max-width: 200px; opacity: 0.7; margin-bottom: 1rem; }
 		.no-products-found h4 { color: #6c757d; }
+		.product-vendor {
+			font-size: 0.85em;
+		}
+		.product-vendor a {
+			font-weight: 500;
+			/* text-decoration: none; */ /* Optional */
+		}
 		/* Style for the heading hiding */
 		#page-message-heading { /* ID kept from previous step */
 			/* No transition needed if just hiding */
@@ -236,6 +270,16 @@
 						</div>
 						<div class="card-body">
 							<h5 class="card-title" title="${product.productName}"><c:out value="${product.productName}"/></h5>
+							<div class="product-vendor mb-2"> <%-- Add margin-bottom --%>
+								<small class="text-muted">
+									Sold by:
+										<%-- Look up name in the map --%>
+									<c:set var="vendorName" value="${vendorNames[product.vendorId]}" />
+									<a href="vendor_store.jsp?vid=${product.vendorId}" class="link-secondary"> <%-- Link to vendor page --%>
+										<c:out value="${not empty vendorName ? vendorName : 'Phong Shop'}"/> <%-- Display name or default --%>
+									</a>
+								</small>
+							</div>
 							<div class="price-container">
                                     <span class="price-discounted">
                                         <fmt:formatNumber value="${product.productPriceAfterDiscount}" type="currency" currencySymbol="£"/>

@@ -2,12 +2,13 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@page import="com.phong.entities.User"%> <%-- Still need User for type casting below --%>
+<%@page import="com.phong.entities.Vendor"%>
 <%@page import="com.phong.entities.Message"%> <%-- For potential error messages --%>
 <%@page import="com.phong.entities.Product"%> <%-- For product list --%>
 <%@page import="com.phong.dao.ProductDao"%> <%-- Needed for buy now price lookup (fallback) --%>
-<%@page import="java.util.Collections"%> <%-- For state list example --%>
-<%@page import="java.util.Arrays"%> <%-- For state list example --%>
-<%@page import="java.util.List"%> <%-- For state list example --%>
+<%@page import="com.phong.dao.VendorDao"%>
+<%@page import="java.util.*"%> <%-- For state list example --%>
+
 
 
 <%@page errorPage="error_exception.jsp"%>
@@ -28,84 +29,144 @@
 	String fromAttr = (String) session.getAttribute("from");
 	request.setAttribute("orderSource", fromAttr); // Make available to EL
 
-	// Prepare price details based on source - Default to 0 if session attributes missing
-	float itemTotalPrice = 0;
-	int itemCount = 0;
-	float deliveryCharge = 4.99f; // Make these configurable if possible
-	float packagingCharge = 1.49f;
+	List<CartItemDetail> itemsForCheckout = new ArrayList<>();
+	Map<Integer, String> checkoutVendorNameMap = new HashMap<>();
+	float calculatedItemTotal = 0f;
+	int checkoutItemCount = 0;
+	float deliveryCharge = 4.99f; // Example UK GBP - Make configurable?
+	float packagingCharge = 1.49f; // Example UK GBP - Make configurable?
+	String pageErrorMessage = null; // For errors specific to this page load
 
-	if ("cart".equals(fromAttr)) {
-		Float totalPriceFromSession = (Float) session.getAttribute("totalPrice");
-		itemTotalPrice = (totalPriceFromSession != null) ? totalPriceFromSession : 0;
-		// Get item count - assuming navbar might have set it? Or fetch again if needed.
-		Integer cartCountFromSession = (Integer) request.getAttribute("navbarCartCount"); // Check if navbar set it
-		if (cartCountFromSession != null) {
-			itemCount = cartCountFromSession;
-		} else {
-			// Fallback: Fetch again (less efficient)
-			// com.phong.dao.CartDao cartDao = new com.phong.dao.CartDao();
-			// itemCount = cartDao.getCartCountByUserId(activeUser.getUserId());
-			// Better to ensure it's passed via session/request attribute
-			System.err.println("Warning: Cart count not found in request attributes for checkout from cart.");
-		}
+	// --- Instantiate DAOs ---
+	ProductDao productDao = new ProductDao();
+	VendorDao vendorDao = new VendorDao(); // Needed for vendor names
 
-	} else if ("buy".equals(fromAttr)) {
-		itemCount = 1;
-		Float buyNowPriceFromSession = (Float) session.getAttribute("buyNowPrice");
-		if (buyNowPriceFromSession != null) {
-			itemTotalPrice = buyNowPriceFromSession;
-		} else {
-			// Fallback: Fetch price again if not set in session (less ideal)
-			Integer pid = (Integer) session.getAttribute("pid");
-			if (pid != null) {
-				ProductDao pDao = new ProductDao();
-				Product p = pDao.getProductsByProductId(pid);
-				if(p != null) {
-					itemTotalPrice = p.getProductPriceAfterDiscount();
-				} else {
-					System.err.println("Error: Product for 'buy now' (PID: " + pid + ") not found.");
-					// Handle error - maybe redirect with message
+	try { // Wrap data fetching in try-catch
+
+		Set<Integer> vendorIdsNeeded = new HashSet<>(); // To collect unique vendor IDs
+
+		// --- Fetch Item Details based on source ---
+		if ("cart".equals(fromAttr)) {
+			CartDao cartDao = new CartDao();
+			List<Cart> cartItems = cartDao.getCartListByUserId(currentUserForCheckout.getUserId());
+
+			if (cartItems != null) {
+				for (Cart cartItem : cartItems) {
+					Product product = productDao.getProductsByProductId(cartItem.getProductId());
+					if (product != null) { // Only process if product exists
+						itemsForCheckout.add(new CartItemDetail(cartItem, product));
+						calculatedItemTotal += cartItem.getQuantity() * product.getProductPriceAfterDiscount();
+						if (product.getVendorId() > 0) {
+							vendorIdsNeeded.add(product.getVendorId());
+						}
+					} else {
+						System.err.println("CHECKOUT WARN: Cart item ID " + cartItem.getCartId() + " refers to non-existent product ID " + cartItem.getProductId());
+						// Item won't be added to checkout list
+					}
 				}
 			} else {
-				System.err.println("Error: Missing 'pid' or 'buyNowPrice' in session for 'buy now'.");
-				// Handle error
+				pageErrorMessage = "Could not retrieve cart items.";
+			}
+
+		} else if ("buy".equals(fromAttr)) {
+			Integer pid = (Integer) session.getAttribute("pid");
+			Float buyNowPrice = (Float) session.getAttribute("buyNowPrice"); // Use pre-calculated price
+
+			if (pid != null && pid > 0) {
+				Product product = productDao.getProductsByProductId(pid);
+				if (product != null) {
+					// Create a temporary Cart object for CartItemDetail consistency
+					Cart tempCartItem = new Cart(currentUserForCheckout.getUserId(), pid, 1); // Quantity is 1 for buy now
+					itemsForCheckout.add(new CartItemDetail(tempCartItem, product));
+
+					// Use price from session if available, otherwise use product's calculated price
+					calculatedItemTotal = (buyNowPrice != null) ? buyNowPrice : product.getProductPriceAfterDiscount();
+
+					if (product.getVendorId() > 0) {
+						vendorIdsNeeded.add(product.getVendorId());
+					}
+				} else {
+					pageErrorMessage = "The product you were trying to buy could not be found.";
+					System.err.println("CHECKOUT ERROR: Product for 'buy now' (PID: " + pid + ") not found.");
+				}
+			} else {
+				pageErrorMessage = "Could not determine which product to buy.";
+				System.err.println("CHECKOUT ERROR: Missing 'pid' in session for 'buy now'.");
+			}
+		} else {
+			// Invalid 'from' value
+			pageErrorMessage = "Invalid checkout source.";
+			System.err.println("CHECKOUT ERROR: Invalid 'from' attribute in session: " + fromAttr);
+		}
+
+		// --- Fetch names for collected vendor IDs ---
+		if (!vendorIdsNeeded.isEmpty()) {
+			for (int vid : vendorIdsNeeded) {
+				// Avoid re-fetching if somehow added twice (unlikely with Set)
+				if (!checkoutVendorNameMap.containsKey(vid)) {
+					Vendor vendor = vendorDao.getVendorById(vid);
+					if (vendor != null && vendor.isApproved()) { // Only show approved vendors
+						checkoutVendorNameMap.put(vid, vendor.getShopName());
+					} else {
+						// Fallback name for missing or unapproved vendors
+						checkoutVendorNameMap.put(vid, "Phong Shop"); // Or "Unknown Seller" or null
+						if(vendor == null) System.err.println("CHECKOUT WARN: Vendor details not found for ID: " + vid);
+						else System.err.println("CHECKOUT WARN: Vendor ID " + vid + " is not approved.");
+					}
+				}
 			}
 		}
+
+	} catch (Exception e) {
+		System.err.println("CHECKOUT ERROR: Unexpected error during data preparation: " + e.getMessage());
+		e.printStackTrace();
+		pageErrorMessage = "An error occurred while preparing your checkout details.";
+		itemsForCheckout.clear(); // Clear items if error occurred during processing
+		checkoutVendorNameMap.clear();
+		calculatedItemTotal = 0;
 	}
 
-	float totalAmountPayable = itemTotalPrice + deliveryCharge + packagingCharge;
+	// --- Final Calculations and Attribute Setting ---
+	checkoutItemCount = itemsForCheckout.size(); // Count valid items added
+	float totalAmountPayable = calculatedItemTotal + deliveryCharge + packagingCharge;
 
-	// Make calculated values available to EL
-	request.setAttribute("itemCount", itemCount);
-	request.setAttribute("itemTotalPrice", itemTotalPrice);
+	// Make data available for EL
+	request.setAttribute("checkoutItems", itemsForCheckout); // The List<CartItemDetail>
+	request.setAttribute("itemCount", checkoutItemCount);
+	request.setAttribute("itemTotalPrice", calculatedItemTotal);
 	request.setAttribute("deliveryCharge", deliveryCharge);
 	request.setAttribute("packagingCharge", packagingCharge);
 	request.setAttribute("totalAmountPayable", totalAmountPayable);
+	request.setAttribute("checkoutVendorNames", checkoutVendorNameMap); // Map<Integer, String>
 
-	// List of UK Counties / Areas (Add/Refine as needed)
-	List<String> ukCounties = Arrays.asList(
-			// England Ceremonial Counties (Common for Addressing)
-			"Avon", "Bedfordshire", "Berkshire", "Bristol", "Buckinghamshire", "Cambridgeshire",
-			"Cheshire", "Cleveland", "Cornwall", "Cumbria", "Derbyshire", "Devon",
-			"Dorset", "Durham", "East Riding of Yorkshire", "East Sussex", "Essex", "Gloucestershire", "Greater London",
-			"Greater Manchester", "Hampshire", "Herefordshire", "Hertfordshire", "Isle of Wight",
-			"Kent", "Lancashire", "Leicestershire", "Lincolnshire", "Merseyside", "Norfolk",
-			"North Yorkshire", "Northamptonshire", "Northumberland", "Nottinghamshire",
-			"Oxfordshire", "Rutland", "Shropshire", "Somerset", "South Yorkshire", "Staffordshire",
-			"Suffolk", "Surrey", "Tyne and Wear", "Warwickshire", "West Midlands",
-			"West Sussex", "West Yorkshire", "Wiltshire", "Worcestershire",
-			// Scotland Council Areas
-			"Aberdeenshire", "City of Edinburgh", "Glasgow City", "Highland", "Fife", "Stirling",
-			// Wales Principal Areas
-			"Cardiff", "Swansea", "Gwynedd", "Powys", "Pembrokeshire",
-			// Northern Ireland Counties
-			"County Antrim", "County Armagh", "County Down", "County Fermanagh", "County Londonderry", "County Tyrone"
-			// Add others if needed
-	);
-	Collections.sort(ukCounties); // Sort the list alphabetically
+	// Set page-specific error message if one occurred during data prep
+	if(pageErrorMessage != null) {
+		pageContext.setAttribute("message", new Message(pageErrorMessage, "error", "alert-danger"), PageContext.REQUEST_SCOPE);
+	}
 
-	// Set attribute with a suitable name for UK
+
+	// UK Counties List (Keep this part)
+	List<String> ukCounties = Arrays.asList( /* ... Your list of counties ... */ );
+	Collections.sort(ukCounties);
 	request.setAttribute("ukCountiesList", ukCounties);
+%>
+<%-- == Helper Inner Class - MUST be placed within <%! ... %> block == --%>
+<%-- ====================================================================== --%>
+<%!
+	// Simple helper class to combine Cart and Product info for easy iteration in JSP
+	// Make sure this class definition is present ONCE in your checkout.jsp
+	public static class CartItemDetail {
+		private Cart cart;
+		private Product product;
+
+		public CartItemDetail(Cart cart, Product product) {
+			this.cart = cart;
+			this.product = product;
+		}
+		// Add Null checks in getters for safety
+		public Cart getCart() { return cart != null ? cart : new Cart(); }
+		public Product getProduct() { return product != null ? product : new Product(); }
+	}
 %>
 
 <!DOCTYPE html>
@@ -290,38 +351,65 @@
 			</div> <%-- End payment section --%>
 		</div> <%-- End left column --%>
 
-		<%-- Right Column: Price Details --%>
-		<div class="col-lg-4">
-			<div class="card price-details-card shadow-sm">
-				<div class="card-body">
-					<h4>Price Details</h4>
-					<hr>
-					<table class="table price-details-table">
-						<tbody>
-						<tr>
-							<td>Price (<c:out value="${itemCount}"/> item<c:if test="${itemCount != 1}">s</c:if>)</td>
-							<td class="text-end">
-								<fmt:setLocale value="en_GB"/>
-								<fmt:formatNumber value="${itemTotalPrice}" type="currency" currencySymbol="£" />
-							</td>
-						</tr>
-						<tr>
-							<td>Delivery Charges</td>
-							<td class="text-end"><fmt:formatNumber value="${deliveryCharge}" type="currency" currencySymbol="£" /></td>
-						</tr>
-						<tr>
-							<td>Packaging Charges</td>
-							<td class="text-end"><fmt:formatNumber value="${packagingCharge}" type="currency" currencySymbol="£" /></td>
-						</tr>
-						<tr> <%-- Final Amount Row --%>
-							<td><strong>Amount Payable</strong></td>
-							<td class="text-end"><strong><fmt:formatNumber value="${totalAmountPayable}" type="currency" currencySymbol="£" /></strong></td>
-						</tr>
-						</tbody>
-					</table>
+			<%-- Right Column: Order Summary --%>
+			<div class="col-lg-4">
+				<div class="card shadow-sm">
+					<div class="card-body p-4"> <%-- More padding --%>
+						<h4 class="mb-3">Order Summary</h4>
+
+						<%-- Item List Section --%>
+						<div class="mb-3" style="max-height: 250px; overflow-y: auto;"> <%-- Scrollable if many items --%>
+							<c:forEach var="itemDetail" items="${checkoutItems}">
+								<div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+									<div class="d-flex align-items-center">
+										<img src="${s3BaseUrl}${itemDetail.product.productImages}" alt="" style="width:45px; height:45px; object-fit:contain; margin-right:10px;">
+										<div>
+											<span class="d-block small fw-medium"><c:out value="${itemDetail.product.productName}"/></span>
+											<span class="d-block text-muted" style="font-size: 0.8em;">
+                                              Qty: ${itemDetail.cart.quantity} | Sold by:
+                                              <c:set var="vendorName" value="${checkoutVendorNames[itemDetail.product.vendorId]}" />
+                                               <c:out value="${not empty vendorName ? vendorName : 'Phong Shop'}"/>
+                                           </span>
+										</div>
+									</div>
+									<div class="text-end small">
+										<fmt:setLocale value="en_GB"/>
+										<fmt:formatNumber value="${itemDetail.cart.quantity * itemDetail.product.productPriceAfterDiscount}" type="currency" currencySymbol="£"/>
+									</div>
+								</div>
+							</c:forEach>
+						</div>
+
+						<%-- Price Calculation Section --%>
+						<h5 class="mt-4 mb-3">Price Details</h5>
+						<table class="table price-details-table">
+							<tbody>
+							<tr>
+								<td>Items Total (<c:out value="${itemCount}"/> item<c:if test="${itemCount != 1}">s</c:if>)</td>
+								<td class="text-end">
+									<fmt:formatNumber value="${itemTotalPrice}" type="currency" currencySymbol="£" />
+								</td>
+							</tr>
+							<tr>
+								<td>Delivery Charges</td>
+								<td class="text-end"><fmt:formatNumber value="${deliveryCharge}" type="currency" currencySymbol="£" /></td>
+							</tr>
+							<tr>
+								<td>Packaging Charges</td>
+								<td class="text-end"><fmt:formatNumber value="${packagingCharge}" type="currency" currencySymbol="£" /></td>
+							</tr>
+							<tr class="fw-bold"> <%-- Final Amount Row --%>
+								<td>Amount Payable</td>
+								<td class="text-end"><fmt:formatNumber value="${totalAmountPayable}" type="currency" currencySymbol="£" /></td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
-			</div>
-		</div> <%-- End right column --%>
+				<div class="alert alert-info small mt-3" role="alert">
+					<i class="fas fa-info-circle"></i> Items from different sellers may arrive in separate packages. Delivery charges are calculated for the entire order.
+				</div>
+			</div> <%-- End right column --%>
 	</div> <%-- End row --%>
 </main> <%-- End main content wrapper --%>
 

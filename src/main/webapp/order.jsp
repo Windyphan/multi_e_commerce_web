@@ -1,15 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<%@page import="com.phong.entities.User"%>
-<%@page import="com.phong.entities.OrderedProduct"%>
-<%@page import="com.phong.entities.Order"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="com.phong.dao.OrderedProductDao"%>
 <%@page import="com.phong.dao.OrderDao"%>
-<%@page import="java.util.Collections"%>
+<%@page import="com.phong.dao.VendorDao"%>
+<%@page import="java.util.*"%>
+<%@ page import="com.phong.entities.Message" %>
+<%@ page import="com.phong.entities.Order" %>
+<%@ page import="com.phong.entities.OrderedProduct" %>
+<%@ page import="com.phong.entities.Vendor" %>
 
 <%@page errorPage="error_exception.jsp"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -29,28 +31,81 @@
   OrderDao orderDao = new OrderDao();
   List<Order> userOrderList = Collections.emptyList(); // Default to empty
   Map<Integer, List<OrderedProduct>> userOrderedProductMap = new HashMap<>(); // Use map for products
+  Set<Integer> vendorIdsNeeded = new HashSet<>();
+  Map<Integer, String> orderVendorNameMap = new HashMap<>();
+
+  String pageErrorMessage = null;
+
 
   if (currentUserForOrder != null) { // Only fetch if user is logged in
-    userOrderList = orderDao.getAllOrderByUserId(currentUserForOrder.getUserId());
-
     // Fetch associated product details efficiently
-    OrderedProductDao ordProdDao = new OrderedProductDao();
-    if (userOrderList != null) {
-      for (Order order : userOrderList) {
-        List<OrderedProduct> productsForOrder = ordProdDao.getAllOrderedProduct(order.getId());
-        userOrderedProductMap.put(order.getId(), productsForOrder != null ? productsForOrder : Collections.emptyList());
+    try {
+      userOrderList = orderDao.getAllOrderByUserId(currentUserForOrder.getUserId());
+
+      if (userOrderList != null && !userOrderList.isEmpty()) {
+        // Fetch associated ordered products efficiently
+        OrderedProductDao ordProdDao = new OrderedProductDao();
+        for (Order order : userOrderList) {
+          List<OrderedProduct> productsForOrder = ordProdDao.getAllOrderedProduct(order.getId());
+          if (productsForOrder != null) {
+            userOrderedProductMap.put(order.getId(), productsForOrder);
+            // *** NEW: Collect vendor IDs from items in this order ***
+            productsForOrder.stream()
+                    .map(OrderedProduct::getVendorId)
+                    .filter(vid -> vid > 0) // Filter out 0 or invalid IDs
+                    .forEach(vendorIdsNeeded::add);
+          } else {
+            userOrderedProductMap.put(order.getId(), Collections.emptyList());
+            System.err.println("ORDERS WARN: Could not get items for order ID: " + order.getId());
+          }
+        }
+
+        // *** NEW: Fetch names for all unique vendors found across orders ***
+        if (!vendorIdsNeeded.isEmpty()) {
+          VendorDao vendorDao = new VendorDao();
+          for (int vid : vendorIdsNeeded) {
+            if (!orderVendorNameMap.containsKey(vid)) { // Avoid redundant lookups
+              Vendor vendor = vendorDao.getVendorById(vid);
+              if (vendor != null) { // Include name even if not approved? Or check?
+                orderVendorNameMap.put(vid, vendor.getShopName());
+              } else {
+                orderVendorNameMap.put(vid, "Unknown Seller"); // Fallback
+                System.err.println("ORDERS WARN: Vendor details not found for ID: " + vid);
+              }
+            }
+          }
+        }
+        // *** END NEW Vendor Name Fetching ***
+
+      } else if (userOrderList == null) { // Handle DAO error
+        pageErrorMessage = "Could not retrieve your order history.";
+        userOrderList = Collections.emptyList();
+      }  else {
+        userOrderList = Collections.emptyList(); // Handle DAO error
+        pageContext.setAttribute("errorMessage", "Could not retrieve your orders.", PageContext.SESSION_SCOPE);
+        pageContext.setAttribute("errorType", "error", PageContext.SESSION_SCOPE);
+        pageContext.setAttribute("errorClass", "alert-danger", PageContext.SESSION_SCOPE);
       }
-    } else {
-      userOrderList = Collections.emptyList(); // Handle DAO error
-      pageContext.setAttribute("errorMessage", "Could not retrieve your orders.", PageContext.SESSION_SCOPE);
-      pageContext.setAttribute("errorType", "error", PageContext.SESSION_SCOPE);
-      pageContext.setAttribute("errorClass", "alert-danger", PageContext.SESSION_SCOPE);
+
+    } catch (Exception e) {
+      System.err.println("ORDERS ERROR: Unexpected error fetching orders: " + e.getMessage());
+      e.printStackTrace();
+      pageErrorMessage = "An error occurred while retrieving your order history.";
+      userOrderList = Collections.emptyList();
+      userOrderedProductMap.clear();
+      orderVendorNameMap.clear();
     }
+
+
   }
 
   // Make data available for EL
   request.setAttribute("myOrders", userOrderList);
   request.setAttribute("myOrderedProducts", userOrderedProductMap);
+  request.setAttribute("orderVendorNames", orderVendorNameMap);
+  if(pageErrorMessage != null) {
+    pageContext.setAttribute("message", new Message(pageErrorMessage, "error", "alert-danger"), PageContext.REQUEST_SCOPE);
+  }
 %>
 
 <!DOCTYPE html>
@@ -206,6 +261,14 @@
                                                 Qty: <c:out value="${orderedProd.quantity}"/> | Price Each:
                                                 <fmt:formatNumber value="${orderedProd.price}" type="currency" currencySymbol="£"/>
                                             </span>
+                        <%-- ***: Display Vendor *** --%>
+                      <span class="d-block text-muted" style="font-size: 0.85em;">
+                                                     Sold by:
+                                                     <c:set var="vName" value="${orderVendorNames[orderedProd.vendorId]}"/>
+                                                     <c:out value="${not empty vName ? vName : 'Phong Shop'}"/>
+                                                     <%-- Don't necessarily need a link here --%>
+                                                 </span>
+                        <%-- *** End Vendor Display *** --%>
                     </div>
                     <div class="order-total-per-item">
                       <fmt:formatNumber value="${orderedProd.price * orderedProd.quantity}" type="currency" currencySymbol="£"/>

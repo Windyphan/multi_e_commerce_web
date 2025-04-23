@@ -5,11 +5,11 @@
 <%-- Import necessary classes (still needed for DAO calls within this page) --%>
 <%@page import="com.phong.dao.ProductDao"%>
 <%@page import="com.phong.dao.ReviewDao"%>
+<%@page import="com.phong.dao.VendorDao"%>
 <%@page import="com.phong.entities.Product"%>
-<%@page import="java.util.List"%>
-<%@page import="java.util.Collections"%> <%-- Import Collections for emptyList --%>
-<%@page import="java.util.Map"%>
-<%@page import="java.util.HashMap"%>
+<%@page import="com.phong.entities.Vendor"%>
+<%-- Import Collections for emptyList --%>
+<%@ page import="java.util.*" %>
 
 <%-- Set Error Page --%>
 <%@page errorPage="error_exception.jsp"%>
@@ -17,7 +17,7 @@
 
 <%--
     Server-side Data Fetching (Ideally done in a Servlet/Controller before forwarding)
-    We add null checks and default to empty lists to prevent NullPointerExceptions in JSTL loops.
+    Add null checks and default to empty lists to prevent NullPointerExceptions in JSTL loops.
 --%>
 <%
 	ProductDao productDao = new ProductDao();
@@ -39,6 +39,37 @@
 			averageRatingsMap.put(p.getProductId(), reviewDao.getAverageRatingByProductId(p.getProductId()));
 		}
 	}
+	//  Fetch Vendor Names for products displayed on this page ---
+	Map<Integer, String> indexVendorNameMap = new HashMap<>();
+	Set<Integer> vendorIdsNeeded = new HashSet<>();
+	if (!productList.isEmpty()) {
+		productList.stream().map(Product::getVendorId).filter(id -> id > 0).forEach(vendorIdsNeeded::add);
+	}
+	if (!topDeals.isEmpty()) {
+		topDeals.stream().map(Product::getVendorId).filter(id -> id > 0).forEach(vendorIdsNeeded::add);
+	}
+
+
+	// Fetch vendor names if any IDs were found
+	if (!vendorIdsNeeded.isEmpty()) {
+		VendorDao vendorDao = new VendorDao(); // Instantiate VendorDao
+		for (int vid : vendorIdsNeeded) {
+			// Avoid re-fetching if somehow already present (unlikely here)
+			if (!indexVendorNameMap.containsKey(vid)) {
+				Vendor vendor = vendorDao.getVendorById(vid);
+				if (vendor != null && vendor.isApproved()) { // Only show approved vendors
+					indexVendorNameMap.put(vid, vendor.getShopName());
+				} else {
+					// Decide fallback for missing/unapproved vendors on index page
+					// Maybe display platform name, or omit "Sold by" line?
+					// indexVendorNameMap.put(vid, "Phong Shop"); // Example fallback
+					indexVendorNameMap.put(vid, null); // Or put null to explicitly check in EL
+				}
+			}
+		}
+	}
+	request.setAttribute("indexVendorNames", indexVendorNameMap); // Set attribute
+
 
 	// Make lists available for Expression Language (EL)
 	request.setAttribute("latestProducts", productList);
@@ -189,6 +220,28 @@
 <%-- Display Messages (if any) --%>
 <%@include file="Components/alert_message.jsp"%>
 
+<%-- Carousel Section --%>
+<section class="section p-0"> <%-- Remove padding if carousel touches edges --%>
+	<div id="carouselAutoplaying" class="carousel slide carousel-dark" data-bs-ride="carousel">
+		<div class="carousel-inner">
+			<div class="carousel-item active">
+				<img src="Images/scroll_img1.png" class="d-block w-100" alt="Promotion Banner 1">
+			</div>
+			<div class="carousel-item">
+				<img src="Images/scroll_img2.png" class="d-block w-100" alt="Promotion Banner 2">
+			</div>
+		</div>
+		<button class="carousel-control-prev" type="button" data-bs-target="#carouselAutoplaying" data-bs-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Previous</span>
+		</button>
+		<button class="carousel-control-next" type="button" data-bs-target="#carouselAutoplaying" data-bs-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Next</span>
+		</button>
+	</div>
+</section>
+
 <%-- Category List Section --%>
 <%-- Only render if categoryList is not null and not empty --%>
 <c:if test="${not empty navbarCategoryList}">
@@ -214,28 +267,6 @@
 	</section>
 </c:if>
 
-<%-- Carousel Section --%>
-<section class="section p-0"> <%-- Remove padding if carousel touches edges --%>
-	<div id="carouselAutoplaying" class="carousel slide carousel-dark" data-bs-ride="carousel">
-		<div class="carousel-inner">
-			<div class="carousel-item active">
-				<img src="Images/scroll_img1.png" class="d-block w-100" alt="Promotion Banner 1">
-			</div>
-			<div class="carousel-item">
-				<img src="Images/scroll_img2.png" class="d-block w-100" alt="Promotion Banner 2">
-			</div>
-		</div>
-		<button class="carousel-control-prev" type="button" data-bs-target="#carouselAutoplaying" data-bs-slide="prev">
-			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-			<span class="visually-hidden">Previous</span>
-		</button>
-		<button class="carousel-control-next" type="button" data-bs-target="#carouselAutoplaying" data-bs-slide="next">
-			<span class="carousel-control-next-icon" aria-hidden="true"></span>
-			<span class="visually-hidden">Next</span>
-		</button>
-	</div>
-</section>
-
 <%-- Latest Products Section --%>
 <c:if test="${not empty latestProducts}">
 	<section class="section section-bg-light">
@@ -254,6 +285,22 @@
 								</div>
 								<div class="card-body">
 									<h5 class="card-title" title="${product.productName}">${product.productName}</h5>
+									<div class="product-vendor mb-2">
+										<small class="text-muted">
+											Sold by:
+											<c:set var="vendorName" value="${indexVendorNames[product.vendorId]}" />
+											<c:if test="${not empty vendorName}"> <%-- Only show if vendor name was found & vendor is approved --%>
+												<a href="vendor_store.jsp?vid=${product.vendorId}" class="link-secondary">
+													<c:out value="${vendorName}"/>
+												</a>
+											</c:if>
+												<%-- Optional: Show platform name if vendorName is null/empty --%>
+											<c:if test="${empty vendorName}">
+												 <span class="fst-italic">Phong Shop</span>  <%-- Or just show nothing --%>
+											</c:if>
+										</small>
+									</div>
+										<%-- *** End Vendor Name Display *** --%>
 									<div class="price-container">
                                              <span class="price-discounted">
                                                  <fmt:setLocale value="en_GB"/> <%-- Set locale for currency --%>
