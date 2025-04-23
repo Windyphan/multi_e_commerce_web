@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.phong.entities.Admin;
+import com.phong.entities.User;
 import com.phong.helper.ConnectionProvider; // Import ConnectionProvider
 
 public class AdminDao {
@@ -100,6 +101,44 @@ public class AdminDao {
 		}
 		// Connection and PreparedStatement are automatically closed here
 		return admin;
+	}
+
+
+	/**
+	 * Retrieves a Admin by their email address.
+	 * Used for login checks before password verification and potentially for vendor checks.
+	 * Manages its own database connection.
+	 * Note: Table name "admin" is enclosed in quotes.
+	 *
+	 * @param adminEmail The email address to search for.
+	 * @return The Admin object if found, null otherwise or on error.
+	 */
+	public Admin getAdminByEmail(String adminEmail) {
+		Admin admin = null;
+		// Enclose table name "admin" in double quotes
+		String query = "select * from \"admin\" where email = ?";
+
+		try (Connection con = ConnectionProvider.getConnection();
+			 PreparedStatement psmt = con.prepareStatement(query)) {
+
+			psmt.setString(1, adminEmail);
+
+			try (ResultSet set = psmt.executeQuery()) {
+				if (set.next()) { // Check if a user was found
+					admin = new Admin();
+					admin.setId(set.getInt("id"));
+					admin.setName(set.getString("name"));
+					admin.setEmail(set.getString("email"));
+					admin.setPassword(set.getString("password")); // Be cautious retrieving plain text passwords
+					admin.setPhone(set.getString("phone"));
+				}
+			} // ResultSet automatically closed
+
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error getting user by email '" + adminEmail + "': " + e.getMessage());
+			e.printStackTrace(); // Replace with proper logging
+		}
+		return admin; // Return null if not found or error
 	}
 
 	/**

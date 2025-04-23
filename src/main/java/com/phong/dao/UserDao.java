@@ -61,6 +61,38 @@ public class UserDao {
 	}
 
 	/**
+	 * Retrieves a User by their email address.
+	 * Used for login checks before password verification and potentially for vendor checks.
+	 * Manages its own database connection.
+	 * Note: Table name "user" is enclosed in quotes.
+	 *
+	 * @param userEmail The email address to search for.
+	 * @return The User object if found, null otherwise or on error.
+	 */
+	public User getUserByEmail(String userEmail) {
+		User user = null;
+		// Enclose table name "user" in double quotes
+		String query = "select * from \"user\" where email = ?";
+
+		try (Connection con = ConnectionProvider.getConnection();
+			 PreparedStatement psmt = con.prepareStatement(query)) {
+
+			psmt.setString(1, userEmail);
+
+			try (ResultSet set = psmt.executeQuery()) {
+				if (set.next()) { // Check if a user was found
+					user = mapResultSetToUser(set); // Use the existing helper method
+				}
+			} // ResultSet automatically closed
+
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error getting user by email '" + userEmail + "': " + e.getMessage());
+			e.printStackTrace(); // Replace with proper logging
+		}
+		return user; // Return null if not found or error
+	}
+
+	/**
 	 * Retrieves a User by their email and password.
 	 * Manages its own database connection.
 	 * Note: Table name "user" is enclosed in quotes.
@@ -437,7 +469,7 @@ public class UserDao {
 		user.setUserId(set.getInt("userid"));
 		user.setUserName(set.getString("name"));
 		user.setUserEmail(set.getString("email"));
-		user.setUserPassword(set.getString("password")); // Be cautious with plain text passwords
+		user.setUserPassword(set.getString("password"));
 		user.setUserPhone(set.getString("phone"));
 		user.setUserGender(set.getString("gender"));
 		// Handle potential null Timestamp for registerdate if column allows nulls
