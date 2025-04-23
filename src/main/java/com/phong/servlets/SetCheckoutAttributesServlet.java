@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import com.phong.entities.Message; // For potential error messages
 import com.phong.entities.User; // To check if user is logged in
+import com.phong.entities.Vendor;
 
 /**
  * Servlet implementation class SetCheckoutAttributesServlet
@@ -35,6 +36,15 @@ public class SetCheckoutAttributesServlet extends HttpServlet {
             session.setAttribute("message", message);
             response.sendRedirect("login.jsp");
             return;
+        }
+
+        Vendor activeVendor = (Vendor) session.getAttribute("activeVendor"); // Check for vendor
+        // Block Vendors from Customer Actions
+        if (activeVendor != null) {
+            message = new Message("Vendor accounts cannot perform customer actions.", "error", "alert-warning");
+            session.setAttribute("message", message);
+            response.sendRedirect("vendor_dashboard.jsp"); // Send vendor back to their dashboard
+            return; // Stop processing customer action
         }
 
         // Get 'from' parameter

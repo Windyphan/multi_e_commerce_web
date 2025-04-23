@@ -9,10 +9,7 @@ import java.io.IOException;
 
 import com.phong.dao.CartDao;
 import com.phong.dao.ProductDao;
-import com.phong.entities.Cart;      // Import Cart entity
-import com.phong.entities.Message;
-import com.phong.entities.Product;   // Import Product entity
-import com.phong.entities.User;      // Import User entity
+import com.phong.entities.*;
 // ConnectionProvider import no longer needed
 // import com.phong.helper.ConnectionProvider;
 
@@ -33,11 +30,20 @@ public class CartOperationServlet extends HttpServlet {
 		try {
 			// --- Get User ID from Session (Security) ---
 			User activeUser = (User) session.getAttribute("activeUser");
+			Vendor activeVendor = (Vendor) session.getAttribute("activeVendor"); // Check for vendor
 			if (activeUser == null) {
 				message = new Message("Please log in to modify your cart.", "error", "alert-danger");
 				session.setAttribute("message", message);
 				response.sendRedirect("login.jsp");
 				return;
+			}
+
+			// Block Vendors from Customer Actions
+			if (activeVendor != null) {
+				message = new Message("Vendor accounts cannot perform customer actions.", "error", "alert-warning");
+				session.setAttribute("message", message);
+				response.sendRedirect("vendor_dashboard.jsp"); // Send vendor back to their dashboard
+				return; // Stop processing customer action
 			}
 			int userId = activeUser.getUserId();
 
@@ -57,16 +63,12 @@ public class CartOperationServlet extends HttpServlet {
 
 
 			// --- Verify Cart Item Ownership and Get Details ---
-			// We need the cart item details to proceed and check ownership
-			// Assuming CartDao needs a method like getCartItemById (or adapt existing logic)
 
-			// Let's fetch the quantity and product ID first (more efficient if ownership check fails)
+			// Fetch the quantity and product ID first (more efficient if ownership check fails)
 			int currentCartQty = cartDao.getQuantityById(cartId);
 			int productId = cartDao.getProductId(cartId);
 
 			// Check if the cart item exists and belongs to the logged-in user
-			// We can verify by trying to fetch the cartId specifically for this user/product
-			// Or fetch the cart item and check userId (requires adapting CartDao slightly or adding a getCartItemById method)
 			if (productId <= 0 || currentCartQty <= 0 || cartDao.getIdByUserIdAndProductId(userId, productId) != cartId) {
 				// Either cid was invalid, or pid couldn't be found, or the cid doesn't match the user/pid combo
 				message = new Message("Invalid cart item specified or it doesn't belong to you.", "error", "alert-danger");
@@ -190,8 +192,6 @@ public class CartOperationServlet extends HttpServlet {
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Although GET is bad practice here, we forward POST to GET to maintain original functionality
-		// In a real app, implement the logic directly in doPost and make doGet return an error or redirect.
 		doGet(request, response);
 	}
 }

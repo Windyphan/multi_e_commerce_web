@@ -13,15 +13,10 @@ import com.phong.dao.CartDao;
 import com.phong.dao.OrderDao;
 import com.phong.dao.OrderedProductDao;
 import com.phong.dao.ProductDao;
-import com.phong.entities.Cart;
-import com.phong.entities.Message; // Import Message
-import com.phong.entities.Order;
-import com.phong.entities.OrderedProduct;
-import com.phong.entities.Product;
-import com.phong.entities.User;
+import com.phong.entities.*;
 // ConnectionProvider not needed here
 // import com.phong.helper.ConnectionProvider;
-import com.phong.helper.MailMessenger; // Assuming correct implementation
+import com.phong.helper.MailMessenger;
 import com.phong.helper.OrderIdGenerator;
 
 public class OrderOperationServlet extends HttpServlet {
@@ -41,16 +36,17 @@ public class OrderOperationServlet extends HttpServlet {
 		Message message = null; // For user feedback
 		boolean orderPlacedSuccessfully = false; // Track overall success
 
-		// --- Instantiate DAOs (assuming they are refactored) ---
+		// --- Instantiate DAOs ---
 		OrderDao orderDao = new OrderDao();
-		CartDao cartDao = new CartDao(); // Assuming refactored
-		OrderedProductDao orderedProductDao = new OrderedProductDao(); // Assuming refactored
-		ProductDao productDao = new ProductDao(); // Assuming refactored
+		CartDao cartDao = new CartDao();
+		OrderedProductDao orderedProductDao = new OrderedProductDao();
+		ProductDao productDao = new ProductDao();
 
 		// --- Get required parameters and session attributes ---
 		String from = (String) session.getAttribute(FROM_SESSION_ATTR);
-		String paymentType = request.getParameter("paymentMode"); // Correct spelling? paymentMode?
+		String paymentType = request.getParameter("paymentMode");
 		User user = (User) session.getAttribute(ACTIVE_USER_SESSION_ATTR);
+		Vendor activeVendor = (Vendor) session.getAttribute("activeVendor"); // Check for vendor
 
 		// --- Validation ---
 		if (user == null) {
@@ -58,6 +54,14 @@ public class OrderOperationServlet extends HttpServlet {
 			session.setAttribute("message", message);
 			response.sendRedirect("login.jsp");
 			return;
+		}
+
+		// Block Vendors from Customer Actions
+		if (activeVendor != null) {
+			message = new Message("Vendor accounts cannot perform customer actions.", "error", "alert-warning");
+			session.setAttribute("message", message);
+			response.sendRedirect("vendor_dashboard.jsp"); // Send vendor back to their dashboard
+			return; // Stop processing customer action
 		}
 		if (from == null || from.trim().isEmpty()) {
 			message = new Message("Invalid order request origin.", "error", "alert-danger");
@@ -78,7 +82,7 @@ public class OrderOperationServlet extends HttpServlet {
 		paymentType = paymentType.trim();
 
 		// Generate common order details
-		String orderId = OrderIdGenerator.getOrderId(); // Assuming this works
+		String orderId = OrderIdGenerator.getOrderId();
 		String status = "Order Placed";
 		int generatedOrderId = 0; // Store the DB primary key for the order
 
@@ -118,6 +122,7 @@ public class OrderOperationServlet extends HttpServlet {
 						allItemsProcessed = false; // Mark failure but maybe continue? Or throw?
 						continue; // Skip this item
 					}
+					int productVendorId = prod.getVendorId();
 
 					String prodName = prod.getProductName();
 					int prodQty = item.getQuantity();
@@ -127,8 +132,14 @@ public class OrderOperationServlet extends HttpServlet {
 					// TODO: Check if sufficient quantity exists before processing?
 					// if (prod.getProductQuantity() < prodQty) { ... handle insufficient stock ... }
 
-					OrderedProduct orderedProduct = new OrderedProduct(prodName, prodQty, price, image, generatedOrderId);
-					// Assuming insertOrderedProduct returns boolean or throws exception on failure
+					OrderedProduct orderedProduct = new OrderedProduct(
+							prod.getProductName(),
+							prodQty,
+							price,
+							image,
+							generatedOrderId,
+							productVendorId // *** PASS VENDOR ID ***
+					);
 					if (!orderedProductDao.insertOrderedProduct(orderedProduct)) {
 						System.err.println("Error: Failed to insert ordered product " + prodName + " for order ID " + generatedOrderId);
 						allItemsProcessed = false; // Mark failure
@@ -143,12 +154,11 @@ public class OrderOperationServlet extends HttpServlet {
 
 				if (!allItemsProcessed) {
 					// Partial failure - what to do? Rollback is needed (but not implemented)
-					// For now, we'll just report an error later
 					System.err.println("Warning: Not all cart items were processed successfully for order " + orderId);
 				}
 
 				// Clear the user's cart *only if all items processed* (or based on business logic)
-				// Using removeCartByUserId (assuming it exists and returns boolean)
+				// Using removeCartByUserId
 				if (allItemsProcessed) { // Or clear regardless? Depends on requirements
 					if (!cartDao.removeCartByUserId(user.getUserId())) {
 						System.err.println("Warning: Failed to clear cart for user ID " + user.getUserId() + " after order " + orderId);
@@ -172,6 +182,8 @@ public class OrderOperationServlet extends HttpServlet {
 					throw new ServletException("Product with ID " + pid + " not found for 'buy now' order.");
 				}
 
+				int productVendorId = prod.getVendorId();
+
 				// TODO: Check if quantity > 0
 				// if (prod.getProductQuantity() <= 0) { ... handle out of stock ... }
 
@@ -180,13 +192,19 @@ public class OrderOperationServlet extends HttpServlet {
 				float price = prod.getProductPriceAfterDiscount();
 				String image = prod.getProductImages();
 
-				OrderedProduct orderedProduct = new OrderedProduct(prodName, prodQty, price, image, generatedOrderId);
-				// Assuming insertOrderedProduct returns boolean or throws exception
+				OrderedProduct orderedProduct = new OrderedProduct(
+						prod.getProductName(),
+						prodQty, // Buy Now quantity is 1
+						price,
+						image,
+						generatedOrderId,
+						productVendorId
+				);
 				if (!orderedProductDao.insertOrderedProduct(orderedProduct)) {
 					throw new ServletException("Failed to insert ordered product " + prodName + " for order ID " + generatedOrderId);
 				}
 
-				// Update product quantity (assuming updateQuantity returns boolean)
+				// Update product quantity
 				boolean qtyUpdateSuccess = productDao.updateQuantity(pid, prod.getProductQuantity() - prodQty); // Use prod.getProductQuantity() to avoid race condition
 				if (!qtyUpdateSuccess) {
 					// This is bad - order placed but quantity not updated. Needs rollback.
@@ -198,7 +216,6 @@ public class OrderOperationServlet extends HttpServlet {
 				throw new ServletException("Invalid 'from' parameter value: " + from);
 			}
 
-			// If we reach here without exceptions, assume overall success for now
 			orderPlacedSuccessfully = true;
 
 		} catch (Exception e) {
@@ -206,7 +223,7 @@ public class OrderOperationServlet extends HttpServlet {
 			System.err.println("Error during order placement process: " + e.getMessage());
 			e.printStackTrace(); // Log the full error
 			message = new Message("An error occurred while placing your order. Please try again or contact support.", "error", "alert-danger");
-			// If generatedOrderId > 0, we might have a partial order in DB - needs manual cleanup or rollback!
+			// If generatedOrderId > 0, might have a partial order in DB - needs manual cleanup or rollback!
 			System.err.println("Order placement failed after potentially inserting order record with DB ID: " + generatedOrderId + " (Order ID: " + orderId + ")");
 
 		} finally {

@@ -11,6 +11,7 @@ import com.phong.dao.ReviewDao;
 import com.phong.entities.Message;
 import com.phong.entities.Review;
 import com.phong.entities.User;
+import com.phong.entities.Vendor;
 
 public class ReviewServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -30,6 +31,15 @@ public class ReviewServlet extends HttpServlet {
             session.setAttribute("message", message);
             response.sendRedirect("login.jsp");
             return;
+        }
+        Vendor activeVendor = (Vendor) session.getAttribute("activeVendor"); // Check for vendor
+
+        // Block Vendors from Customer Actions
+        if (activeVendor != null) {
+            message = new Message("Vendor accounts cannot perform customer actions.", "error", "alert-warning");
+            session.setAttribute("message", message);
+            response.sendRedirect("vendor_dashboard.jsp"); // Send vendor back to their dashboard
+            return; // Stop processing customer action
         }
 
         try {

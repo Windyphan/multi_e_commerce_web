@@ -10,6 +10,7 @@ import java.io.IOException;
 import com.phong.dao.WishlistDao;
 import com.phong.entities.Message;   // Import Message
 import com.phong.entities.User;      // Import User
+import com.phong.entities.Vendor;
 import com.phong.entities.Wishlist;
 // ConnectionProvider import no longer needed
 // import com.phong.helper.ConnectionProvider;
@@ -35,11 +36,19 @@ public class WishlistServlet extends HttpServlet {
 		try {
 			// --- Security Check: Get User from Session ---
 			User activeUser = (User) session.getAttribute("activeUser");
+			Vendor activeVendor = (Vendor) session.getAttribute("activeVendor"); // Check for vendor
 			if (activeUser == null) {
 				message = new Message("Please log in to manage your wishlist.", "error", "alert-danger");
 				session.setAttribute("message", message);
 				response.sendRedirect("login.jsp");
 				return;
+			}
+			// Block Vendors from Customer Actions
+			if (activeVendor != null) {
+				message = new Message("Vendor accounts cannot perform customer actions.", "error", "alert-warning");
+				session.setAttribute("message", message);
+				response.sendRedirect("vendor_dashboard.jsp"); // Send vendor back to their dashboard
+				return; // Stop processing customer action
 			}
 			// !! Use user ID from session, NOT from request parameter !!
 			int userId = activeUser.getUserId();

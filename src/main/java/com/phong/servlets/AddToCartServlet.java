@@ -9,12 +9,7 @@ import java.io.IOException;
 
 import com.phong.dao.CartDao;
 import com.phong.dao.ProductDao;
-import com.phong.entities.Cart;
-import com.phong.entities.Message;
-import com.phong.entities.Product; // Import Product entity
-import com.phong.entities.User;    // Import User entity
-// ConnectionProvider import no longer needed
-// import com.phong.helper.ConnectionProvider;
+import com.phong.entities.*;
 
 public class AddToCartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -33,11 +28,19 @@ public class AddToCartServlet extends HttpServlet {
 		try {
 			// --- Get User ID from Session (Security) ---
 			User activeUser = (User) session.getAttribute("activeUser");
+			Vendor activeVendor = (Vendor) session.getAttribute("activeVendor"); // Check for vendor
 			if (activeUser == null) {
 				message = new Message("You must be logged in to add items to the cart.", "error", "alert-danger");
 				session.setAttribute("message", message);
 				response.sendRedirect("login.jsp");
 				return;
+			}
+			// : Block Vendors from Customer Actions
+			if (activeVendor != null) {
+				message = new Message("Vendor accounts cannot perform customer actions.", "error", "alert-warning");
+				session.setAttribute("message", message);
+				response.sendRedirect("vendor_dashboard.jsp"); // Send vendor back to their dashboard
+				return; // Stop processing customer action
 			}
 			int userId = activeUser.getUserId(); // Use ID from logged-in user
 
@@ -88,7 +91,7 @@ public class AddToCartServlet extends HttpServlet {
 			} else {
 				// Increase quantity in existing cart item
 				int cartId = cartDao.getIdByUserIdAndProductId(userId, productId);
-				if (cartId > 0) { // Check if we found the cart item id
+				if (cartId > 0) { // Check if found the cart item id
 					// Check if adding one more exceeds stock? Optional, depends on requirements.
 					// if (currentCartQty + 1 > currentStock) { ... handle ... }
 
