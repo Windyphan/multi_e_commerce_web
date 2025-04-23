@@ -12,6 +12,7 @@ import com.phong.dao.UserDao;
 import com.phong.entities.Admin;
 import com.phong.entities.Message;
 import com.phong.entities.User;
+import com.phong.helper.PasswordUtil;
 // ConnectionProvider import likely not needed directly here anymore
 // import com.phong.helper.ConnectionProvider;
 
@@ -37,11 +38,21 @@ public class LoginServlet extends HttpServlet {
 
 		login = login.trim(); // Trim after null check
 
+		UserDao userDao = new UserDao();
+		AdminDao adminDao = new AdminDao();
 		if (login.equals("user")) {
 			// --- User Login ---
 			try {
 				String userEmail = request.getParameter("user_email");
-				String userPassword = request.getParameter("user_password"); // Handle passwords securely!
+				String userPassword = request.getParameter("user_password");
+
+				User user = userDao.getUserByEmail(userEmail.trim());
+
+				boolean passwordMatch = false;
+				if (user != null) {
+					// 2. Check password using BCrypt
+					passwordMatch = PasswordUtil.checkPassword(userPassword, user.getUserPassword());
+				}
 
 				// Basic validation for user credentials
 				if (userEmail == null || userPassword == null || userEmail.trim().isEmpty() || userPassword.trim().isEmpty()) {
@@ -52,16 +63,14 @@ public class LoginServlet extends HttpServlet {
 				}
 
 				// Instantiate UserDao using default constructor
-				UserDao userDao = new UserDao(); // Assumes UserDao is refactored
-				User user = userDao.getUserByEmailPassword(userEmail.trim(), userPassword); // Trim email
 
-				if (user != null) {
+				if (user != null && passwordMatch) { // Check BOTH user exists AND password matches
 					session.setAttribute("activeUser", user);
-					response.sendRedirect("index.jsp"); // Redirect to user dashboard/home
+					response.sendRedirect("index.jsp");
 				} else {
 					message = new Message("Invalid user credentials! Please try again.", "error", "alert-danger");
 					session.setAttribute("message", message);
-					response.sendRedirect("login.jsp"); // Redirect back to user login page
+					response.sendRedirect("login.jsp");
 				}
 				// No return needed here, flow continues to end if redirect happens
 
@@ -77,7 +86,6 @@ public class LoginServlet extends HttpServlet {
 		} else if (login.equals("admin")) {
 			// --- Admin Login ---
 			try {
-				// Assuming admin form uses 'email' and 'password' field names
 				String adminEmail = request.getParameter("email");
 				String adminPassword = request.getParameter("password"); // Handle passwords securely!
 
@@ -90,10 +98,15 @@ public class LoginServlet extends HttpServlet {
 				}
 
 				// Instantiate AdminDao using default constructor
-				AdminDao adminDao = new AdminDao();
-				Admin admin = adminDao.getAdminByEmailPassword(adminEmail.trim(), adminPassword); // Trim email
+				Admin admin = adminDao.getAdminByEmail(adminEmail.trim());
+				boolean passwordMatch = false;
 
 				if (admin != null) {
+					// 2. Check password using BCrypt
+					passwordMatch = PasswordUtil.checkPassword(adminPassword, admin.getPassword());
+				}
+
+				if (admin != null && passwordMatch) {
 					session.setAttribute("activeAdmin", admin);
 					response.sendRedirect("admin.jsp"); // Redirect to admin dashboard
 				} else {

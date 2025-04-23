@@ -14,6 +14,7 @@ import com.phong.entities.Message;
 // ConnectionProvider import is no longer needed here
 // import com.phong.helper.ConnectionProvider;
 import com.phong.helper.MailMessenger;
+import com.phong.helper.PasswordUtil;
 
 public class ChangePasswordServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -64,7 +65,6 @@ public class ChangePasswordServlet extends HttpServlet {
 					session.setAttribute("otp", otp);
 					session.setAttribute("email", email); // Store email needed for password update stage
 
-					// Assuming MailMessenger works and handles potential errors internally
 					MailMessenger.sendOtp(email, otp);
 
 					message = new Message("We've sent a password reset code to " + email, "success", "alert-success");
@@ -109,7 +109,6 @@ public class ChangePasswordServlet extends HttpServlet {
 						message = new Message("Invalid code format. Please enter numbers only.", "error", "alert-warning");
 					}
 				}
-				// If we reach here, it means validation failed or code was incorrect
 				session.setAttribute("message", message);
 				response.sendRedirect("otp_code.jsp"); // Redirect back to OTP entry page
 
@@ -117,7 +116,7 @@ public class ChangePasswordServlet extends HttpServlet {
 			} else if (referrer.contains("change_password.jsp")) { // Be more specific
 				// --- Stage 3: Change Password ---
 				String password = request.getParameter("password");
-				String confirmPassword = request.getParameter("confirm_password"); // Assuming you have a confirmation field
+				String confirmPassword = request.getParameter("confirm_password");
 				String emailFromSession = (String) session.getAttribute("email");
 
 				// Validate input and session attribute
@@ -133,12 +132,10 @@ public class ChangePasswordServlet extends HttpServlet {
 					return;
 				} else {
 					// Passwords match and email is in session
-					// !! IMPORTANT: Hash the password before saving !!
-					// String hashedPassword = YourPasswordHashingUtil.hash(password);
-					// boolean success = userDao.updateUserPasswordByEmail(hashedPassword, emailFromSession);
+					// --- HASH the new password ---
+					String hashedNewPassword = PasswordUtil.hashPassword(password);
 
-					// Using plain text password as per original code (NOT RECOMMENDED FOR PRODUCTION)
-					boolean success = userDao.updateUserPasswordByEmail(password, emailFromSession); // Call DAO method
+					boolean success = userDao.updateUserPasswordByEmail(hashedNewPassword, emailFromSession); // Call DAO method
 
 
 					if (success) {
@@ -152,7 +149,6 @@ public class ChangePasswordServlet extends HttpServlet {
 						message = new Message("Failed to update password. Please try again later.", "error", "alert-danger");
 					}
 				}
-				// If we reach here, it means validation failed or update failed
 				session.setAttribute("message", message);
 				response.sendRedirect("change_password.jsp"); // Redirect back to password change page
 

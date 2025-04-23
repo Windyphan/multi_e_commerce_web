@@ -12,6 +12,7 @@ import com.phong.dao.UserDao;
 import com.phong.entities.Message;
 import com.phong.entities.User;
 import com.phong.helper.MailMessenger;
+import com.phong.helper.PasswordUtil;
 
 public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -71,13 +72,10 @@ public class RegisterServlet extends HttpServlet {
 			     response.sendRedirect("register.jsp");
 			     return;
 			 }
+			// --- HASH PASSWORD ---
+			String hashedPassword = PasswordUtil.hashPassword(userPassword); // Hash it!
 
-			// --- IMPORTANT: Hash the password before storing ---
-			// String hashedPassword = YourPasswordHashingUtil.hash(userPassword);
-			// User user = new User(userName, userEmail, hashedPassword, userPhone, userGender, userAddress, userCity, userPostcode, userCounty);
-
-			// Creating user with plain text password (NOT RECOMMENDED FOR PRODUCTION)
-			User user = new User(userName, userEmail, userPassword, userPhone, userGender, userAddress, userCity, userPostcode, userCounty);
+			User user = new User(userName, userEmail, hashedPassword, userPhone, userGender, userAddress, userCity, userPostcode, userCounty);
 
 
 			// --- Save User using DAO ---
