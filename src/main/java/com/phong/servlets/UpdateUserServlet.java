@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 import com.phong.dao.UserDao;
+import com.phong.entities.Admin;
 import com.phong.entities.Message;
 import com.phong.entities.User;
 // ConnectionProvider import is no longer needed here
@@ -81,7 +82,7 @@ public class UpdateUserServlet extends HttpServlet {
 				activeUser.setUserPostcode(userPostcode.trim());
 				activeUser.setUserCounty(userCounty.trim());
 
-				// Call DAO method (assuming it returns boolean for success)
+				// Call DAO method
 				boolean success = userDao.updateUserAddresss(activeUser);
 
 				if (success) {
@@ -141,7 +142,7 @@ public class UpdateUserServlet extends HttpServlet {
 				activeUser.setUserCounty((userCounty != null) ? userCounty.trim() : activeUser.getUserCounty());
 				// Keep existing Password and DateTime
 
-				// Call DAO method (assuming it returns boolean for success)
+				// Call DAO method
 				boolean success = userDao.updateUser(activeUser);
 
 				if (success) {
@@ -162,7 +163,6 @@ public class UpdateUserServlet extends HttpServlet {
 
 				// !!! SECURITY WARNING: Add access control here! !!!
 				// Check if an admin user is logged in before allowing deletion.
-                /*
                 Admin activeAdmin = (Admin) session.getAttribute("activeAdmin");
                 if (activeAdmin == null) {
                     message = new Message("Unauthorized operation.", "error", "alert-danger");
@@ -170,7 +170,7 @@ public class UpdateUserServlet extends HttpServlet {
                     response.sendRedirect("adminlogin.jsp"); // Or appropriate access denied page
                     return;
                 }
-                */
+
 
 				String uidParam = request.getParameter("uid");
 				if (uidParam == null || uidParam.trim().isEmpty()) {
@@ -182,7 +182,7 @@ public class UpdateUserServlet extends HttpServlet {
 
 				int uid = Integer.parseInt(uidParam.trim()); // Potential NumberFormatException
 
-				// Call DAO method (assuming it returns boolean for success)
+				// Call DAO method
 				boolean success = userDao.deleteUser(uid);
 
 				if (success) {
@@ -230,7 +230,6 @@ public class UpdateUserServlet extends HttpServlet {
 		// Generally unsafe to perform updates/deletes via GET.
 		// Forwarding GET to POST might be okay for simple cases, but consider
 		// showing an error or redirecting to the relevant form page instead for GET requests.
-		// For simplicity here, we keep the original behaviour:
 		doPost(req, resp);
 	}
 }
