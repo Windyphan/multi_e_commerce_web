@@ -283,3 +283,108 @@
 .star-rating-input input[type="radio"]:checked ~ label {
 	color: #ffc107;
 }
+
+/* --- Sidebar Container --- */
+.sidebar {
+	background-color: #ffffff; /* Clean white background */
+	padding: 1.75rem 1.5rem;    /* More vertical padding */
+	border-radius: 0.5rem;     /* Slightly more rounded corners */
+	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07); /* Subtle but noticeable shadow */
+	height: fit-content;       /* Adjust height based on content */
+	border: 1px solid #e9ecef; /* Optional: light border */
+}
+
+/* --- Sidebar Section Titles --- */
+.sidebar .sidebar-title {
+	font-weight: 600;         /* Bold title */
+	font-size: 1.1rem;        /* Slightly larger title */
+	margin-bottom: 0.75rem;   /* Space below title */
+	padding-bottom: 0.75rem;  /* Space above border */
+	border-bottom: 1px solid #e9ecef; /* Lighter separator */
+	color: #343a40;           /* Darker grey color */
+}
+
+/* --- Filter Sections (Spacing) --- */
+.sidebar .filter-section {
+	margin-bottom: 1.75rem; /* Increase space between filter groups */
+}
+.sidebar hr {
+	margin-top: 1.75rem;    /* Space above hr */
+	margin-bottom: 1.75rem; /* Space below hr */
+	border-top: 1px solid #e9ecef; /* Lighter hr */
+}
+/* Hide the last hr if needed */
+.sidebar .filter-section:last-of-type + hr {
+	display: none;
+}
+
+
+/* --- Checkboxes and Radio Buttons --- */
+.sidebar .form-check {
+	margin-bottom: 0.75rem; /* Space between options */
+	padding-left: 2em;     /* Ensure enough space for custom input */
+	position: relative;    /* Needed for positioning label interaction */
+}
+
+.sidebar .form-check-label {
+	font-size: 0.95rem;    /* Slightly smaller text */
+	color: #495057;
+	cursor: pointer;
+	transition: color 0.2s ease;
+	padding-top: 1px; /* Fine-tune vertical alignment with checkbox */
+}
+.sidebar .form-check-label:hover {
+	color: #0d6efd; /* Highlight label text on hover */
+}
+
+.sidebar .form-check-input {
+	cursor: pointer;
+	margin-top: 0.2em; /* Adjust vertical alignment */
+	border-color: #adb5bd; /* Slightly darker border for visibility */
+	transition: background-color 0.2s ease, border-color 0.2s ease;
+	float: left; /* Ensure proper layout */
+	margin-left: -2em; /* Position relative to .form-check padding */
+}
+/* Style when checked */
+.sidebar .form-check-input:checked {
+	background-color: #0d6efd;
+	border-color: #0d6efd;
+}
+/* Style the checkmark/radio circle */
+.sidebar .form-check-input[type="checkbox"] {
+	border-radius: 0.25em; /* Slightly rounded checkbox */
+}
+.sidebar .form-check-input[type="radio"] {
+	border-radius: 50%; /* Circular radio */
+}
+/* Focus style */
+.sidebar .form-check-input:focus {
+	border-color: #86b7fe;
+	box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+
+/* --- Price Filter Inputs --- */
+.sidebar #price-filter-options .row {
+	align-items: center; /* Vertically center items */
+}
+.sidebar #price-filter-options .form-control-sm {
+	font-size: 0.9rem;    /* Consistent small size */
+	border-radius: 0.25rem; /* Standard radius */
+	border: 1px solid #ced4da;
+	text-align: center; /* Center price text */
+}
+.sidebar #price-filter-options .col-auto {
+	padding-left: 0.3rem;  /* Adjust spacing around '-' */
+	padding-right: 0.3rem;
+	color: #6c757d;      /* Muted dash */
+	font-weight: 500;
+}
+.sidebar #price-filter-options input[type="number"]::-webkit-inner-spin-button,
+.sidebar #price-filter-options input[type="number"]::-webkit-outer-spin-button {
+	-webkit-appearance: none; /* Hide number spinners in Chrome/Safari */
+	margin: 0;
+}
+.sidebar #price-filter-options input[type="number"] {
+	-moz-appearance: textfield; /* Hide number spinners in Firefox */
+}
