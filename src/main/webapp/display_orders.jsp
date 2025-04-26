@@ -30,23 +30,23 @@
 	}
 
 	// Fetch Orders
-	OrderDao orderDao = new OrderDao();
-	List<Order> orderList = orderDao.getAllOrder(); // Fetches all orders
+	OrderDao orderDaoForOrderDisplay = new OrderDao();
+	List<Order> orderListForOrderDisplay = orderDaoForOrderDisplay.getAllOrder(); // Fetches all orders
 
 	// Fetch associated user and product details efficiently
 	// Create Maps to store details keyed by ID to avoid repeated DB calls in loops
-	Map<Integer, User> userMap = new HashMap<>();
-	Map<Integer, List<OrderedProduct>> orderedProductMap = new HashMap<>();
-	UserDao userDao = new UserDao();
-	OrderedProductDao ordProdDao = new OrderedProductDao();
+	Map<Integer, User> userMapForOrderDisplay = new HashMap<>();
+	Map<Integer, List<OrderedProduct>> orderedProductMapForOrderDisplay = new HashMap<>();
+	UserDao userDaoForOrderDisplay = new UserDao();
+	OrderedProductDao ordProdDaoForOrderDisplay = new OrderedProductDao();
 
-	if (orderList != null) {
-		for (Order order : orderList) {
+	if (orderListForOrderDisplay != null) {
+		for (Order order : orderListForOrderDisplay) {
 			// Fetch User if not already fetched
-			if (!userMap.containsKey(order.getUserId())) {
-				User orderUser = userDao.getUserById(order.getUserId());
+			if (!userMapForOrderDisplay.containsKey(order.getUserId())) {
+				User orderUser = userDaoForOrderDisplay.getUserById(order.getUserId());
 				if (orderUser != null) {
-					userMap.put(order.getUserId(), orderUser);
+					userMapForOrderDisplay.put(order.getUserId(), orderUser);
 				} else {
 					// Handle case where user might have been deleted
 					User deletedUser = new User();
@@ -56,24 +56,24 @@
 					deletedUser.setUserCity("");
 					deletedUser.setUserCounty("");
 					deletedUser.setUserPostcode("");
-					userMap.put(order.getUserId(), deletedUser);
+					userMapForOrderDisplay.put(order.getUserId(), deletedUser);
 				}
 			}
 			// Fetch Ordered Products for this order
-			List<OrderedProduct> productsForOrder = ordProdDao.getAllOrderedProduct(order.getId());
-			orderedProductMap.put(order.getId(), productsForOrder != null ? productsForOrder : Collections.emptyList());
+			List<OrderedProduct> productsForOrder = ordProdDaoForOrderDisplay.getAllOrderedProduct(order.getId());
+			orderedProductMapForOrderDisplay.put(order.getId(), productsForOrder != null ? productsForOrder : Collections.emptyList());
 		}
 	} else {
-		orderList = Collections.emptyList(); // Ensure list is not null for JSTL
+		orderListForOrderDisplay = Collections.emptyList(); // Ensure list is not null for JSTL
 		pageContext.setAttribute("errorMessage", "Could not retrieve orders.", PageContext.SESSION_SCOPE);
 		pageContext.setAttribute("errorType", "error", PageContext.SESSION_SCOPE);
 		pageContext.setAttribute("errorClass", "alert-danger", PageContext.SESSION_SCOPE);
 	}
 
 	// Make data available for EL
-	request.setAttribute("allOrders", orderList);
-	request.setAttribute("usersData", userMap);
-	request.setAttribute("orderedProductsData", orderedProductMap);
+	request.setAttribute("allOrders", orderListForOrderDisplay);
+	request.setAttribute("usersData", userMapForOrderDisplay);
+	request.setAttribute("orderedProductsData", orderedProductMapForOrderDisplay);
 %>
 
 <!DOCTYPE html>
@@ -171,16 +171,11 @@
 	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<%-- Navbar --%>
-<%@include file="Components/navbar.jsp"%>
 
 <%-- Main Content Wrapper --%>
-<main class="container flex-grow-1 my-4">
+<main>
 
 	<h2 class="mb-4">Manage Customer Orders</h2>
-
-	<%-- Display Messages --%>
-	<%@include file="Components/alert_message.jsp"%>
 
 	<%-- Check if there are any orders --%>
 	<c:choose>
@@ -236,7 +231,7 @@
                                                 <c:when test="${order.status == 'Order Confirmed'}">bg-primary</c:when>
                                                 <c:otherwise>bg-warning text-dark</c:otherwise> <%-- Default for 'Order Placed' etc. --%>
                                             </c:choose>
-                                         ">
+                                         "  id="statusBadge-${order.id}">
                                              <c:out value="${order.status}"/>
                                          </span>
 								</p>
@@ -280,23 +275,25 @@
 									</c:otherwise>
 								</c:choose>
 
-									<%-- Status Update Form --%>
-								<div class="mt-3 status-update-form">
-									<form action="UpdateOrderServlet" method="post" class="d-flex align-items-center">
-										<input type="hidden" name="oid" value="${order.id}">
-										<label for="statusSelect-${order.id}" class="form-label me-2 visually-hidden">Update Status:</label>
-										<select id="statusSelect-${order.id}" name="status" class="form-select form-select-sm" ${order.status == 'Delivered' ? 'disabled' : ''}>
-											<option value="" selected disabled>-- Change Status --</option>
-											<option value="Order Confirmed" ${order.status == 'Order Confirmed' ? 'selected' : ''}>Order Confirmed</option>
-											<option value="Shipped" ${order.status == 'Shipped' ? 'selected' : ''}>Shipped</option>
-											<option value="Out For Delivery" ${order.status == 'Out For Delivery' ? 'selected' : ''}>Out For Delivery</option>
-											<option value="Delivered" ${order.status == 'Delivered' ? 'selected' : ''}>Delivered</option>
-												<%-- Add other statuses like Cancelled if needed --%>
-										</select>
-										<button type="submit" class="btn btn-secondary btn-sm" ${order.status == 'Delivered' ? 'disabled' : ''}>
-											<i class="fa-solid fa-sync-alt"></i> Update
-										</button>
-									</form>
+									<%-- Status Update Controls (No Form Tag) --%>
+								<div class="mt-3 status-update-form d-flex align-items-center"> <%-- Added flex directly here --%>
+										<%-- Label is visually hidden but good for accessibility --%>
+									<label for="statusSelect-${order.id}" class="form-label me-2 visually-hidden">Update Status for Order #<c:out value="${order.orderId}"/></label>
+
+									<select id="statusSelect-${order.id}" name="status" class="form-select form-select-sm" ${order.status == 'Delivered' ? 'disabled' : ''}>
+										<option value="" selected disabled>-- Change Status --</option>
+										<option value="Order Confirmed" ${order.status == 'Order Confirmed' ? 'selected' : ''}>Order Confirmed</option>
+										<option value="Shipped" ${order.status == 'Shipped' ? 'selected' : ''}>Shipped</option>
+										<option value="Out For Delivery" ${order.status == 'Out For Delivery' ? 'selected' : ''}>Out For Delivery</option>
+										<option value="Delivered" ${order.status == 'Delivered' ? 'selected' : ''}>Delivered</option>
+									</select>
+
+										<%-- Changed to type="button", added class and data attribute --%>
+									<button type="button" class="btn btn-secondary btn-sm ms-2 btn-update-status"
+											data-order-id="${order.id}" <%-- Store DB primary key 'id' --%>
+										${order.status == 'Delivered' ? 'disabled' : ''}>
+										<i class="fa-solid fa-sync-alt"></i> Update
+									</button>
 								</div>
 
 							</div> <%-- End Order Summary & Status Column --%>
@@ -308,9 +305,122 @@
 	</c:choose>
 
 </main> <%-- End main wrapper --%>
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		document.querySelectorAll('.btn-update-status').forEach(button => {
+			button.addEventListener('click', function(event) {
+				event.preventDefault();
+				const orderId = this.getAttribute('data-order-id');
+				const selectElement = document.getElementById('statusSelect-' + orderId); // Concatenation for ID
 
-<%-- Footer --%>
-<%@include file="footer.jsp"%>
+				if (!selectElement) {
+					console.error("Could not find select element for order " + orderId); // Concatenation
+					return;
+				}
+				const newStatus = selectElement.value;
 
+				if (!newStatus || newStatus === "") {
+					Swal.fire('Error', 'Please select a valid status.', 'warning');
+					return;
+				}
+
+				// --- UI Updates & Fetch ---
+				this.disabled = true;
+				const originalButtonText = this.innerHTML;
+				// No template literal here, simple HTML string
+				this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Updating...';
+
+				const formData = new FormData();
+				formData.append('oid', orderId);
+				formData.append('status', newStatus);
+
+				// var formData = "oid=" + encodeURIComponent(orderId)
+				// 		+ "&status=" + encodeURIComponent(newStatus);
+
+				// console.log("--- FormData Contents Before Fetch ---");
+				// for (let [key, value] of data.entries()) {
+				// 	console.log(key + ': ' + value);
+				// }
+				// console.log("------------------------------------");
+
+				fetch('UpdateOrderServlet', {
+					method: 'POST',
+					body: formData
+				})
+						.then(response => {
+							// Check response.ok FIRST before assuming JSON
+							if (!response.ok) {
+								// console.log("--- FormData Contents Before Fetch ---");
+								// for (let [key, value] of data.entries()) {
+								// 	console.log(key + ': ' + value);
+								// }
+								// console.log("------------------------------------");
+								// Try to get error text, then throw
+								return response.text().then(text => {
+									throw new Error("HTTP error " + response.status + ": " + (text || 'Server error'));
+								});
+							}
+							return response.json(); // Expect JSON on success
+						})
+						.then(data => {
+							if (data && data.status === 'success') { // Check response structure
+								Swal.fire({
+									toast: true,
+									icon: 'success',
+									title: data.message || 'Status Updated!',
+									position: 'top-end',
+									showConfirmButton: false,
+									timer: 2500,
+									timerProgressBar: true
+								});
+
+								// --- Update UI ---
+								const statusBadge = document.getElementById('statusBadge-' + orderId); // Concatenation for ID
+								if (statusBadge) {
+									// Use data from JSON response (data.newStatus should match newStatus variable)
+									statusBadge.textContent = data.newStatus || newStatus;
+									statusBadge.className = 'badge status-badge ms-1 ' + getStatusBadgeClass(data.newStatus || newStatus);
+								}
+
+								if ((data.newStatus || newStatus) === 'Delivered') {
+									selectElement.disabled = true;
+									this.disabled = true;
+									this.innerHTML = 'Updated';
+								} else {
+									this.disabled = false;
+									this.innerHTML = originalButtonText;
+								}
+
+							} else {
+								// Handle error reported in JSON response
+								Swal.fire('Update Failed', (data ? data.message : null) || 'Could not update status.', 'error');
+								this.disabled = false;
+								this.innerHTML = originalButtonText;
+							}
+						})
+						.catch(error => {
+							console.error('Error updating order status:', error);
+							// Display error from catch (could be network error or error thrown from !response.ok)
+							Swal.fire('Error', error.message || 'An unexpected error occurred. Please try again.', 'error');
+							// Ensure button is re-enabled and text reset on any failure
+							this.disabled = false;
+							this.innerHTML = originalButtonText;
+						});
+			});
+		});
+
+		// Helper function (no changes needed, doesn't use template literals)
+		function getStatusBadgeClass(status) {
+			switch(status) {
+				case 'Delivered': return 'bg-success';
+				case 'Shipped':
+				case 'Out For Delivery': return 'bg-info text-dark';
+				case 'Order Confirmed': return 'bg-primary';
+				default: return 'bg-warning text-dark';
+			}
+		}
+
+	}); // End DOMContentLoaded
+</script>
 </body>
 </html>

@@ -1,7 +1,6 @@
 package com.phong.servlets;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +31,6 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception; // More specific exception
 import software.amazon.awssdk.core.sync.RequestBody;
 
-@MultipartConfig
 public class AddOperationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -132,7 +130,7 @@ public class AddOperationServlet extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		Message message = null;
-		String redirectPage = "admin.jsp";
+		String redirectPage = "";
 
 		// Security Check
 		Admin activeAdmin = (Admin) session.getAttribute("activeAdmin");
@@ -153,7 +151,7 @@ public class AddOperationServlet extends HttpServlet {
 		if (operation == null || operation.trim().isEmpty()) {
 			message = new Message("No operation specified.", "error", "alert-warning");
 			session.setAttribute("message", message);
-			response.sendRedirect(redirectPage);
+			response.sendRedirect("admin.jsp");
 			return;
 		}
 		operation = operation.trim();
@@ -167,7 +165,6 @@ public class AddOperationServlet extends HttpServlet {
 			String oldFileNameToDelete = null; // For updates/deletes
 
 			if (operation.equals("addCategory")) {
-				redirectPage = "admin.jsp";
 				String categoryName = request.getParameter("category_name");
 				Part part = request.getPart("category_img");
 
@@ -195,7 +192,6 @@ public class AddOperationServlet extends HttpServlet {
 				}
 
 			}else if (operation.equals("updateCategory")) {
-				redirectPage = "display_category.jsp";
 				int cid = Integer.parseInt(request.getParameter("cid").trim());
 				String name = request.getParameter("category_name");
 				Part part = request.getPart("category_img");
@@ -248,7 +244,6 @@ public class AddOperationServlet extends HttpServlet {
 
 
 			} else if (operation.equals("deleteCategory")) {
-				redirectPage = "display_category.jsp";
 				int cid = Integer.parseInt(request.getParameter("cid").trim());
 
 				// 1. Get category details BEFORE deleting from DB to know image filename
@@ -272,7 +267,6 @@ public class AddOperationServlet extends HttpServlet {
 
 
 			} else if (operation.equals("updateProduct")) {
-				redirectPage = "display_products.jsp";
 				int pid = Integer.parseInt(request.getParameter("pid").trim());
 				String name = request.getParameter("name");
 				String priceStr = request.getParameter("price");
@@ -338,7 +332,6 @@ public class AddOperationServlet extends HttpServlet {
 				}
 
 			} else if (operation.equals("deleteProduct")) {
-				redirectPage = "display_products.jsp";
 				int pid = Integer.parseInt(request.getParameter("pid").trim());
 
 				// 1. Get product details to find image filename
@@ -361,7 +354,6 @@ public class AddOperationServlet extends HttpServlet {
 				}
 
 			} else if (operation.equals("approveVendor")) {
-				redirectPage = "display_vendors.jsp";
 				try {
 					int vendorId = Integer.parseInt(request.getParameter("vid"));
 					if (vendorDao.approveVendor(vendorId)) {
@@ -374,7 +366,6 @@ public class AddOperationServlet extends HttpServlet {
 					message = new Message("Invalid Vendor ID for approval.", "error", "alert-warning");
 				}
 			} else if (operation.equals("suspendVendor")) {
-					redirectPage = "display_vendors.jsp";
 					try {
 						int vendorId = Integer.parseInt(request.getParameter("vid"));
 						if (vendorDao.suspendVendor(vendorId)) {
@@ -418,7 +409,6 @@ public class AddOperationServlet extends HttpServlet {
 			System.err.println("Warning: Operation '" + operation + "' completed without setting a message.");
 		}
 		session.setAttribute("message", message);
-		response.sendRedirect(redirectPage);
 	}
 
 
@@ -430,12 +420,12 @@ public class AddOperationServlet extends HttpServlet {
 				return "admin.jsp";
 			case "updateCategory":
 			case "deleteCategory":
-				return "display_category.jsp";
+				return "admin.jsp";
 			case "updateProduct":
 			case "deleteProduct":
-				return "display_products.jsp";
+				return "admin.jsp";
 			case "approveVendor":
-				return "display_vendors.jsp";
+				return "admin.jsp";
 			default:
 				return "admin.jsp";
 		}

@@ -1,185 +1,219 @@
 package com.phong.servlets;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
+import java.util.stream.Collectors;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession; // Still needed for session check
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Set; // Use Set for unique vendor IDs
-import java.util.HashSet; // Use HashSet
-import java.util.stream.Collectors; // For stream processing
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phong.dao.OrderDao;
 import com.phong.dao.UserDao;
-import com.phong.dao.VendorDao; // ** NEW: Import VendorDao **
-import com.phong.dao.OrderedProductDao; // ** NEW: Import OrderedProductDao **
-import com.phong.entities.Admin; // ** NEW: Import Admin for security check **
-import com.phong.entities.Message;
+import com.phong.dao.VendorDao;
+import com.phong.dao.OrderedProductDao;
+import com.phong.entities.Admin;
 import com.phong.entities.Order;
 import com.phong.entities.User;
-import com.phong.entities.Vendor; // ** NEW: Import Vendor **
-import com.phong.entities.OrderedProduct; // ** NEW: Import OrderedProduct **
+import com.phong.entities.Vendor;
+import com.phong.entities.OrderedProduct;
 import com.phong.helper.MailMessenger;
 
+@MultipartConfig
 public class UpdateOrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private final ObjectMapper mapper = new ObjectMapper(); // Reuse ObjectMapper instance
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		HttpSession session = request.getSession();
-		Message message = null;
-		String redirectPage = "display_orders.jsp"; // Default redirect target
+		Map<String, Object> responseMap = new HashMap<>(); // Prepare response map
 
 		// --- Security Check: Ensure Admin is logged in ---
 		Admin activeAdmin = (Admin) session.getAttribute("activeAdmin");
 		if (activeAdmin == null) {
-			message = new Message("Unauthorized access. Please log in as admin.", "error", "alert-danger");
-			session.setAttribute("message", message);
-			response.sendRedirect("adminlogin.jsp");
-			return;
+			// For AJAX, it's better to send a 401/403 Unauthorized status
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			responseMap.put("status", "error");
+			responseMap.put("message", "Unauthorized access. Please log in as admin.");
+			try (PrintWriter out = response.getWriter()) {
+				mapper.writeValue(out, responseMap);
+				out.flush();
+			}
+			return; // Stop processing
 		}
 
 		// --- Instantiate DAOs ---
 		OrderDao orderDao = new OrderDao();
 		UserDao userDao = new UserDao();
-		OrderedProductDao orderedProductDao = new OrderedProductDao(); // Needed for vendor lookup
-		VendorDao vendorDao = new VendorDao(); // Needed for vendor email
+		OrderedProductDao orderedProductDao = new OrderedProductDao();
+		VendorDao vendorDao = new VendorDao();
+
+		// --- Default response to error until success ---
+		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Assume error initially
+		responseMap.put("status", "error");
+		responseMap.put("message", "An internal error occurred."); // Default error
 
 		try {
 			// --- Get and Validate Parameters ---
-			String oidParam = request.getParameter("oid"); // This is the 'order' table primary key 'id'
+			String oidParam = request.getParameter("oid");
 			String status = request.getParameter("status");
 
-			if (oidParam == null || oidParam.trim().isEmpty() || status == null || status.trim().isEmpty() || "-- Change Status --".equals(status) ) {
-				message = new Message("Order ID and a valid Status are required.", "error", "alert-warning");
-				// Try to preserve oid in redirect if possible, otherwise just go back
-				if (oidParam != null && !oidParam.trim().isEmpty()) redirectPage += "?highlight=" + oidParam.trim();
-				session.setAttribute("message", message);
-				response.sendRedirect(redirectPage);
-				return;
+			if (oidParam == null || oidParam.trim().isEmpty() || status == null || status.trim().isEmpty() || "-- Change Status --".equals(status)) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
+				responseMap.put("message", "Order ID and a valid Status are required. Status:" + status + " OrderId:" + oidParam + "Request" + request);
+				try (PrintWriter out = response.getWriter()) {
+					mapper.writeValue(out, responseMap);
+					out.flush();
+				} catch (IOException ioEx) { /* log */ }
+				return; // <--- EXIT HERE after sending error
+
 			}
 
-			int orderDbId = Integer.parseInt(oidParam.trim()); // The primary key from 'order' table
+			int orderDbId = 0; // Initialize
+			try {
+				orderDbId = Integer.parseInt(oidParam.trim());
+			} catch (NumberFormatException nfe) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
+				responseMap.put("message", "Invalid Order ID format.");
+				System.err.println("NumberFormatException in UpdateOrderServlet: " + nfe.getMessage());
+				// Write JSON response and return immediately
+				try (PrintWriter out = response.getWriter()) { mapper.writeValue(out, responseMap); out.flush(); } catch (IOException ioEx) { /* log */ }
+				return; // <--- EXIT HERE
+			}
+
 			status = status.trim();
 
 			// --- Update Order Status in DB ---
 			boolean updateSuccess = orderDao.updateOrderStatus(orderDbId, status);
 
-			if (!updateSuccess) {
-				message = new Message("Failed to update order status in database. Order might not exist or status was unchanged.", "error", "alert-danger");
-				redirectPage += "?highlight=" + orderDbId;
-				session.setAttribute("message", message);
-				response.sendRedirect(redirectPage);
-				return;
+			if (updateSuccess) {
+				// --- Prepare SUCCESS response data ---
+				response.setStatus(HttpServletResponse.SC_OK); // 200 OK
+				responseMap.put("status", "success");
+				// Start with base success message, append warnings later if needed
+				StringBuilder responseMessageBuilder = new StringBuilder("Order status updated successfully!");
+				responseMap.put("orderId", orderDbId);
+				responseMap.put("newStatus", status);
+
+				// --- Trigger Notifications (Handle errors locally) ---
+				boolean customerNotifyFailed = false;
+				boolean vendorNotifyFailed = false;
+
+				if (status.equals("Shipped") || status.equals("Out For Delivery") || status.equals("Delivered")) {
+					System.out.println("### UpdateOrderServlet: Status changed, attempting notifications for order DB ID: " + orderDbId);
+					Order order = orderDao.getOrderById(orderDbId);
+					if (order != null) {
+						User customer = userDao.getUserById(order.getUserId());
+						List<OrderedProduct> itemsInOrder = orderedProductDao.getAllOrderedProduct(orderDbId);
+
+						if (itemsInOrder != null && customer != null) {
+							// Notify Customer
+							try {
+								System.out.println("### UpdateOrderServlet: Notifying customer " + customer.getUserEmail());
+								if (status.equals("Shipped") || status.equals("Out For Delivery")) {
+									MailMessenger.orderShipped(customer.getUserName(), customer.getUserEmail(), order.getOrderId(), order.getDate().toString());
+								} // Add specific Delivered notification?
+							} catch (Exception mailEx) {
+								customerNotifyFailed = true;
+								System.err.println("WARNING: Failed customer email for order " + order.getOrderId() + ": " + mailEx.getMessage());
+							}
+
+							// Notify Vendors
+							Set<Integer> vendorIdsInOrder = itemsInOrder.stream()
+									.filter(item -> item.getVendorId() > 0).map(OrderedProduct::getVendorId)
+									.collect(Collectors.toSet());
+							System.out.println("### UpdateOrderServlet: Found vendor IDs: " + vendorIdsInOrder);
+
+							for (int vendorId : vendorIdsInOrder) {
+								Vendor vendor = vendorDao.getVendorById(vendorId);
+								if (vendor != null && vendor.getBusinessEmail() != null && !vendor.getBusinessEmail().isEmpty()) {
+									try {
+										System.out.println("### UpdateOrderServlet: Notifying vendor " + vendor.getBusinessEmail());
+										final int currentVendorId = vendorId;
+										List<OrderedProduct> itemsForThisVendor = itemsInOrder.stream()
+												.filter(item -> item.getVendorId() == currentVendorId)
+												.collect(Collectors.toList());
+										MailMessenger.notifyVendorOfStatusUpdate(vendor.getShopName(), vendor.getBusinessEmail(), order.getOrderId(), status, customer.getUserName(), itemsForThisVendor);
+									} catch (Exception mailEx) {
+										vendorNotifyFailed = true;
+										System.err.println("WARNING: Failed vendor email for vendor " + vendorId + " order " + order.getOrderId() + ": " + mailEx.getMessage());
+									}
+								}  else {
+									System.err.println("WARNING: Could not find vendor details or email for vendor ID " + vendorId + " in order " + order.getOrderId());
+								}
+							} // End vendor loop
+
+						} else {
+							System.err.println("WARNING: Could not retrieve customer or items for order " + order.getOrderId() + " to send notifications.");
+							response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 or maybe 400 if it just means no rows affected?
+							responseMap.put("message", "Failed to update order status in database (Notification details missing).");
+						}
+					} else {
+						System.err.println("WARNING: Could not retrieve order details for ID " + orderDbId + " after status update.");
+						response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 or maybe 400 if it just means no rows affected?
+						responseMap.put("message", "Failed to update order status in database (Order details missing).");
+					}
+				} // End notification check
+
+				// Append warnings to success message if needed
+				if (customerNotifyFailed && vendorNotifyFailed) {
+					responseMessageBuilder.append(" (Warning: Customer and Vendor email notifications failed)");
+				} else if (customerNotifyFailed) {
+					responseMessageBuilder.append(" (Warning: Customer email notification failed)");
+				} else if (vendorNotifyFailed) {
+					responseMessageBuilder.append(" (Warning: Vendor email notification failed)");
+				}
+				responseMap.put("message", responseMessageBuilder.toString()); // Put final message in map
+
+			} else { // updateSuccess was false
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 or maybe 400 if it just means no rows affected?
+				responseMap.put("message", "Failed to update order status in database (Order might not exist or status was unchanged).");
+				// Keep status="error" from default
 			}
 
-			// Set base success message
-			message = new Message("Order status updated successfully!", "success", "alert-success");
-
-			// Notify customer and vendors if status indicates shipment/delivery progress
-			if (status.equals("Shipped") || status.equals("Out For Delivery") || status.equals("Delivered")) {
-				System.out.println("### UpdateOrderServlet: Status changed to " + status + ", attempting notifications for order DB ID: " + orderDbId);
-
-				// 1. Get Order Details (needed for customer info and Order ID string)
-				Order order = orderDao.getOrderById(orderDbId);
-
-				if (order != null) {
-					// 2. Get Customer Details
-					User customer = userDao.getUserById(order.getUserId()); // Use new method
-
-					// 3. Get Ordered Products to find Vendors involved
-					List<OrderedProduct> itemsInOrder = orderedProductDao.getAllOrderedProduct(orderDbId);
-
-					if (itemsInOrder != null && customer != null) {
-						// Customer notification (similar to before, potentially new MailMessenger method)
-						try {
-							System.out.println("### UpdateOrderServlet: Notifying customer " + customer.getUserEmail());
-							// MailMessenger.orderStatusUpdate(customer.getUserName(), customer.getUserEmail(), order.getOrderId(), status, order.getDate().toString());
-							// Reusing existing shipped notification for simplicity for now:
-							if (status.equals("Shipped") || status.equals("Out For Delivery")) {
-								MailMessenger.orderShipped(customer.getUserName(), customer.getUserEmail(), order.getOrderId(), order.getDate().toString());
-							} // Add specific method for 'Delivered' if needed
-						} catch (Exception mailEx) {
-							System.err.println("WARNING: Failed to send status update email to customer " + customer.getUserEmail() + " for order " + order.getOrderId() + ": " + mailEx.getMessage());
-							// Don't stop, but maybe modify success message
-							message = new Message(message.getMessage() + " (Customer email failed)", "warning", "alert-warning");
-						}
-
-						// 4. Find Unique Vendors and Notify Them
-						Set<Integer> vendorIdsInOrder = itemsInOrder.stream()
-								.filter(item -> item.getVendorId() > 0) // Filter out items with no vendor ID (maybe platform items)
-								.map(OrderedProduct::getVendorId)
-								.collect(Collectors.toSet()); // Get unique vendor IDs
-
-						System.out.println("### UpdateOrderServlet: Found vendor IDs in order: " + vendorIdsInOrder);
-
-						for (int vendorId : vendorIdsInOrder) {
-							Vendor vendor = vendorDao.getVendorById(vendorId);
-							if (vendor != null && vendor.getBusinessEmail() != null && !vendor.getBusinessEmail().isEmpty()) {
-								try {
-									System.out.println("### UpdateOrderServlet: Notifying vendor " + vendor.getBusinessEmail());
-									// Create a new method in MailMessenger for vendor notifications
-									final int currentVendorId = vendorId; // Need final variable for lambda
-									List<OrderedProduct> itemsForThisVendor = itemsInOrder.stream()
-											.filter(item -> item.getVendorId() == currentVendorId)
-											.collect(Collectors.toList());
-									MailMessenger.notifyVendorOfStatusUpdate(
-											vendor.getShopName(),
-											vendor.getBusinessEmail(),
-											order.getOrderId(), // Customer facing Order ID
-											status,             // The new status
-											customer.getUserName(), // Customer name
-											itemsForThisVendor  // Only items for this vendor
-									);
-								} catch (Exception mailEx) {
-									System.err.println("WARNING: Failed to send status update email to vendor " + vendor.getBusinessEmail() + " (ID: " + vendorId + ") for order " + order.getOrderId() + ": " + mailEx.getMessage());
-									message = new Message(message.getMessage() + " (Vendor email failed)", "warning", "alert-warning");
-								}
-							} else {
-								System.err.println("WARNING: Could not find vendor details or email for vendor ID " + vendorId + " in order " + order.getOrderId());
-							}
-						} // End vendor loop
-
-					} else {
-						System.err.println("WARNING: Could not retrieve customer or items for order " + order.getOrderId() + " to send notifications.");
-						message = new Message(message.getMessage() + " (Notification details missing)", "warning", "alert-warning");
-					}
-				} else {
-					System.err.println("WARNING: Could not retrieve order details for ID " + orderDbId + " after status update.");
-					message = new Message(message.getMessage() + " (Order details missing)", "warning", "alert-warning");
-				}
-			} // End notification check
-
-
-			// --- Set final message and Redirect ---
-			session.setAttribute("message", message);
-			response.sendRedirect(redirectPage);
-
-
 		} catch (NumberFormatException e) {
-			message = new Message("Invalid Order ID format.", "error", "alert-danger");
-			session.setAttribute("message", message);
-			response.sendRedirect(redirectPage); // Redirect back to order list
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400 Bad Request
+			responseMap.put("message", "Invalid Order ID format.");
+			System.err.println("NumberFormatException in UpdateOrderServlet: " + e.getMessage());
 		} catch (Exception e) {
+			// Status already set to 500 (default)
+			responseMap.put("message", "An unexpected error occurred: " + e.getMessage());
 			System.err.println("Error in UpdateOrderServlet: " + e.getMessage());
 			e.printStackTrace();
-			message = new Message("An unexpected error occurred while updating the order.", "error", "alert-danger");
-			session.setAttribute("message", message);
-			response.sendRedirect(redirectPage); // Redirect back to order list
+		} finally { // Ensure JSON is always written
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			System.out.println("!!! UpdateOrderServlet: Writing JSON response: " + responseMap + " with Status: " + response.getStatus()); // Log final response
+			try (PrintWriter out = response.getWriter()) {
+				mapper.writeValue(out, responseMap);
+				out.flush();
+			} catch (IOException ioError) {
+				// Log error if writing response fails itself
+				System.err.println("!!! UpdateOrderServlet: FAILED to write final JSON response: " + ioError.getMessage());
+			}
 		}
-	}
+	} // End doPost
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// Updates should be POST
-		HttpSession session = request.getSession();
-		Message message = new Message("Invalid request method for order update.", "error", "alert-warning");
-		session.setAttribute("message", message);
-		response.sendRedirect("display_orders.jsp");
+		// Send proper error response for GET
+		response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED); // 405 Method Not Allowed
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		Map<String, Object> errorMap = new HashMap<>();
+		errorMap.put("status", "error");
+		errorMap.put("message", "Invalid request method for order update.");
+		try (PrintWriter out = response.getWriter()) {
+			mapper.writeValue(out, errorMap);
+			out.flush();
+		}
 	}
-
 }
