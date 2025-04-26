@@ -176,7 +176,6 @@ public class UpdateUserServlet extends HttpServlet {
 				if (uidParam == null || uidParam.trim().isEmpty()) {
 					message = new Message("User ID is required for deletion.", "error", "alert-warning");
 					session.setAttribute("message", message);
-					response.sendRedirect("display_users.jsp"); // Redirect back to user list
 					return;
 				}
 
@@ -191,7 +190,6 @@ public class UpdateUserServlet extends HttpServlet {
 					message = new Message("Failed to delete user. The user might not exist or an error occurred.", "error", "alert-danger");
 				}
 				session.setAttribute("message", message);
-				response.sendRedirect("display_users.jsp"); // Redirect back to user list
 				// Redirect handles response flow
 
 			} else {
@@ -205,7 +203,6 @@ public class UpdateUserServlet extends HttpServlet {
 			// Specifically for parsing uid in delete operation
 			message = new Message("Invalid User ID format.", "error", "alert-danger");
 			session.setAttribute("message", message);
-			response.sendRedirect("display_users.jsp"); // Redirect back to user list for delete error
 		} catch (Exception e) {
 			// Catch any other unexpected errors
 			System.err.println("Error in UpdateUserServlet (operation: " + op + "): " + e.getMessage());

@@ -33,7 +33,7 @@ public class AdminServlet extends HttpServlet {
 		if (operation == null || operation.trim().isEmpty()) {
 			message = new Message("No operation specified.", "error", "alert-warning");
 			session.setAttribute("message", message);
-			response.sendRedirect("display_admin.jsp"); // Redirect even if operation is invalid
+			response.sendRedirect("admin.jsp"); // Redirect even if operation is invalid
 			return; // Stop further processing
 		}
 
@@ -110,7 +110,6 @@ public class AdminServlet extends HttpServlet {
 			// This case should ideally not happen if logic above is sound, but good to be aware
 			System.err.println("Warning: No message was generated for operation: " + operation);
 		}
-		response.sendRedirect("display_admin.jsp"); // Redirect after processing
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
