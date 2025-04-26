@@ -33,10 +33,10 @@
     // Fetch associated owner user details efficiently
     Map<Integer, User> ownerUserMap = new HashMap<>();
     if (vendorList != null) {
-        UserDao userDao = new UserDao();
+        UserDao userDaoForVendorDisplay = new UserDao();
         for (Vendor vendor : vendorList) {
             if (!ownerUserMap.containsKey(vendor.getOwnerUserId())) {
-                User owner = userDao.getUserById(vendor.getOwnerUserId());
+                User owner = userDaoForVendorDisplay.getUserById(vendor.getOwnerUserId());
                 ownerUserMap.put(vendor.getOwnerUserId(), owner != null ? owner : new User()); // Handle null user
             }
         }
@@ -73,16 +73,11 @@
     </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<%-- Navbar --%>
-<%@include file="Components/navbar.jsp"%>
 
 <%-- Main Content Wrapper --%>
-<main class="container flex-grow-1 my-4">
+<main>
 
     <h2 class="page-header">Manage Vendors</h2>
-
-    <%-- Display Messages --%>
-    <%@include file="Components/alert_message.jsp"%>
 
     <div class="card shadow-sm">
         <div class="card-body p-0">
@@ -169,9 +164,6 @@
     </div> <%-- End card --%>
 
 </main> <%-- End main wrapper --%>
-
-<%-- Footer --%>
-<%@include file="footer.jsp"%>
 
 </body>
 </html>

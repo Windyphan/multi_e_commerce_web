@@ -111,18 +111,13 @@
 	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<%-- Navbar --%>
-<%@include file="Components/navbar.jsp"%>
 
 <%-- Main Content Wrapper --%>
-<main class="container flex-grow-1 my-4">
+<main>
 
 	<div class="page-header">
 		<h2>Manage Products</h2>
 	</div>
-
-	<%-- Display Messages --%>
-	<%@include file="Components/alert_message.jsp"%>
 
 	<div class="card shadow-sm">
 		<div class="card-body p-0">
@@ -175,10 +170,19 @@
 							<td><c:out value="${product.productDiscount}"/>%</td>
 							<td class="action-buttons">
 									<%-- Link to Update Page --%>
-								<a href="update_product.jsp?pid=${product.productId}"
-								   role="button" class="btn btn-secondary btn-sm">
-									<i class="fa-solid fa-edit"></i> Update
-								</a>
+									<button type="button" class="btn btn-secondary btn-sm btn-update-product"
+											data-bs-toggle="modal"
+											data-bs-target="#updateProductModal"
+											data-pid="${product.productId}"
+											data-name="${product.productName}"
+											data-price="${product.productPrice}"
+											data-description="<c:out value='${product.productDescription}' escapeXml='true'/>" <%-- Use c:out for description --%>
+											data-quantity="${product.productQuantity}"
+											data-discount="${product.productDiscount}"
+											data-category-id="${product.categoryId}"
+											data-image-name="${product.productImages}"> <%-- Pass current image name --%>
+										<i class="fa-solid fa-edit"></i> Update
+									</button>
 									<%-- Link to Delete Servlet with confirmation --%>
 								<a href="AddOperationServlet?pid=${product.productId}&operation=deleteProduct"
 								   class="btn btn-danger btn-sm" role="button"
@@ -195,9 +199,113 @@
 	</div> <%-- End card --%>
 
 </main> <%-- End main --%>
+<script>
+	$(document).ready(function() { // Use jQuery ready for simplicity here
 
-<%-- Footer --%>
-<%@include file="footer.jsp"%>
+		const updateModal = document.getElementById('updateProductModal');
+		const updateModalForm = document.getElementById('updateProductModalForm');
+		const loadingDiv = document.getElementById('updateProductModalLoading');
+		const formContentDiv = document.getElementById('updateProductModalFormContent');
+		const s3BaseUrl = '<c:out value="${s3BaseUrl}"/>'; // Make sure s3BaseUrl is available
 
+		if (updateModal) {
+			updateModal.addEventListener('show.bs.modal', function (event) {
+				// Button that triggered the modal
+				const button = event.relatedTarget;
+
+				// Extract info from data-* attributes
+				const productId = button.getAttribute('data-pid');
+				const name = button.getAttribute('data-name');
+				const price = button.getAttribute('data-price');
+				const description = button.getAttribute('data-description');
+				const quantity = button.getAttribute('data-quantity');
+				const discount = button.getAttribute('data-discount');
+				const categoryId = button.getAttribute('data-category-id');
+				const imageName = button.getAttribute('data-image-name');
+
+				console.log("Populating update modal for PID:", productId);
+
+				// Get the modal's elements
+				const modalTitle = updateModal.querySelector('.modal-title');
+				const productIdInput = updateModal.querySelector('#updateProductId');
+				const existingImageInput = updateModal.querySelector('#updateExistingImage');
+				const existingCategoryInput = updateModal.querySelector('#updateExistingCategory');
+				const nameInput = updateModal.querySelector('#updateProductName');
+				const priceInput = updateModal.querySelector('#updateProductPrice');
+				const descInput = updateModal.querySelector('#updateProductDesc');
+				const quantityInput = updateModal.querySelector('#updateProductQuantity');
+				const discountInput = updateModal.querySelector('#updateProductDiscount');
+				const categorySelect = updateModal.querySelector('#updateProductCategory');
+				const imagePreview = updateModal.querySelector('#updateCurrentImagePreview');
+				const imageNameLabel = updateModal.querySelector('#updateCurrentImageName');
+				const imageFileInput = updateModal.querySelector('#updateProductImage');
+
+				// Clear previous validation states
+				updateModalForm.classList.remove('was-validated');
+
+				// Reset file input (important!)
+				imageFileInput.value = '';
+
+				// --- Populate the form ---
+				modalTitle.textContent = 'Edit Product: ' + name; // Update title
+				productIdInput.value = productId;
+				existingImageInput.value = imageName || '';
+				existingCategoryInput.value = categoryId || '';
+				nameInput.value = name || '';
+				priceInput.value = price || 0;
+				descInput.value = description || '';
+				quantityInput.value = quantity || 0;
+				discountInput.value = discount || 0;
+
+				// Select the correct category in the dropdown
+				if(categorySelect){
+					if(categoryId){
+						categorySelect.value = categoryId;
+					} else {
+						categorySelect.value = ""; // Select the default disabled option
+					}
+				}
+
+				// Display current image preview
+				if (imageName) {
+					imagePreview.src = s3BaseUrl + imageName;
+					imagePreview.style.display = 'inline-block';
+					imageNameLabel.textContent = imageName;
+				} else {
+					imagePreview.style.display = 'none';
+					imagePreview.src = '';
+					imageNameLabel.textContent = 'No image';
+				}
+
+				// Optional: Show loading indicator while populating (usually fast enough not to need)
+				// formContentDiv.style.display = 'block';
+				// loadingDiv.style.display = 'none';
+			});
+
+			// Optional: Reset form when modal is hidden
+			updateModal.addEventListener('hidden.bs.modal', function (event) {
+				// updateModalForm.reset(); // Reset might clear hidden fields unintentionally
+				// Clear specific fields if needed or rely on show.bs.modal to repopulate
+				const imageFileInput = updateModal.querySelector('#updateProductImage');
+				imageFileInput.value = ''; // Clear file input
+				updateModalForm.classList.remove('was-validated'); // Remove validation classes
+			});
+		}
+
+		// Ensure discount validation function exists if modal is used
+		function validateModalDiscount(inputElement) {
+			const discountValue = parseInt(inputElement.value, 10);
+			if (inputElement.value === '' || (!isNaN(discountValue) && discountValue >= 0 && discountValue <= 100)) {
+				inputElement.setCustomValidity(''); inputElement.classList.remove('is-invalid');
+			} else {
+				inputElement.setCustomValidity('Discount must be between 0 and 100.'); inputElement.classList.add('is-invalid');
+			}
+		}
+		const discountFieldModalCheck = document.getElementById('updateProductDiscount');
+		if(discountFieldModalCheck) discountFieldModalCheck.addEventListener('blur', () => validateModalDiscount(discountFieldModalCheck));
+
+
+	});
+</script>
 </body>
 </html>

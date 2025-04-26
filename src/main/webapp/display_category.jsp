@@ -56,11 +56,9 @@
 	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<%-- Navbar --%>
-<%@include file="Components/navbar.jsp"%>
 
 <%-- Main Content Wrapper --%>
-<main class="container flex-grow-1 my-4">
+<main>
 
 	<div class="page-header">
 		<h2>Manage Product Categories</h2>
@@ -69,9 +67,6 @@
 			<i class="fa-solid fa-plus"></i> Add New Category
 		</button>
 	</div>
-
-	<%-- Display Messages --%>
-	<%@include file="Components/alert_message.jsp"%>
 
 	<div class="card shadow-sm">
 		<div class="card-body p-0"> <%-- Remove padding if table touches edges --%>
@@ -105,10 +100,11 @@
 							</td>
 							<td class="action-buttons">
 									<%-- Link to Update Page --%>
-								<a href="update_category.jsp?cid=${category.categoryId}"
-								   role="button" class="btn btn-secondary btn-sm">
-									<i class="fa-solid fa-edit"></i> Update
-								</a>
+										<button type="button" class="btn btn-secondary btn-sm btn-update-category"
+												data-bs-toggle="modal" data-bs-target="#updateCategoryModal"
+												data-category-id="${category.categoryId}" data-category-name="${category.categoryName}" data-category-image="${category.categoryImage}">
+											<i class="fa-solid fa-edit"></i> Update
+										</button>
 									<%-- Link to Delete Servlet with confirmation --%>
 								<a href="AddOperationServlet?cid=${category.categoryId}&operation=deleteCategory"
 								   class="btn btn-danger btn-sm" role="button"
@@ -126,10 +122,37 @@
 
 </main> <%-- End main --%>
 
-<%-- Footer --%>
-<%@include file="footer.jsp"%>
+<script>
+	// Load all the model with action button
+	document.addEventListener('DOMContentLoaded', () => {
 
-<%-- Any page-specific JS can go here --%>
+		// Find the modal and all update buttons
+		const updateModal = document.getElementById('updateCategoryModal');
+		const updateButtons = document.querySelectorAll('.btn-update-category');
+
+		// Check the button can activate model
+		if(updateModal) {
+			updateButtons.forEach(button => {
+				//  show action to click
+				button.addEventListener('click', function(event) {
+					// Prevent follow link
+					event.preventDefault();
+
+					// Grab the necessary info from all action button
+					const categoryId = button.getAttribute('data-category-id');
+					const categoryName = button.getAttribute('data-category-name');
+					const categoryImage = button.getAttribute('data-category-image');
+
+					// Set these attributes for the modal's attribute for show
+					updateModal.querySelector('.modal-title').textContent = `Edit Category - ID ${categoryId}`;
+					updateModal.querySelector('#updateCategoryNameInputModal').value = categoryName;
+					updateModal.querySelector('#updateCategoryImageInputModal').value = categoryImage;
+				});
+			});
+		}
+
+	});
+</script>
 
 </body>
 </html>

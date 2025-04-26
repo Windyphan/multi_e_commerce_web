@@ -23,18 +23,18 @@
 	}
 
 	// Fetch User List
-	UserDao userDao = new UserDao();
-	List<User> userList = userDao.getAllUser(); // Get all users
+	UserDao userDaoForUserDisplay = new UserDao();
+	List<User> userListForUserDisplay = userDaoForUserDisplay.getAllUser(); // Get all users
 
-	if (userList == null) { // Handle potential DB error
-		userList = Collections.emptyList();
+	if (userListForUserDisplay == null) { // Handle potential DB error
+		userListForUserDisplay = Collections.emptyList();
 		pageContext.setAttribute("errorMessage", "Could not retrieve user list.", PageContext.SESSION_SCOPE);
 		pageContext.setAttribute("errorType", "error", PageContext.SESSION_SCOPE);
 		pageContext.setAttribute("errorClass", "alert-danger", PageContext.SESSION_SCOPE);
 	}
 
 	// Make list available for EL
-	request.setAttribute("allUsers", userList);
+	request.setAttribute("allUsers", userListForUserDisplay);
 %>
 
 <!DOCTYPE html>
@@ -73,16 +73,11 @@
 	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<%-- Navbar --%>
-<%@include file="Components/navbar.jsp"%>
 
 <%-- Main Content Wrapper --%>
-<main class="container flex-grow-1 my-4">
+<main>
 
 	<h2 class="page-header">Manage Registered Users</h2>
-
-	<%-- Display Messages --%>
-	<%@include file="Components/alert_message.jsp"%>
 
 	<div class="card shadow-sm">
 		<div class="card-body p-0">
@@ -141,10 +136,6 @@
 	</div> <%-- End card --%>
 
 </main> <%-- End main wrapper --%>
-
-
-<%-- Footer --%>
-<%@include file="footer.jsp"%>
 
 </body>
 </html>

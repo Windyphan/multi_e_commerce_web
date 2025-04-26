@@ -21,17 +21,17 @@
 	}
 
 	// Fetch Admin List
-	AdminDao adminDao = new AdminDao();
-	List<Admin> adminList = adminDao.getAllAdmin();
-	if (adminList == null) { // Handle potential DB error
-		adminList = Collections.emptyList();
+	AdminDao adminDaoForAdminDisplay = new AdminDao();
+	List<Admin> adminListForAdminDisplay = adminDaoForAdminDisplay.getAllAdmin();
+	if (adminListForAdminDisplay == null) { // Handle potential DB error
+		adminListForAdminDisplay = Collections.emptyList();
 		pageContext.setAttribute("errorMessage", "Could not retrieve admin list.", PageContext.SESSION_SCOPE);
 		pageContext.setAttribute("errorType", "error", PageContext.SESSION_SCOPE);
 		pageContext.setAttribute("errorClass", "alert-danger", PageContext.SESSION_SCOPE);
 	}
 
 	// Make list available for EL
-	request.setAttribute("listOfAdmins", adminList);
+	request.setAttribute("listOfAdmins", adminListForAdminDisplay);
 %>
 
 <!DOCTYPE html>
@@ -85,16 +85,11 @@
 	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<%-- Navbar --%>
-<%@include file="Components/navbar.jsp"%>
 
 <%-- Main Content Wrapper --%>
-<main class="container flex-grow-1 my-4">
+<main>
 
 	<h2 class="mb-4">Manage Administrators</h2>
-
-	<%-- Display Messages --%>
-	<%@include file="Components/alert_message.jsp"%>
 
 	<div class="row">
 		<%-- Column 1: Add Admin Form --%>
@@ -185,8 +180,6 @@
 	</div> <%-- End row --%>
 </main> <%-- End main content wrapper --%>
 
-<%-- Footer --%>
-<%@include file="footer.jsp"%>
 <%-- Conditionally include only if admin is logged in --%>
 
 <script>
