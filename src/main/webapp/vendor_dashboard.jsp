@@ -2,7 +2,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@page import="com.phong.entities.Vendor"%> <%-- For session check --%>
-<%@page import="com.phong.entities.Message"%> <%-- For potential messages --%>
+<%@page import="com.phong.dao.VendorDao"%> <%-- For session check --%>
+<%@page import="java.time.LocalDate"%> <%-- For potential messages --%>
+<%@page import="java.util.ArrayList"%> <%-- For potential messages --%>
+<%@page import="java.util.HashMap"%> <%-- For potential messages --%>
+<%@page import="java.util.List"%> <%-- For potential messages --%>
+<%@page import="java.util.Map"%> <%-- For potential messages --%>
 
 <%@page errorPage="error_exception.jsp"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -16,14 +21,66 @@
     <c:redirect url="vendor_login.jsp"/>
 </c:if>
 
-<%--
-    Optional Data Fetching (Example - Implement in specific pages later)
-    // Vendor specific data like pending orders, total products etc. could be fetched here
-    // by instantiating DAOs and setting request attributes, but it's often better
-    // to fetch data only on the specific management pages (vendor_orders.jsp etc.)
-    // int pendingOrderCount = orderDao.getPendingOrderCountForVendor(activeVendor.getVendorId());
-    // request.setAttribute("pendingOrderCount", pendingOrderCount);
---%>
+<%
+    Vendor activeVendor = (Vendor) session.getAttribute("activeVendor");
+    // Redirect if not logged in as vendor or if vendor is not approved
+    if (activeVendor == null || !activeVendor.isApproved()) {
+        pageContext.setAttribute("errorMessage", "Access Denied. Please log in as an approved vendor.", PageContext.SESSION_SCOPE);
+        pageContext.setAttribute("errorType", "error", PageContext.SESSION_SCOPE);
+        pageContext.setAttribute("errorClass", "alert-danger", PageContext.SESSION_SCOPE);
+        response.sendRedirect("vendor_login.jsp");
+        return;
+    }
+
+    int vendorId = activeVendor.getVendorId();
+
+    // --- NEW: Fetch Sales Summaries ---
+    VendorDao vendorDao = new VendorDao(); // DAO with new method
+    Map<String, Number> summaryToday = null;
+    Map<String, Number> summary7Days = null;
+    Map<String, Number> summary15Days = null;
+    Map<String, Number> summary30Days = null;
+
+    LocalDate today = LocalDate.now();
+    LocalDate yesterday = today.minusDays(1); // For 'today' range start (optional)
+    LocalDate sevenDaysAgo = today.minusDays(6);
+    LocalDate fifteenDaysAgo = today.minusDays(14);
+    LocalDate thirtyDaysAgo = today.minusDays(29);
+
+    String summaryError = null;
+    try {
+        // Today: From start of today until start of tomorrow
+        summaryToday = vendorDao.getVendorSalesSummaryForPeriod(vendorId, yesterday, today);
+
+        // Last 7 Days: From 7 days ago until start of today
+        summary7Days = vendorDao.getVendorSalesSummaryForPeriod(vendorId, sevenDaysAgo, today); // Includes today
+
+        // Last 15 Days: From 15 days ago until start of today
+        summary15Days = vendorDao.getVendorSalesSummaryForPeriod(vendorId, fifteenDaysAgo, today); // Includes today
+
+        // Last 30 Days: From 30 days ago until start of today
+        summary30Days = vendorDao.getVendorSalesSummaryForPeriod(vendorId, thirtyDaysAgo, today); // Includes today
+
+        if (summaryToday == null || summary7Days == null || summary15Days == null || summary30Days == null) {
+            // Handle case where DAO method returned null (error)
+            summaryError = "Could not load sales summary data.";
+        }
+
+    } catch (Exception e) {
+        // Handle any unexpected exceptions during date calculation or DAO calls
+        System.err.println("Error calculating vendor summaries: " + e.getMessage());
+        e.printStackTrace();
+        summaryError = "An error occurred while calculating sales summaries.";
+    }
+
+    // Set attributes for EL (even if null/empty, JSTL can handle)
+    request.setAttribute("summaryToday", summaryToday);
+    request.setAttribute("summary7Days", summary7Days);
+    request.setAttribute("summary15Days", summary15Days);
+    request.setAttribute("summary30Days", summary30Days);
+    request.setAttribute("summaryError", summaryError);
+
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -108,6 +165,80 @@
         <p class="lead text-muted mb-0">Welcome back, <span class="shop-name"><c:out value="${activeVendor.shopName}"/></span>!</p>
     </div>
 
+    <%-- *** Sales Summary Section *** --%>
+    <h4 class="mb-3">Sales Summary (Shipped/Delivered Orders)</h4>
+    <c:choose>
+        <c:when test="${not empty summaryError}">
+            <div class="alert alert-warning" role="alert">
+                Could not load sales summary: <c:out value="${summaryError}"/>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div class="row g-4">
+                    <%-- Today's Summary Card --%>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="card text-center border-primary shadow-sm">
+                        <div class="card-header bg-primary text-white">Today</div>
+                        <div class="card-body">
+                            <p class="card-text fs-4 fw-bold mb-1"><c:out value="${summaryToday.itemsSold}"/></p>
+                            <p class="card-text text-muted small mb-2">Items Sold</p>
+                            <p class="card-text fs-5 fw-bold">
+                                <fmt:formatNumber value="${summaryToday.totalRevenue}" type="currency" currencySymbol="£"/>
+                            </p>
+                            <p class="card-text text-muted small">Revenue</p>
+                        </div>
+                    </div>
+                </div>
+                    <%-- Last 7 Days Summary Card --%>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="card text-center border-info shadow-sm">
+                        <div class="card-header bg-info text-dark">Last 7 Days</div>
+                        <div class="card-body">
+                            <p class="card-text fs-4 fw-bold mb-1"><c:out value="${summary7Days.itemsSold}"/></p>
+                            <p class="card-text text-muted small mb-2">Items Sold</p>
+                            <p class="card-text fs-5 fw-bold">
+                                <fmt:formatNumber value="${summary7Days.totalRevenue}" type="currency" currencySymbol="£"/>
+                            </p>
+                            <p class="card-text text-muted small">Revenue</p>
+                        </div>
+                    </div>
+                </div>
+                    <%-- Last 15 Days Summary Card --%>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="card text-center border-secondary shadow-sm">
+                        <div class="card-header bg-secondary text-white">Last 15 Days</div>
+                        <div class="card-body">
+                            <p class="card-text fs-4 fw-bold mb-1"><c:out value="${summary15Days.itemsSold}"/></p>
+                            <p class="card-text text-muted small mb-2">Items Sold</p>
+                            <p class="card-text fs-5 fw-bold">
+                                <fmt:formatNumber value="${summary15Days.totalRevenue}" type="currency" currencySymbol="£"/>
+                            </p>
+                            <p class="card-text text-muted small">Revenue</p>
+                        </div>
+                    </div>
+                </div>
+                    <%-- Last 30 Days Summary Card --%>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="card text-center border-success shadow-sm">
+                        <div class="card-header bg-success text-white">Last 30 Days</div>
+                        <div class="card-body">
+                            <p class="card-text fs-4 fw-bold mb-1"><c:out value="${summary30Days.itemsSold}"/></p>
+                            <p class="card-text text-muted small mb-2">Items Sold</p>
+                            <p class="card-text fs-5 fw-bold">
+                                <fmt:formatNumber value="${summary30Days.totalRevenue}" type="currency" currencySymbol="£"/>
+                            </p>
+                            <p class="card-text text-muted small">Revenue</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:otherwise>
+    </c:choose>
+    <%-- *** END: Sales Summary Section *** --%>
+
+
+    <hr class="my-4"> <%-- Separator --%>
+
     <%-- Dashboard Link Cards --%>
     <div class="row g-4 justify-content-center">
         <div class="col-12 col-sm-6 col-lg-4">
@@ -116,7 +247,6 @@
                     <div class="card-body">
                         <i class="fas fa-box-open"></i>
                         <h4 class="card-title">Manage Products</h4>
-                        <%-- Optional: Display product count --%>
                         <%-- <p class="card-text">${vendorProductCount}</p> --%>
                     </div>
                 </a>
@@ -128,7 +258,6 @@
                     <div class="card-body">
                         <i class="fas fa-receipt"></i>
                         <h4 class="card-title">View Orders</h4>
-                        <%-- Optional: Display new/pending order count --%>
                         <%-- <p class="card-text">${pendingOrderCount}</p> --%>
                     </div>
                 </a>
@@ -140,7 +269,6 @@
                     <div class="card-body">
                         <i class="fas fa-store-alt"></i>
                         <h4 class="card-title">Shop Settings</h4>
-                        <%-- Optional: Maybe link to profile editing --%>
                     </div>
                 </a>
             </div>
@@ -151,7 +279,7 @@
 </main> <%-- End main wrapper --%>
 
 <%-- Footer --%>
-<%@include file="footer.jsp"%>
+<%@include file="Components/footer.jsp"%>
 
 </body>
 </html>

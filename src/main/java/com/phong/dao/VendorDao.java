@@ -1,8 +1,12 @@
 package com.phong.dao;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import com.phong.entities.Vendor;
 import com.phong.helper.ConnectionProvider;
 
@@ -165,6 +169,59 @@ public class VendorDao {
             }
         }
         return flag;
+    }
+
+    /**
+     * Calculates sales summary (items sold, total revenue) for a vendor within a date range.
+     * Considers only items from orders with status 'Shipped' or 'Delivered'.
+     *
+     * @param vendorId The ID of the vendor.
+     * @param startDate The start date of the period (inclusive).
+     * @param endDate The end date of the period (inclusive).
+     * @return A Map containing "itemsSold" (Long) and "totalRevenue" (Double/BigDecimal), or null on error. Returns 0 values if no sales.
+     */
+    public Map<String, Number> getVendorSalesSummaryForPeriod(int vendorId, LocalDate startDate, LocalDate endDate) {
+        Map<String, Number> summary = new HashMap<>();
+        summary.put("itemsSold", 0L); // Default to 0 (use Long for count)
+        summary.put("totalRevenue", 0.0); // Default to 0.0 (use Double or BigDecimal)
+
+        // Query joins ordered_product with order table to filter by date and status
+        // and calculates SUM of quantity and SUM of (quantity * price)
+        String query = "SELECT " +
+                "  COALESCE(SUM(op.quantity), 0) AS total_items, " +
+                "  COALESCE(SUM(op.quantity * op.price), 0.0) AS total_value " +
+                "FROM ordered_product op " +
+                "JOIN \"order\" o ON op.orderid = o.id " +
+                "WHERE op.vendor_id = ? " +
+                "  AND o.status IN ('Shipped', 'Delivered') " + // Filter by relevant statuses
+                "  AND o.date >= ? " +                         // Filter by start date
+                "  AND o.date <= ? ";                          // Filter by end date (exclusive for timestamp comparison)
+
+        // We use < endDate + 1 day because timestamp comparison should usually be exclusive for the end boundary
+        LocalDate nextDay = endDate.plusDays(1);
+
+        try (Connection con = ConnectionProvider.getConnection();
+             PreparedStatement psmt = con.prepareStatement(query)) {
+
+            psmt.setInt(1, vendorId);
+            psmt.setDate(2, Date.valueOf(startDate)); // Convert LocalDate to java.sql.Date
+            psmt.setDate(3, Date.valueOf(nextDay));   // Use next day for exclusive end boundary
+
+            try (ResultSet rs = psmt.executeQuery()) {
+                if (rs.next()) {
+                    summary.put("itemsSold", rs.getLong("total_items"));
+                    summary.put("totalRevenue", rs.getDouble("total_value")); // Use getDouble for NUMERIC/DECIMAL
+                }
+                // If no rows match WHERE clause, COALESCE returns 0, so defaults are fine.
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            System.err.println("Error getting vendor sales summary for vendor ID " + vendorId +
+                    " between " + startDate + " and " + endDate + ": " + e.getMessage());
+            e.printStackTrace();
+            return null; // Indicate error
+        }
+        return summary;
     }
 
     // Helper

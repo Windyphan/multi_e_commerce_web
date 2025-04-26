@@ -187,8 +187,7 @@ public class VendorProductServlet extends HttpServlet {
                     // ... (Add validation for required fields similar to addProduct) ...
                     if (name == null || name.trim().isEmpty() || priceStr == null || priceStr.trim().isEmpty() ||
                             description == null || description.trim().isEmpty() || discountStr == null || discountStr.trim().isEmpty() ||
-                            quantityStr == null || quantityStr.trim().isEmpty() || categoryTypeStr == null || categoryTypeStr.trim().isEmpty() ||
-                            part == null || part.getSize() == 0 || part.getSubmittedFileName() == null || part.getSubmittedFileName().trim().isEmpty())
+                            quantityStr == null || quantityStr.trim().isEmpty() || categoryTypeStr == null || categoryTypeStr.trim().isEmpty())
                     { throw new ServletException("Required fields missing for update."); }
 
                     float price = Float.parseFloat(priceStr.trim());
