@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.phong.entities.Product;
 import com.phong.helper.ConnectionProvider; // Import ConnectionProvider
@@ -428,6 +429,152 @@ public class ProductDao {
 			return null; // Indicate error
 		}
 		return list;
+	}
+
+	/**
+	 * Retrieves a list of products based on various filter criteria.
+	 * Handles filtering by category (multiple), price range, search key, and sorting by rating.
+	 * Manages its own database connection.
+	 *
+	 * @param categoryIds   List of category IDs to filter by (if empty or null, no category filter).
+	 * @param minPrice      Minimum price filter (inclusive, null if no min price).
+	 * @param maxPrice      Maximum price filter (inclusive, null if no max price).
+	 * @param ratingSortOrder Sorting order for average rating ("asc", "desc", or null/empty for no rating sort).
+	 * @param searchKey     Search term to match in name or description (null if no search).
+	 * @return A List of matching Product objects, may be empty. Returns null on major DB error.
+	 */
+	public List<Product> getFilteredProducts(List<Integer> categoryIds, Float minPrice, Float maxPrice, String ratingSortOrder, String searchKey) {
+
+		List<Product> list = new ArrayList<>();
+		// Use StringBuilder to dynamically build the query
+		StringBuilder queryBuilder = new StringBuilder();
+		List<Object> parameters = new ArrayList<>(); // To hold parameters for PreparedStatement in order
+
+		// Base query - Select product columns
+		// If sorting by rating, we need to calculate average rating first
+		boolean sortByRating = (ratingSortOrder != null && !ratingSortOrder.trim().isEmpty());
+
+		if (sortByRating) {
+			// Need to join reviews and group to get average rating for filtering/sorting
+			queryBuilder.append("SELECT p.*, COALESCE(AVG(r.rating), 0) as avg_rating ");
+			queryBuilder.append("FROM product p ");
+			queryBuilder.append("LEFT JOIN review r ON p.pid = r.product_id "); // LEFT JOIN to include products with no reviews
+		} else {
+			// Simple select if not sorting/filtering by rating
+			queryBuilder.append("SELECT p.* FROM product p ");
+		}
+
+		// --- WHERE Clauses ---
+		StringBuilder whereClause = new StringBuilder();
+		boolean firstWhere = true;
+
+		// Category Filter (handle multiple categories using IN)
+		if (categoryIds != null && !categoryIds.isEmpty()) {
+			whereClause.append(firstWhere ? "WHERE " : "AND ");
+			// Create placeholders (?,?,?) for IN clause
+			String categoryPlaceholders = categoryIds.stream()
+					.map(id -> "?")
+					.collect(Collectors.joining(", "));
+			whereClause.append("p.cid IN (").append(categoryPlaceholders).append(") ");
+			parameters.addAll(categoryIds); // Add category IDs to parameters list
+			firstWhere = false;
+		}
+
+		// Min Price Filter
+		if (minPrice != null) {
+			whereClause.append(firstWhere ? "WHERE " : "AND ");
+			whereClause.append("p.price >= ? ");
+			parameters.add(minPrice);
+			firstWhere = false;
+		}
+
+		// Max Price Filter
+		if (maxPrice != null) {
+			whereClause.append(firstWhere ? "WHERE " : "AND ");
+			whereClause.append("p.price <= ? ");
+			parameters.add(maxPrice);
+			firstWhere = false;
+		}
+
+		// Search Key Filter (case-insensitive)
+		if (searchKey != null && !searchKey.trim().isEmpty()) {
+			whereClause.append(firstWhere ? "WHERE " : "AND ");
+			whereClause.append("(lower(p.name) LIKE lower(?) OR lower(p.description) LIKE lower(?)) ");
+			String searchPattern = "%" + searchKey.trim() + "%";
+			parameters.add(searchPattern);
+			parameters.add(searchPattern);
+			firstWhere = false;
+		}
+
+		// Append WHERE clause if any conditions were added
+		queryBuilder.append(whereClause);
+
+		// --- GROUP BY Clause (Only if calculating average rating) ---
+		if (sortByRating) {
+			queryBuilder.append("GROUP BY p.pid "); // Group by all columns of product or just pid if DB allows
+			// Depending on PostgreSQL version and settings, you might need to list ALL selected 'p' columns here
+			// GROUP BY p.pid, p.name, p.description, p.price, ... etc. OR just p.pid if primary key grouping is sufficient
+		}
+
+		// --- ORDER BY Clause ---
+		StringBuilder orderByClause = new StringBuilder();
+		boolean firstOrder = true;
+
+		// Rating Sort
+		if (sortByRating) {
+			orderByClause.append("ORDER BY avg_rating ");
+			orderByClause.append("asc".equalsIgnoreCase(ratingSortOrder) ? "ASC" : "DESC");
+			// Add NULLS LAST/FIRST if desired
+			orderByClause.append(" NULLS LAST "); // Show products without ratings last
+			firstOrder = false;
+		}
+
+		// Default sort or secondary sort (e.g., by product ID or name)
+		orderByClause.append(firstOrder ? "ORDER BY " : ", ");
+		orderByClause.append("p.pid ASC "); // Example: sort by ID ascending as secondary/default
+
+
+		queryBuilder.append(orderByClause);
+
+		// Final Query String
+		String finalQuery = queryBuilder.toString();
+		System.out.println("Executing Filtered Query: " + finalQuery); // Log the generated query
+		System.out.println("Parameters: " + parameters); // Log parameters
+
+		// --- Execute Query ---
+		try (Connection con = ConnectionProvider.getConnection();
+			 PreparedStatement psmt = con.prepareStatement(finalQuery)) {
+
+			// Set parameters dynamically
+			int paramIndex = 1;
+			for (Object param : parameters) {
+				// Need to check type, PreparedStatement needs specific set methods
+				if (param instanceof Integer) {
+					psmt.setInt(paramIndex++, (Integer) param);
+				} else if (param instanceof Float) {
+					psmt.setFloat(paramIndex++, (Float) param);
+				} else if (param instanceof String) {
+					psmt.setString(paramIndex++, (String) param);
+				} else if (param instanceof Double) { // In case prices become double
+					psmt.setDouble(paramIndex++, (Double) param);
+				}
+				// Add other types if needed
+			}
+
+			try (ResultSet rs = psmt.executeQuery()) {
+				while (rs.next()) {
+					// Map using existing helper - it ignores extra columns like avg_rating
+					list.add(mapResultSetToProduct(rs));
+				}
+			}
+
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error executing filtered product query: " + e.getMessage());
+			e.printStackTrace();
+			return null; // Return null on major query execution error
+		}
+
+		return list; // Return the filtered (potentially empty) list
 	}
 
 
