@@ -36,6 +36,7 @@ com\phong\dao\ReviewDao.class
 com\phong\servlets\AddOperationServlet.class
 com\phong\entities\Admin.class
 com\phong\helper\MailMessenger.class
+com\phong\servlets\FilterProductsServlet.class
 com\phong\servlets\WishlistServlet.class
 com\phong\dao\AdminDao.class
 com\phong\dao\OrderDao.class

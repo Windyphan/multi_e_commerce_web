@@ -4,145 +4,116 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99cc4e27-b3cd-4759-ad19-9816ff79b9ba" name="Changes" comment="In">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phong/dao/VendorDao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phong/entities/Vendor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phong/helper/PasswordUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/VendorLoginServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/VendorProductServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/VendorProfileServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/VendorRegisterServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/Components/vendor_add_product_modal.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/display_vendors.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/vendor_dashboard.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/vendor_login.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/vendor_orders.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/vendor_products.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/vendor_profile.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/vendor_register.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/vendor_store.jsp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/webapp/vendor_update_product.jsp" afterDir="false" />
+    <list default="true" id="99cc4e27-b3cd-4759-ad19-9816ff79b9ba" name="Changes" comment="Remove redundant code">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/FilterProductsServlet.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/Components/sidebar.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/Components/update_category_modal.jsp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/webapp/Components/update_product_modal.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/webContexts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webContexts.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/phong_maven.sql" beforeDir="false" afterPath="$PROJECT_DIR$/phong_maven.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/dao/AdminDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/dao/AdminDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/dao/CartDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/dao/CartDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/dao/OrderDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/dao/OrderDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/dao/OrderedProductDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/dao/OrderedProductDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/dao/ProductDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/dao/ProductDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/dao/UserDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/dao/WishlistDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/dao/WishlistDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/entities/OrderedProduct.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/entities/OrderedProduct.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/entities/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/entities/Product.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/helper/MailMessenger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/helper/MailMessenger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/dao/VendorDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/dao/VendorDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/AddOperationServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/AddOperationServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/AddToCartServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/AddToCartServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/CartOperationServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/CartOperationServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/ChangePasswordServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/ChangePasswordServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/LoginServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/LoginServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/LogoutServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/LogoutServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/OrderOperationServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/OrderOperationServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/RegisterServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/RegisterServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/ReviewServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/ReviewServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/SetCheckoutAttributesServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/SetCheckoutAttributesServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/AdminServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/AdminServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/UpdateOrderServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/UpdateOrderServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/UpdateUserServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/UpdateUserServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/WishlistServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/WishlistServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/phong/servlets/VendorProductServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/phong/servlets/VendorProductServlet.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/CSS/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/CSS/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/Components/admin_modals.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/Components/admin_modals.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/Components/admin_modals.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/Components/add_category_modal.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/Components/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/Components/navbar.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/admin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/adminlogin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/adminlogin.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/cart.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/cart.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/change_password.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/change_password.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/checkout.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/checkout.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/display_admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_admin.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/display_category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_category.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/display_orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_orders.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/display_products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_products.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/display_users.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_users.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/footer.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/display_vendors.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/display_vendors.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/error_exception.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/error_exception.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/error_page.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/error_page.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/Components/footer.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/forgot_password.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/forgot_password.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/login.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/order.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/order.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/personalInfo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/personalInfo.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/otp_code.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/otp_code.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/products.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/profile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/profile.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/update_product.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/update_product.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/register.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/update_category.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/update_product.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/vendor_dashboard.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/vendor_dashboard.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/vendor_login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/vendor_login.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/vendor_orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/vendor_orders.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/vendor_products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/vendor_products.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/vendor_profile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/vendor_profile.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/vendor_register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/vendor_register.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/vendor_store.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/vendor_store.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/vendor_update_product.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/vendor_update_product.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/viewProduct.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/viewProduct.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/webapp/wishlist.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/wishlist.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/wishlist_section.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/wishlist_section.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0-lambda.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0-lambda.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0.war" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/CSS/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/CSS/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/Components/admin_modals.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/Components/admin_modals.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/Components/admin_modals.jsp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/Components/navbar.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/Components/navbar.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/AdminDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/AdminDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/CartDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/CartDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/OrderDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/OrderDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/OrderedProductDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/OrderedProductDao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/ProductDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/ProductDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/UserDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/UserDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/WishlistDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/WishlistDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/entities/OrderedProduct.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/entities/OrderedProduct.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/entities/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/entities/Product.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/helper/MailMessenger.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/helper/MailMessenger.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/VendorDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/dao/VendorDao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/AddOperationServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/AddOperationServlet.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/AddToCartServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/AddToCartServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/CartOperationServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/CartOperationServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/ChangePasswordServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/ChangePasswordServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/LoginServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/LoginServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/LogoutServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/LogoutServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/OrderOperationServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/OrderOperationServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/RegisterServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/RegisterServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/ReviewServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/ReviewServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/SetCheckoutAttributesServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/SetCheckoutAttributesServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/AdminServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/AdminServlet.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/UpdateOrderServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/UpdateOrderServlet.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/UpdateUserServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/UpdateUserServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/WishlistServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/WishlistServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/VendorLoginServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/VendorLoginServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/VendorProductServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/classes/com/phong/servlets/VendorProductServlet.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/web.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/WEB-INF/web.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/admin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/adminlogin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/adminlogin.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/cart.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/cart.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/change_password.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/change_password.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/checkout.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/checkout.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_admin.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_category.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_orders.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_products.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_users.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_users.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/footer.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/footer.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_vendors.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_vendors.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/error_exception.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/error_exception.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/error_page.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/error_page.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/footer.jsp" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/forgot_password.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/forgot_password.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/index.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/login.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/order.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/order.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/personalInfo.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/personalInfo.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/otp_code.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/otp_code.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/products.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/profile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/profile.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/update_product.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/update_product.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/register.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/update_category.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/update_product.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_dashboard.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_dashboard.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_login.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_login.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_orders.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_orders.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_products.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_products.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_profile.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_profile.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_register.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_store.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_store.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_update_product.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/vendor_update_product.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/viewProduct.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/viewProduct.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/wishlist.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/wishlist.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/wishlist_section.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/wishlist_section.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/dao/AdminDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/dao/AdminDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/dao/CartDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/dao/CartDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/dao/OrderDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/dao/OrderDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/dao/OrderedProductDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/dao/OrderedProductDao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/phong/dao/ProductDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/dao/ProductDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/dao/UserDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/dao/UserDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/dao/WishlistDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/dao/WishlistDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/entities/OrderedProduct.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/entities/OrderedProduct.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/entities/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/entities/Product.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/helper/MailMessenger.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/helper/MailMessenger.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/dao/VendorDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/dao/VendorDao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/AddOperationServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/AddOperationServlet.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/AddToCartServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/AddToCartServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/CartOperationServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/CartOperationServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/ChangePasswordServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/ChangePasswordServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/LoginServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/LoginServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/LogoutServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/LogoutServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/OrderOperationServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/OrderOperationServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/RegisterServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/RegisterServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/ReviewServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/ReviewServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/SetCheckoutAttributesServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/SetCheckoutAttributesServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/AdminServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/AdminServlet.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/UpdateOrderServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/UpdateOrderServlet.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/UpdateUserServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/UpdateUserServlet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/WishlistServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/WishlistServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/VendorLoginServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/VendorLoginServlet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/phong/servlets/VendorProductServlet.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/phong/servlets/VendorProductServlet.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
@@ -182,8 +153,8 @@
   </component>
   <component name="JspContextManager">
     <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/personalInfo.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/profile.jsp" />
-    <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/Components/admin_modals.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/Components/navbar.jsp" />
-    <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/footer.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/error_exception.jsp" />
+    <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/Components/footer.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/error_exception.jsp" />
+    <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/Components/add_category_modal.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/Components/navbar.jsp" />
     <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/order_section.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/profile.jsp" />
     <jsp-to-context jsp-file="file://$PROJECT_DIR$/src/main/webapp/wishlist_section.jsp" context-file="file://$PROJECT_DIR$/src/main/webapp/profile.jsp" />
   </component>
@@ -214,7 +185,7 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Laptop/IdeaProjects/CIWUW&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Laptop/IdeaProjects/multi_e_commerce_web/src/main/webapp/Components&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -229,6 +200,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\webapp\Components" />
       <recent name="C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\webapp\Images" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -372,135 +344,8 @@
       <workItem from="1744905372412" duration="14643000" />
       <workItem from="1745249600655" duration="32024000" />
       <workItem from="1745332786482" duration="13726000" />
-      <workItem from="1745423930178" duration="493000" />
-    </task>
-    <task id="LOCAL-00026" summary="Re haul jsp file">
-      <option name="closed" value="true" />
-      <created>1744168736043</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1744168736043</updated>
-    </task>
-    <task id="LOCAL-00027" summary="Fix grammar">
-      <option name="closed" value="true" />
-      <created>1744168755174</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1744168755174</updated>
-    </task>
-    <task id="LOCAL-00028" summary="Fix grammar">
-      <option name="closed" value="true" />
-      <created>1744168764911</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1744168764911</updated>
-    </task>
-    <task id="LOCAL-00029" summary="Fix grammar">
-      <option name="closed" value="true" />
-      <created>1744168780309</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1744168780309</updated>
-    </task>
-    <task id="LOCAL-00030" summary="Add file">
-      <option name="closed" value="true" />
-      <created>1744168797649</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1744168797649</updated>
-    </task>
-    <task id="LOCAL-00031" summary="Add sql">
-      <option name="closed" value="true" />
-      <created>1744168806750</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1744168806750</updated>
-    </task>
-    <task id="LOCAL-00032" summary="Add lib">
-      <option name="closed" value="true" />
-      <created>1744168816489</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1744168816489</updated>
-    </task>
-    <task id="LOCAL-00033" summary="Change property">
-      <option name="closed" value="true" />
-      <created>1744168831425</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1744168831425</updated>
-    </task>
-    <task id="LOCAL-00034" summary="Change style">
-      <option name="closed" value="true" />
-      <created>1744168844045</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1744168844045</updated>
-    </task>
-    <task id="LOCAL-00035" summary="Change property">
-      <option name="closed" value="true" />
-      <created>1744168865014</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1744168865014</updated>
-    </task>
-    <task id="LOCAL-00036" summary="Add chatbot system">
-      <option name="closed" value="true" />
-      <created>1744664699451</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1744664699451</updated>
-    </task>
-    <task id="LOCAL-00037" summary="Re haul the file, changing logic for s3 update">
-      <option name="closed" value="true" />
-      <created>1744664889861</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1744664889861</updated>
-    </task>
-    <task id="LOCAL-00038" summary="Re haul the file, changing logic for s3 update">
-      <option name="closed" value="true" />
-      <created>1744664905171</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1744664905171</updated>
-    </task>
-    <task id="LOCAL-00039" summary="Re haul the file, changing logic for s3 update">
-      <option name="closed" value="true" />
-      <created>1744664926084</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1744664926084</updated>
-    </task>
-    <task id="LOCAL-00040" summary="Re haul the file, changing logic for s3 update">
-      <option name="closed" value="true" />
-      <created>1744664934672</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1744664934672</updated>
-    </task>
-    <task id="LOCAL-00041" summary="Fix wrong id">
-      <option name="closed" value="true" />
-      <created>1744664947807</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1744664947807</updated>
+      <workItem from="1745423930178" duration="29652000" />
+      <workItem from="1745605347585" duration="29610000" />
     </task>
     <task id="LOCAL-00042" summary="Remove redundant code">
       <option name="closed" value="true" />
@@ -766,7 +611,135 @@
       <option name="project" value="LOCAL" />
       <updated>1745249736999</updated>
     </task>
-    <option name="localTasksCounter" value="75" />
+    <task id="LOCAL-00075" summary="Add vendor actions">
+      <option name="closed" value="true" />
+      <created>1745425096612</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425096612</updated>
+    </task>
+    <task id="LOCAL-00076" summary="Add vendor validation for performing customer action">
+      <option name="closed" value="true" />
+      <created>1745425306563</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425306563</updated>
+    </task>
+    <task id="LOCAL-00077" summary="Add vendor validation for performing customer action">
+      <option name="closed" value="true" />
+      <created>1745425356291</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425356291</updated>
+    </task>
+    <task id="LOCAL-00078" summary="Add vendor structure">
+      <option name="closed" value="true" />
+      <created>1745425401871</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425401871</updated>
+    </task>
+    <task id="LOCAL-00079" summary="Add password hashing">
+      <option name="closed" value="true" />
+      <created>1745425471280</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425471280</updated>
+    </task>
+    <task id="LOCAL-00080" summary="Fix dropdown not worked">
+      <option name="closed" value="true" />
+      <created>1745425521324</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425521324</updated>
+    </task>
+    <task id="LOCAL-00081" summary="Fix new method in DAO">
+      <option name="closed" value="true" />
+      <created>1745425568550</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425568550</updated>
+    </task>
+    <task id="LOCAL-00082" summary="Fix new method in DAO">
+      <option name="closed" value="true" />
+      <created>1745425629828</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425629828</updated>
+    </task>
+    <task id="LOCAL-00083" summary="Fix vendor structure to jsp files">
+      <option name="closed" value="true" />
+      <created>1745425728659</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425728659</updated>
+    </task>
+    <task id="LOCAL-00084" summary="Remove redundant code">
+      <option name="closed" value="true" />
+      <created>1745425812188</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425812188</updated>
+    </task>
+    <task id="LOCAL-00085" summary="Add vendor structure">
+      <option name="closed" value="true" />
+      <created>1745425851799</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425851799</updated>
+    </task>
+    <task id="LOCAL-00086" summary="Add vendor structure">
+      <option name="closed" value="true" />
+      <created>1745425880413</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425880413</updated>
+    </task>
+    <task id="LOCAL-00087" summary="Update">
+      <option name="closed" value="true" />
+      <created>1745425920315</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425920315</updated>
+    </task>
+    <task id="LOCAL-00088" summary="CHange color">
+      <option name="closed" value="true" />
+      <created>1745425940618</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425940618</updated>
+    </task>
+    <task id="LOCAL-00089" summary="Add admin action and remove redundant code">
+      <option name="closed" value="true" />
+      <created>1745425985211</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1745425985211</updated>
+    </task>
+    <task id="LOCAL-00090" summary="Remove redundant code">
+      <option name="closed" value="true" />
+      <created>1745426137605</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1745426137605</updated>
+    </task>
+    <option name="localTasksCounter" value="91" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -784,17 +757,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Change property" />
-    <MESSAGE value="Re haul the file, changing logic for s3 update" />
-    <MESSAGE value="Fix wrong id" />
-    <MESSAGE value="Change immage source" />
-    <MESSAGE value="Add chatbot system" />
-    <MESSAGE value="Add new file" />
-    <MESSAGE value="Fix uni code" />
-    <MESSAGE value="Add review system" />
-    <MESSAGE value="Fix footer to become fixed at the bottom of the screen" />
     <MESSAGE value="Close div" />
-    <MESSAGE value="Remove redundant code" />
     <MESSAGE value="Add mail user and password property" />
     <MESSAGE value="Add footer and header" />
     <MESSAGE value="Add new file without footer and header" />
@@ -808,7 +771,17 @@
     <MESSAGE value="Add admin modal" />
     <MESSAGE value="Add component css file into navbar" />
     <MESSAGE value="Add UK county lists" />
+    <MESSAGE value="Add vendor actions" />
+    <MESSAGE value="Add vendor validation for performing customer action" />
+    <MESSAGE value="Add password hashing" />
+    <MESSAGE value="Fix dropdown not worked" />
+    <MESSAGE value="Fix new method in DAO" />
+    <MESSAGE value="Fix vendor structure to jsp files" />
+    <MESSAGE value="Add vendor structure" />
     <MESSAGE value="Update" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update" />
+    <MESSAGE value="CHange color" />
+    <MESSAGE value="Add admin action and remove redundant code" />
+    <MESSAGE value="Remove redundant code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove redundant code" />
   </component>
 </project>
