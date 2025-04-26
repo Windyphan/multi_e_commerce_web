@@ -551,7 +551,7 @@
 </main> <%-- End main wrapper --%>
 
 <%-- Footer --%>
-<%@include file="footer.jsp"%>
+<%@include file="Components/footer.jsp"%>
 
 <%-- Remove the invalid JavaScript --%>
 
