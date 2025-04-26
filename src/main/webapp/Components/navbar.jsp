@@ -20,16 +20,16 @@
 	// *** START NAVBAR LOGGING ***
 	System.out.println("### NAVBAR_JSP [" + new Date() + "]: Starting data fetch...");
 
-	User activeUser = (User) session.getAttribute("activeUser");
-	Admin activeAdmin = (Admin) session.getAttribute("activeAdmin");
+	User activeUserForNav = (User) session.getAttribute("activeUser");
+	Admin activeAdminForNav = (Admin) session.getAttribute("activeAdmin");
 	Vendor activeVendorForNav = (Vendor) session.getAttribute("activeVendor");
-	System.out.println("### NAVBAR_JSP [" + new Date() + "]: activeUser found? " + (activeUser != null) + ", activeAdmin found? " + (activeAdmin != null));
+	System.out.println("### NAVBAR_JSP [" + new Date() + "]: activeUser found? " + (activeUserForNav != null) + ", activeAdmin found? " + (activeAdminForNav != null));
 
-	CategoryDao categoryDao = new CategoryDao();
+	CategoryDao categoryDaoForNav = new CategoryDao();
 	List<Category> categoryList = null;
 	String catError = null;
 	try {
-		categoryList = categoryDao.getAllCategories();
+		categoryList = categoryDaoForNav.getAllCategories();
 	} catch (Exception e) {
 		catError = e.getMessage();
 		System.err.println("### NAVBAR_JSP [" + new Date() + "]: ERROR fetching categories: " + e.getMessage());
@@ -42,10 +42,10 @@
 	System.out.println("### NAVBAR_JSP [" + new Date() + "]: Fetched " + categoryList.size() + " categories. Error msg (if any): " + catError);
 
 	int cartCount = 0;
-	if (activeUser != null) {
+	if (activeUserForNav != null) {
 		CartDao cartDao = new CartDao();
 		try {
-			cartCount = cartDao.getCartCountByUserId(activeUser.getUserId());
+			cartCount = cartDao.getCartCountByUserId(activeUserForNav.getUserId());
 		} catch (Exception e) {
 			System.err.println("### NAVBAR_JSP [" + new Date() + "]: ERROR fetching cart count: " + e.getMessage());
 			e.printStackTrace();
@@ -54,8 +54,8 @@
 	System.out.println("### NAVBAR_JSP [" + new Date() + "]: Cart count: " + cartCount);
 
 	// Set request attributes
-	request.setAttribute("activeUserForNav", activeUser);
-	request.setAttribute("activeAdminForNav", activeAdmin);
+	request.setAttribute("activeUserForNav", activeUserForNav);
+	request.setAttribute("activeAdminForNav", activeAdminForNav);
 	request.setAttribute("activeVendorForNav", activeVendorForNav);
 	request.setAttribute("navbarCategoryList", categoryList);
 	request.setAttribute("navbarCartCount", cartCount);
@@ -173,47 +173,18 @@
 		<c:choose>
 			<%-- === Admin View === --%>
 			<c:when test="${not empty activeAdminForNav}">
-				<%@include file="admin_modals.jsp"%>
+				<%@include file="add_category_modal.jsp"%>
+				<%@include file="update_product_modal.jsp"%>
+				<%@include file="update_category_modal.jsp"%>
 				<a class="navbar-brand" href="admin.jsp">
 					<i class="fa-solid fa-user-shield" style="color: #ffffff;"></i>Phong Admin
 				</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<%-- Admin Actions (aligned right) --%>
-					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-						<li class="nav-item">
-							<button type="button" class="btn btn-sm admin-nav-btn" data-bs-toggle="modal" data-bs-target="#add-category">
-								<i class="fa-solid fa-plus fa-xs"></i> Add Category
-							</button>
-						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								<i class="fa-solid fa-user-gear"></i> ${activeAdminForNav.name}
-							</a>
-							<ul class="dropdown-menu dropdown-menu-end"> <%-- Align right --%>
-								<li><a class="dropdown-item" href="admin.jsp">Dashboard</a></li>
-								<li><a class="dropdown-item" href="display_category.jsp">Manage Categories</a></li>
-								<li><a class="dropdown-item" href="display_products.jsp">Manage Products</a></li>
-								<li><a class="dropdown-item" href="display_orders.jsp">Manage Orders</a></li>
-								<li><a class="dropdown-item" href="display_users.jsp">Manage Users</a></li>
-								<li><a class="dropdown-item" href="display_admin.jsp">Manage Admins</a></li>
-								<li><a class="dropdown-item" href="display_vendors.jsp">Manage Vendors</a></li>
-
-								<li><hr class="dropdown-divider"></li>
-								<li>
-									<a class="dropdown-item" href="LogoutServlet?user=admin">
-										<i class="fa-solid fa-sign-out-alt"></i> Logout
-									</a>
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</div>
 			</c:when>
 
-			<%-- === Admin View === --%>
+			<%-- === Vendor View === --%>
 			<c:when test="${not empty activeVendorForNav and activeVendorForNav.approved}">
 				<%@include file="vendor_add_product_modal.jsp"%>
 				<a class="navbar-brand" href="vendor_dashboard.jsp">
@@ -265,23 +236,23 @@
 						<li class="nav-item">
 							<a class="nav-link <c:if test='${param.activePage == "products"}'>active</c:if>" href="products.jsp"> Products </a> <%-- Example active state --%>
 						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								Category
-							</a>
-							<ul class="dropdown-menu">
-								<li><a class="dropdown-item" href="products.jsp?category=0">All Products</a></li>
-									<%-- Loop through categories using JSTL --%>
-								<c:if test="${not empty navbarCategoryList}">
-									<li><hr class="dropdown-divider"></li>
-									<c:forEach var="cat" items="${navbarCategoryList}">
-										<li>
-											<a class="dropdown-item" href="products.jsp?category=${cat.categoryId}">${cat.categoryName}</a>
-										</li>
-									</c:forEach>
-								</c:if>
-							</ul>
-						</li>
+<%--						<li class="nav-item dropdown">--%>
+<%--							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">--%>
+<%--								Category--%>
+<%--							</a>--%>
+<%--							<ul class="dropdown-menu">--%>
+<%--								<li><a class="dropdown-item" href="products.jsp?category=0">All Products</a></li>--%>
+<%--									&lt;%&ndash; Loop through categories using JSTL &ndash;%&gt;--%>
+<%--								<c:if test="${not empty navbarCategoryList}">--%>
+<%--									<li><hr class="dropdown-divider"></li>--%>
+<%--									<c:forEach var="cat" items="${navbarCategoryList}">--%>
+<%--										<li>--%>
+<%--											<a class="dropdown-item" href="products.jsp?category=${cat.categoryId}">${cat.categoryName}</a>--%>
+<%--										</li>--%>
+<%--									</c:forEach>--%>
+<%--								</c:if>--%>
+<%--							</ul>--%>
+<%--						</li>--%>
 							<%-- Add other links like "About", "Contact" here if needed --%>
 					</ul>
 
@@ -327,8 +298,8 @@
 							<c:otherwise>
 								<%-- User is Logged Out (Guest) --%>
 								<li class="nav-item">
-									<a class="nav-link" aria-current="page" href="register.jsp">
-										<i class="fa-solid fa-user-plus"></i> Register
+									<a class="nav-link" aria-current="page" href="login.jsp">
+										<i class="fa-solid fa-cart-shopping"></i>
 									</a>
 								</li>
 								<li class="nav-item">
