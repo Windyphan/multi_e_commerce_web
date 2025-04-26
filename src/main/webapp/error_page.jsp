@@ -73,7 +73,7 @@
 </main> <%-- End main --%>
 
 <%-- Footer --%>
-<%@include file="footer.jsp"%>
+<%@include file="Components/footer.jsp"%>
 
 </body>
 </html>

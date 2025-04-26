@@ -464,7 +464,7 @@
 <!-- End Change Address Modal -->
 
 <%-- Footer --%>
-<%@include file="footer.jsp"%>
+<%@include file="Components/footer.jsp"%>
 
 <script>
 	// Simple JS to require card details only if card payment is selected

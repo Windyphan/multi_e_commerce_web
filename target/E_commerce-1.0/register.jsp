@@ -247,7 +247,7 @@
 </main>
 
 <%-- Footer --%>
-<%@include file="footer.jsp"%>
+<%@include file="Components/footer.jsp"%>
 
 <script>
 	// Bootstrap validation script

@@ -178,7 +178,7 @@
 </div>
 
 <%-- Footer --%>
- <%@include file="footer.jsp"%>
+ <%@include file="Components/footer.jsp"%>
 
 <script type="text/javascript">
 	const passwordInput = document.getElementById("password");

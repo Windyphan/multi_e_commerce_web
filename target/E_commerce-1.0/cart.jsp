@@ -340,7 +340,7 @@
 </div> <%-- End container --%>
 
 <%-- Footer --%>
- <%@include file="footer.jsp"%>
+ <%@include file="Components/footer.jsp"%>
 
 <%-- Remove the JavaScript that incorrectly sets session attributes --%>
 <%--

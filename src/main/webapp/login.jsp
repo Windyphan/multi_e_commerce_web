@@ -157,7 +157,7 @@
 </main>
 
 <%-- Footer --%>
-<%@include file="footer.jsp"%>
+<%@include file="Components/footer.jsp"%>
 
 <script>
 	// Optional: Add Bootstrap validation script if not already global
