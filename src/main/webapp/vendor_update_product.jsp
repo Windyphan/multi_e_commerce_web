@@ -201,7 +201,7 @@
 </main>
 
 <%-- Footer --%>
-<%@include file="footer.jsp"%>
+<%@include file="Components/footer.jsp"%>
 
 <script>
     // Validation function for discount (can be shared)

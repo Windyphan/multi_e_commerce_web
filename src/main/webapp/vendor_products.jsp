@@ -213,7 +213,7 @@
 </main>
 
 <%-- Footer --%>
-<%@include file="footer.jsp"%>
+<%@include file="Components/footer.jsp"%>
 
 <%-- Include the Add Product Modal (using a unique ID) --%>
 <%-- This requires 'vendorCategoryList' to be available --%>
