@@ -131,10 +131,6 @@
 		<div class="col-lg-9">
 			<div class="card admin-content">
 				<div class="card-body">
-					<div id="dashboard-content" class="tab-pane ${activeAdminTab == 'dashboard' ? 'active' : ''}">
-						<h3>Admin Dashboard</h3>
-						<p>Welcome admin</p>
-					</div>
 					<%-- Content panes - Include content JSPs here --%>
 					<div id="categories-content" class="tab-pane ${activeAdminTab == 'categories' ? 'active' : ''}">
 						<%@include file="display_category.jsp"%>
@@ -162,6 +158,9 @@
 
 <%-- Footer --%>
 <%@include file="Components/footer.jsp"%>
+<%@include file="Components/add_category_modal.jsp"%>
+<%@include file="Components/update_product_modal.jsp"%>
+<%@include file="Components/update_category_modal.jsp"%>
 
 <script>
 	// Tab switching script (similar to profile.jsp)

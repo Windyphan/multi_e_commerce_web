@@ -158,6 +158,9 @@
 
 <%-- Footer --%>
 <%@include file="Components/footer.jsp"%>
+<%@include file="Components/add_category_modal.jsp"%>
+<%@include file="Components/update_product_modal.jsp"%>
+<%@include file="Components/update_category_modal.jsp"%>
 
 <script>
 	// Tab switching script (similar to profile.jsp)
