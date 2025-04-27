@@ -173,9 +173,6 @@
 		<c:choose>
 			<%-- === Admin View === --%>
 			<c:when test="${not empty activeAdminForNav}">
-				<%@include file="add_category_modal.jsp"%>
-				<%@include file="update_product_modal.jsp"%>
-				<%@include file="update_category_modal.jsp"%>
 				<a class="navbar-brand" href="admin.jsp">
 					<i class="fa-solid fa-user-shield" style="color: #ffffff;"></i>Phong Admin
 				</a>

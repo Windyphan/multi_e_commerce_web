@@ -127,13 +127,307 @@
 		.section-bg-light { background-color: #f8f9fa; }
 		.carousel { margin-bottom: 1rem; /* Less margin if sidebar is present */ }
 		.carousel-item img { max-height: 400px; /* Maybe slightly smaller */ object-fit: cover; }
-		/* ... other necessary styles ... */
+		/* === Main Content Container === */
+		.main-content-container {
+			max-width: 1200px; /* Adjust max width as needed */
+			margin-left: auto;
+			margin-right: auto;
+			padding-left: 15px; /* Add padding for smaller screens */
+			padding-right: 15px;
+		}
+
+		/* === Promo Section General Styling === */
+		.promo-section {
+			background-color: #ffffff; /* White background for sections */
+			border-radius: 0.75rem;   /* Rounded corners */
+			padding: 2.5rem 2rem;     /* Generous padding */
+			margin-bottom: 2rem;      /* Space between sections */
+			overflow: hidden;         /* Prevent content bleed */
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Soft shadow */
+		}
+
+		.promo-section h2, .promo-section h3 {
+			font-weight: 700;
+			color: #333;
+			margin-bottom: 0.75rem;
+		}
+		.promo-section p {
+			color: #555;
+			font-size: 1.05rem;
+			margin-bottom: 1.5rem;
+			line-height: 1.6;
+		}
+		.promo-section .btn {
+			padding: 0.75rem 1.75rem;
+			font-weight: 600;
+			border-radius: 50px; /* Pill-shaped buttons */
+			transition: all 0.3s ease;
+		}
+		.promo-section .btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+		}
+		.promo-section .sub-text {
+			font-size: 0.85rem;
+			color: #777;
+			margin-top: 1rem;
+		}
+
+		/* === Specific Section Styles === */
+
+		/* Section 1: Tuning & Styling */
+		.promo-section.tuning-styling {
+			background-color: #00a1b1; /* Teal background */
+			color: #ffffff; /* White text */
+			position: relative; /* For potential absolute positioning of decorative elements */
+		}
+		.promo-section.tuning-styling h2,
+		.promo-section.tuning-styling p,
+		.promo-section.tuning-styling .sub-text {
+			color: #ffffff;
+		}
+		.promo-section.tuning-styling .btn {
+			background-color: #222; /* Dark button */
+			border-color: #222;
+			color: #fff;
+		}
+		.promo-section.tuning-styling .btn:hover {
+			background-color: #444;
+			border-color: #444;
+		}
+		/* Placeholder for image area if needed */
+		.tuning-img-placeholder {
+			background-color: rgba(255, 255, 255, 0.1); /* Subtle indication */
+			min-height: 200px;
+			border-radius: 0.5rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-style: italic;
+			color: rgba(255, 255, 255, 0.5);
+		}
+
+
+		/* Section 2: Sell for Free */
+		.promo-section.sell-free {
+			background-color: #f8f9fa; /* Light grey background */
+			box-shadow: none; /* Remove shadow if preferred */
+			border: 1px solid #e9ecef;
+		}
+		.promo-section.sell-free .btn {
+			background-color: #343a40; /* Dark grey button */
+			border-color: #343a40;
+			color: #fff;
+		}
+		.promo-section.sell-free .btn:hover {
+			background-color: #495057;
+			border-color: #495057;
+		}
+		/* Placeholder for image area */
+		.sell-img-placeholder {
+			background-color: #e9ecef;
+			min-height: 250px; /* Adjust height */
+			border-radius: 0.5rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-style: italic;
+			color: #6c757d;
+		}
+		.sell-img-placeholder img {
+			display: block;         /* Prevents extra space below image */
+			width: 100%;            /* Make image fill container width */
+			height: 100%;           /* Make image fill container height */
+			object-fit: cover;      /* Crucial: Scales image to cover the container, maintaining aspect ratio, cropping if needed */
+			/* Or use object-fit: contain; if you want the whole image visible, potentially leaving empty space */
+			/* object-fit: contain; */
+		}
+
+
+		/* Section 3: Great Deal */
+		.promo-section.great-deal {
+			/* Background is default white */
+			border: 1px solid #e0e0e0; /* Light border */
+			box-shadow: none;
+		}
+		.promo-section.great-deal .featured-text {
+			font-size: 0.9rem;
+			color: #6c757d;
+			margin-bottom: 0.25rem;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+		}
+		.promo-section.great-deal .brand-placeholder { /* For 'ebay' */
+			font-weight: bold;
+			font-size: 1.8rem;
+			color: #8a2be2; /* Example purple */
+			margin-bottom: 1rem;
+			/* If you had a logo: height: 30px; width: auto; */
+		}
+		.promo-section.great-deal h3 { /* Using h3 here */
+			font-weight: 600;
+			font-size: 1.8rem;
+		}
+		.promo-section.great-deal .btn {
+			background-color: transparent;
+			border: 2px solid #343a40; /* Outline button */
+			color: #343a40;
+		}
+		.promo-section.great-deal .btn:hover {
+			background-color: #343a40;
+			color: #fff;
+			box-shadow: none; /* Remove hover shadow for outline buttons if desired */
+			transform: none; /* Remove lift effect for outline buttons */
+		}
+		/* === Carousel Specific Styling === */
+
+		/* General Carousel Adjustments */
+		.promo-carousel .carousel-inner { padding: 0 40px; /* Make space for controls */ }
+		.promo-carousel .carousel-control-prev,
+		.promo-carousel .carousel-control-next { width: 5%; } /* Adjust control width */
+		.promo-carousel .carousel-control-prev-icon,
+		.promo-carousel .carousel-control-next-icon { background-color: rgba(0, 0, 0, 0.3); border-radius: 50%; padding: 15px; background-size: 60%; }
+
+		/* Hot Deals Carousel */
+		#hotDealsCarousel .carousel-item { padding: 1rem 0.5rem; /* Padding inside the item */ text-align: center; }
+		#hotDealsCarousel .product-card-carousel { /* Style for cards inside this carousel */
+			max-width: 300px; /* Limit card width */
+			margin: auto; /* Center the card */
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+			border: none;
+			background-color: #fff; /* Ensure white background */
+			/* Copy relevant product card styles here or create specific ones */
+			border-radius: 0.375rem; overflow: hidden;
+		}
+		#hotDealsCarousel .product-card-carousel a { text-decoration: none; color: #212529; }
+		#hotDealsCarousel .product-card-carousel .card-img-container { height: 180px; display: flex; align-items: center; justify-content: center; padding: 10px; overflow: hidden; background-color: #f8f9fa; }
+		#hotDealsCarousel .product-card-carousel .card-img-top { max-height: 100%; max-width: 100%; object-fit: contain; }
+		#hotDealsCarousel .product-card-carousel .card-body { padding: 0.8rem; text-align: center; }
+		#hotDealsCarousel .product-card-carousel .card-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #343a40; }
+		#hotDealsCarousel .product-card-carousel .product-vendor { font-size: 0.8rem; margin-bottom: 0.3rem; }
+		#hotDealsCarousel .product-card-carousel .star-rating { margin-bottom: 0.4rem; font-size: 0.9rem; } /* Adjust star size */
+		#hotDealsCarousel .product-card-carousel .price-container { font-size: 0.85rem; line-height: 1.4; }
+		#hotDealsCarousel .product-card-carousel .price-discounted { font-size: 1rem; font-weight: 700; color: #dc3545; }
+		#hotDealsCarousel .product-card-carousel .price-original { text-decoration: line-through; color: #6c757d; margin-left: 0.4rem; font-size: 0.85em; }
+		#hotDealsCarousel .product-card-carousel .discount-badge { color: #198754; font-weight: 600; margin-left: 0.4rem; font-size: 0.8em; }
+		#hotDealsCarousel .product-card-carousel .wishlist-icon-container { position: absolute; top: 8px; right: 8px; z-index: 10; }
+		#hotDealsCarousel .product-card-carousel .wishlist-btn { background: rgba(255,255,255,0.7); border-radius: 50%; padding: 5px 7px; line-height: 1; color: #dc3545; font-size: 0.9rem;}
+		#hotDealsCarousel .product-card-carousel .wishlist-btn:hover { background: rgba(255,255,255,0.9); }
+		#hotDealsCarousel .product-card-carousel .wishlist-btn .not-in-wishlist { color: #6c757d; }
+
+
+		/* Category Carousel */
+		.category-carousel-section { padding: 40px 0; background-color: #fff; margin-bottom: 2rem; border-radius: 0.75rem; box-shadow: 0 4px 15px rgba(0,0,0,0.07); }
+		.category-carousel-section .section-title { text-align: center; margin-bottom: 30px; font-weight: 600; color: #333; font-size: 1.8rem; }
+		#categoryCarousel .carousel-item { /* Padding adjusted by inner row */ }
+
+		#categoryCarousel .category-card-large {
+			border: 1px solid #e9ecef; /* Lighter border */
+			transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+			text-align: center;
+			background-color: #fff;
+			border-radius: 0.5rem; /* More rounded */
+			padding: 1.5rem 1rem;  /* INCREASED Padding */
+			display: flex;         /* Use flex for vertical centering */
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			min-height: 170px; /* INCREASED Min Height (adjust as needed) */
+		}
+		#categoryCarousel .category-card-large:hover {
+			box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+			transform: translateY(-4px); /* Add slight lift on hover */
+		}
+		#categoryCarousel .category-card-large img {
+			width: 85px;   /* INCREASED Image Width */
+			height: 85px;  /* INCREASED Image Height */
+			object-fit: contain;
+			margin: 0 auto 1rem auto; /* INCREASED Margin below image */
+		}
+		#categoryCarousel .category-card-large h6 {
+			font-size: 1rem; /* INCREASED Font Size */
+			font-weight: 500;
+			color: #444;    /* Slightly darker text */
+			margin-bottom: 0;
+			line-height: 1.3;
+		}
+		#categoryCarousel .category-card-large a {
+			text-decoration: none;
+			color: inherit;
+			/* Make the link cover the whole card for easier clicking */
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+			height: 100%;
+		}
+		/* Dark controls for light background */
+		#categoryCarousel.carousel-dark .carousel-control-prev-icon,
+		#categoryCarousel.carousel-dark .carousel-control-next-icon { filter: invert(1) grayscale(100); } /* Make default Bootstrap dark icons visible */
+
+		/* Responsive Adjustments */
+		@media (max-width: 991.98px) { /* Below LG breakpoint */
+			.promo-section {
+				padding: 2rem 1.5rem;
+			}
+			.img-placeholder { /* Target all placeholders */
+				margin-top: 1.5rem;
+				min-height: 180px; /* Reduce height on smaller screens */
+			}
+			.promo-section.tuning-styling .product-card-carousel { max-width: 250px; } /* Smaller cards */
+			#hotDealsCarousel .card-img-container { height: 150px; }
+		}
+		@media (max-width: 767.98px) { /* Below MD breakpoint */
+			.promo-section h2, .promo-section h3 {
+				font-size: 1.8rem; /* Slightly smaller headings */
+			}
+			.promo-section p {
+				font-size: 1rem;
+			}
+			.promo-section .btn {
+				width: 100%; /* Make buttons full width */
+				padding: 0.7rem 1rem;
+			}
+			/* Center text in sections */
+			.promo-section .row > div[class*="col-"] { /* Target direct children cols */
+				text-align: center;
+			}
+			#hotDealsCarousel .carousel-inner { padding: 0 10px; } /* Less padding */
+			#hotDealsCarousel .product-card-carousel { max-width: 220px; }
+			#hotDealsCarousel .card-img-container { height: 130px; }
+			#categoryCarousel .row { --bs-gutter-x: 0.5rem; /* Reduce gap between category cards */ }
+			#categoryCarousel .category-card-small img { width: 45px; height: 45px; }
+			#categoryCarousel .category-card-small h6 { font-size: 0.75rem; }
+			.img-placeholder {
+				min-height: 150px;
+			}
+		}
+		/* Placeholder for image area */
+		.deal-img-placeholder {
+			background-color: #ffe0e6; /* Light pinkish */
+			min-height: 250px; /* Adjust height */
+			border-radius: 0.5rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-style: italic;
+			color: #ad717c;
+		}
+		.deal-img-placeholder img {
+			display: block;         /* Prevents extra space below image */
+			width: 100%;            /* Make image fill container width */
+			height: 100%;           /* Make image fill container height */
+			object-fit: cover;      /* Crucial: Scales image to cover the container, maintaining aspect ratio, cropping if needed */
+			/* Or use object-fit: contain; if you want the whole image visible, potentially leaving empty space */
+			/* object-fit: contain; */
+		}
 	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
 <%@include file="Components/navbar.jsp"%>
 
-<main class="container-fluid flex-grow-1 my-4">
+<main class="main-content-container flex-grow-1 my-4">
 	<%@include file="Components/alert_message.jsp"%>
 
 	<%-- Carousel Section --%>
@@ -157,399 +451,171 @@
 			</button>
 		</div>
 	</section>
-
-	<%-- Category List Section --%>
-	<%-- Only render if categoryList is not null and not empty --%>
+		<%-- === Section: Category Carousel === --%>
 	<c:if test="${not empty navbarCategoryList}">
-		<section class="section category-section section-bg-accent">
-			<div class="container">
-					<%-- Use responsive columns for categories --%>
-				<div class="row row-cols-3 row-cols-md-4 row-cols-lg-6 g-3 justify-content-center">
-					<c:forEach var="cat" items="${navbarCategoryList}">
-						<div class="col">
-							<a href="products.jsp?category=${cat.categoryId}">
-								<div class="card category-card h-100">
-										<%-- Use forward slashes for web paths --%>
-									<img src="${s3BaseUrl}${cat.categoryImage}" class="card-img-top" alt="${cat.categoryName}">
-									<div class="card-body">
-										<h6 class="card-title">${cat.categoryName}</h6>
-									</div>
-								</div>
-							</a>
-						</div>
-					</c:forEach>
-				</div>
-			</div>
-		</section>
-	</c:if>
+		<section class="category-carousel-section">
+			<h2 class="section-title">Shop by Category</h2>
+			<div id="categoryCarousel" class="carousel slide promo-carousel carousel-dark" data-bs-ride="carousel" data-bs-interval="5000"> <%-- Added carousel-dark --%>
+					<%-- Optional Indicators --%>
+					<%-- <div class="carousel-indicators"> ... </div> --%>
 
-	<%-- Hot Deals Section --%>
-	<c:if test="${not empty hotDeals}">
-		<section class="section"> <%-- Different background or no background --%>
-			<div class="container">
-				<h2 class="section-title">Hot Deals</h2>
-					<%-- Responsive grid --%>
-				<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-					<c:forEach var="product" items="${hotDeals}">
+				<div class="carousel-inner">
+					<c:set var="itemsPerSlide" value="4"/> <%-- Adjust items per slide 4 --%>
+					<c:forEach var="cat" items="${navbarCategoryList}" varStatus="loop">
+						<%-- Start a new carousel item every 'itemsPerSlide' --%>
+						<c:if test="${loop.index % itemsPerSlide == 0}">
+							<div class="carousel-item ${loop.index == 0 ? 'active' : ''}">
+							<div class="row row-cols-${itemsPerSlide > 3 ? itemsPerSlide : 3} row row-cols-${itemsPerSlide} g-4 justify-content-center px-md-4"> <%-- Adjust row-cols based on itemsPerSlide, add padding --%>
+						</c:if>
+
+						<%-- The Category Card --%>
 						<div class="col">
-							<div class="card h-100 product-card">
-								<a href="viewProduct.jsp?pid=${product.productId}">
-									<div class="card-img-container">
-										<img src="${s3BaseUrl}${product.productImages}" class="card-img-top" alt="${product.productName}">
-									</div>
-									<div class="card-body">
-										<h5 class="card-title" title="${product.productName}">${product.productName}</h5>
-										<div class="price-container">
-                                             <span class="price-discounted">
-                                                 <fmt:setLocale value="en_GB"/>
-                                                 <fmt:formatNumber value="${product.productPriceAfterDiscount}" type="currency" currencySymbol="£"/>
-                                             </span>
-											<span class="price-original">
-                                                 <fmt:formatNumber value="${product.productPrice}" type="currency" currencySymbol="£"/>
-                                             </span>
-											<span class="discount-badge">
-                                                 ${product.productDiscount}% off
-                                             </span>
-										</div>
-									</div>
+							<div class="category-card-large h-100">
+								<a href="products.jsp?category=${cat.categoryId}">
+									<img src="${s3BaseUrl}${cat.categoryImage}" alt="${cat.categoryName}">
+									<h6><c:out value="${cat.categoryName}"/></h6>
 								</a>
 							</div>
 						</div>
+
+						<%-- Close carousel item if it's the last item OR end of a slide group --%>
+						<c:if test="${loop.last or (loop.index + 1) % itemsPerSlide == 0}">
+							</div> <%-- // close row --%>
+							</div> <%-- // close carousel-item --%>
+						</c:if>
 					</c:forEach>
+				</div>
+
+					<%-- Controls --%>
+				<button class="carousel-control-prev" type="button" data-bs-target="#categoryCarousel" data-bs-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Previous</span>
+				</button>
+				<button class="carousel-control-next" type="button" data-bs-target="#categoryCarousel" data-bs-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Next</span>
+				</button>
+			</div>
+		</section>
+	</c:if> <%-- End Category Carousel Section --%>
+
+
+	<%-- === Section 1: Tuning & Styling (with Hot Deals Carousel) === --%>
+	<section class="promo-section tuning-styling">
+		<div class="row align-items-center">
+			<div class="col-lg-6 col-md-7">
+				<h2 class="display-5">Save up to 30% on hot deal</h2>
+				<p>Cruise into deals and upgrade your lifestyle for less.</p>
+			</div>
+			<div class="col-lg-6 col-md-5"> <%-- Always show this column now --%>
+				<%-- Hot Deals Carousel --%>
+				<c:if test="${not empty hotDeals}">
+					<div id="hotDealsCarousel" class="carousel slide promo-carousel" data-bs-ride="carousel" data-bs-interval="3500"> <%-- Adjust interval --%>
+						<div class="carousel-inner">
+							<c:forEach var="product" items="${hotDeals}" varStatus="loop">
+								<div class="carousel-item ${loop.first ? 'active' : ''}">
+										<%-- Use a specific class for cards in this carousel --%>
+									<div class="card product-card-carousel position-relative"> <%-- Added position-relative for wishlist icon --%>
+											<%-- Wishlist Icon (Optional) --%>
+										<div class="wishlist-icon-container">
+											<c:choose>
+												<c:when test="${empty sessionScope.activeUser}"><a href="login.jsp" class="btn wishlist-btn" title="Login to add to wishlist"><i class="fa-regular fa-heart not-in-wishlist"></i></a></c:when>
+												<c:otherwise>
+													<c:set var="isInWishlist" value="${userWishlistPids.contains(product.productId)}"/>
+													<a href="WishlistServlet?pid=${product.productId}&op=${isInWishlist ? 'remove' : 'add'}" class="btn wishlist-btn" title="${isInWishlist ? 'Remove from' : 'Add to'} Wishlist"><i class="fa-${isInWishlist ? 'solid' : 'regular'} fa-heart ${isInWishlist ? 'in-wishlist' : 'not-in-wishlist'}"></i></a>
+												</c:otherwise>
+											</c:choose>
+										</div>
+											<%-- Product Link --%>
+										<a href="viewProduct.jsp?pid=${product.productId}">
+											<div class="card-img-container">
+												<img src="${s3BaseUrl}${product.productImages}" class="card-img-top" alt="${product.productName}">
+											</div>
+											<div class="card-body">
+												<h5 class="card-title" title="${product.productName}"><c:out value="${product.productName}"/></h5>
+													<%-- Vendor (Optional) --%>
+												<div class="product-vendor mb-1">
+													<small class="text-muted">By:
+														<c:set var="vendorName" value="${indexVendorNames[product.vendorId]}" />
+														<c:out value="${not empty vendorName ? vendorName : 'Phong Shop'}"/>
+													</small>
+												</div>
+													<%-- Rating (Optional) --%>
+												<c:set var="avgRating" value="${averageRatings[product.productId]}"/>
+												<c:choose>
+													<c:when test="${not empty avgRating and avgRating > 0}">
+														<div class="star-rating mb-1" title="${avgRating} stars">
+															<small><c:forEach var="i" begin="1" end="5"><i class="fa-${avgRating >= i ? 'solid' : (avgRating >= i-0.5 ? 'solid fa-star-half-stroke' : 'regular')} fa-star text-warning"></i></c:forEach></small>
+														</div>
+													</c:when>
+													<c:otherwise><div class="star-rating mb-1 text-muted"><small>No reviews</small></div></c:otherwise>
+												</c:choose>
+													<%-- Price --%>
+												<div class="price-container">
+													<span class="price-discounted"><fmt:setLocale value="en_GB"/><fmt:formatNumber value="${product.productPriceAfterDiscount}" type="currency" currencySymbol="£"/></span>
+													<c:if test="${product.productDiscount > 0}">
+														<span class="price-original"><fmt:formatNumber value="${product.productPrice}" type="currency" currencySymbol="£"/></span>
+														<span class="discount-badge">${product.productDiscount}% off</span>
+													</c:if>
+												</div>
+											</div>
+										</a>
+									</div> <%-- End product-card-carousel --%>
+								</div> <%-- End carousel-item --%>
+							</c:forEach>
+						</div>
+							<%-- Controls (Optional but recommended for usability) --%>
+						<button class="carousel-control-prev" type="button" data-bs-target="#hotDealsCarousel" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button" data-bs-target="#hotDealsCarousel" data-bs-slide="next">
+							<span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span>
+						</button>
+					</div>
+				</c:if>
+				<c:if test="${empty hotDeals}">
+					<p class="text-white-50 fst-italic mt-3 text-center">No hot deals available right now.</p> <%-- Fallback message --%>
+				</c:if>
+			</div>
+		</div>
+	</section> <%-- End Tuning & Styling Section --%>
+
+		<%-- === Section 2: Sell for Free === --%>
+		<section class="promo-section sell-free">
+			<div class="row align-items-center">
+				<div class="col-md-6">
+					<h2>Sell for free in your community</h2>
+					<p>Clear out and cash in! List items for collection in your area.</p>
+					<a href="vendor_login.jsp" class="btn btn-dark">Start listing</a> <%-- Link to listing page --%>
+					<p class="sub-text">Excludes Vehicles and business sellers.</p>
+				</div>
+				<div class="col-md-6 d-none d-md-block">
+					<div class="sell-img-placeholder"><img src="Images/background-image.png" alt="People using Phong Shop to sell items locally"></div>
 				</div>
 			</div>
 		</section>
-	</c:if>
 
-	<div class="row g-4"> <%-- Row for sidebar and main content --%>
-		<%-- === Sidebar Column === --%>
-		<div class="col-lg-3 d-none d-lg-block"> <%-- Hide sidebar on smaller screens for index --%>
-			<%@include file="Components/sidebar.jsp"%>
-		</div>
-
-		<%-- === Main Content Column === --%>
-		<div class="col-lg-9"> <%-- Content takes remaining space --%>
-
-			<div id="product-grid-container">
-				<%-- Latest Products Section --%>
-				<c:if test="${not empty latestProducts}">
-					<section class="section section-bg-light">
-						<div class="container">
-								<%-- Responsive grid: 1 col on xs, 2 on sm, 3 on md, 4 on lg --%>
-							<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-									<%-- Loop through the latestProducts list --%>
-								<c:forEach var="product" items="${latestProducts}">
-									<div class="col">
-										<div class="card h-100 product-card">
-											<a href="viewProduct.jsp?pid=${product.productId}">
-												<div class="card-img-container">
-														<%-- Use forward slashes for web paths --%>
-													<img src="${s3BaseUrl}${product.productImages}" class="card-img-top" alt="${product.productName}">
-												</div>
-												<div class="card-body">
-													<h5 class="card-title" title="${product.productName}">${product.productName}</h5>
-													<div class="product-vendor mb-2">
-														<small class="text-muted">
-															Sold by:
-															<c:set var="vendorName" value="${indexVendorNames[product.vendorId]}" />
-															<c:if test="${not empty vendorName}"> <%-- Only show if vendor name was found & vendor is approved --%>
-																<a href="vendor_store.jsp?vid=${product.vendorId}" class="link-secondary">
-																	<c:out value="${vendorName}"/>
-																</a>
-															</c:if>
-																<%-- Optional: Show platform name if vendorName is null/empty --%>
-															<c:if test="${empty vendorName}">
-																<span class="fst-italic">Phong Shop</span>  <%-- Or just show nothing --%>
-															</c:if>
-														</small>
-													</div>
-														<%-- *** End Vendor Name Display *** --%>
-													<div class="price-container">
-                                             <span class="price-discounted">
-                                                 <fmt:setLocale value="en_GB"/> <%-- Set locale for currency --%>
-                                                 <fmt:formatNumber value="${product.productPriceAfterDiscount}" type="currency" currencySymbol="£"/>
-                                             </span>
-															<%-- Show original price only if there's a discount --%>
-														<c:if test="${product.productDiscount > 0}">
-                                                 <span class="price-original">
-                                                     <fmt:formatNumber value="${product.productPrice}" type="currency" currencySymbol="£"/>
-                                                 </span>
-															<span class="discount-badge">
-                                                     ${product.productDiscount}% off
-                                                 </span>
-														</c:if>
-															<%--Show rating--%>
-														<c:set var="avgRating" value="${averageRatings[product.productId]}"/>
-														<c:if test="${not empty avgRating and avgRating > 0}">
-															<div class="star-rating mb-1" title="${avgRating} out of 5 stars">
-																<small> <%-- Use small tag --%>
-																	<c:forEach var="i" begin="1" end="5">
-																		<i class="fa-${avgRating >= i ? 'solid' : (avgRating >= i-0.5 ? 'solid fa-star-half-stroke' : 'regular')} fa-star text-warning"></i>
-																	</c:forEach>
-																</small>
-															</div>
-														</c:if>
-													</div>
-												</div>
-											</a>
-										</div>
-									</div>
-								</c:forEach>
-							</div>
-						</div>
-					</section>
-				</c:if>
+		<%-- === Section 3: Great Deal === --%>
+		<section class="promo-section great-deal">
+			<div class="row align-items-center">
+				<div class="col-md-6">
+					<p class="featured-text">Featured</p>
+					<%-- Placeholder for Brand Logo/Name --%>
+					<div class="brand-placeholder">Phong Shop</div> <%-- Or use <img> if you have a logo --%>
+					<h3>Looking for a Great Deal?</h3>
+					<p>We've got everything you need.</p>
+					<a href="products.jsp" class="btn btn-outline-dark">Shop Now</a> <%-- Link to products page --%>
+				</div>
+				<div class="col-md-6 d-none d-md-block">
+					<%-- Image Placeholder --%>
+					<div class="deal-img-placeholder">
+						<img src="Images/background-image-2.png" alt="People using Phong Shop to buy items">
+					</div>
+				</div>
 			</div>
-
-			<%-- Confirmation message script (logic remains the same, ensure 'user' is available) --%>
-			<c:set var="orderStatus" value="${sessionScope.order}" />
-			<c:if test="${not empty orderStatus and orderStatus eq 'success'}">
-				<script type="text/javascript">
-					// Ensure Swal is loaded in common_css_js.jsp
-					if (typeof Swal !== 'undefined') {
-						Swal.fire({
-							icon : 'success',
-							title: 'Order Placed, Thank you!',
-							text: 'Confirmation will be sent to ${sessionScope.activeUser.userEmail}', // Access user from session scope
-							width: 600,
-							padding: '3em',
-							showConfirmButton : false,
-							timer : 3500,
-							backdrop: `rgba(0,0,123,0.4)`
-						});
-					} else {
-						console.error("SweetAlert (Swal) is not loaded!");
-					}
-				</script>
-				<% session.removeAttribute("order"); %> <%-- Still need scriptlet to remove attribute --%>
-			</c:if>
-
-		</div> <%-- End Main Content Column --%>
-	</div> <%-- End Row --%>
+		</section>
 </main>
 
 <%@include file="Components/footer.jsp"%>
-
-<script>
-	document.addEventListener('DOMContentLoaded', () => {
-		const filterForm = document.getElementById('filter-form');
-		const productGridContainer = document.getElementById('product-grid-container'); // Target for replacing content
-		const pageMessageHeading = document.getElementById('page-message-heading'); // To update status
-
-		// Function to gather current filter values
-		function getFilterData() {
-			const formData = new FormData(filterForm);
-			const data = {
-				// Use getAll for checkboxes as there can be multiple values
-				categories: formData.getAll('category'), // Gets array of checked category IDs
-				minPrice: formData.get('minPrice'),
-				maxPrice: formData.get('maxPrice'),
-				ratingSort: formData.get('ratingSort') || '' // Default to empty string if no sort selected
-				// Add other filters (search term?)
-				// search: new URLSearchParams(window.location.search).get('search') || ''
-			};
-			return data;
-		}
-
-		// Function to handle fetching and displaying filtered products (AJAX Placeholder)
-		function applyFilters() {
-			const filters = getFilterData();
-			console.log("Applying Filters:", filters); // Log the selected filters
-
-			// --- AJAX/Fetch Implementation (To be added) ---
-			// 1. Show a loading indicator
-			if(pageMessageHeading) pageMessageHeading.textContent = 'Loading products...';
-			if(productGridContainer) productGridContainer.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>'; // Basic spinner
-
-			// 2. Construct URLSearchParams or JSON payload for the backend
-			const params = new URLSearchParams();
-			filters.categories.forEach(catId => params.append('category', catId));
-			if (filters.minPrice) params.append('minPrice', filters.minPrice);
-			if (filters.maxPrice) params.append('maxPrice', filters.maxPrice);
-			if (filters.ratingSort) params.append('ratingSort', filters.ratingSort);
-			// if (filters.search) params.append('search', filters.search); // Add search if needed
-
-			// 3. Use Fetch API to send request to a backend endpoint (e.g., /FilterProductsServlet)
-			//    This endpoint needs to query the DB using the filters and return JSON
-			fetch('FilterProductsServlet?' + params.toString(), { // Example using GET with params
-				method: 'GET', // Or POST if sending JSON body
-				headers: {
-					'Accept': 'application/json'
-					// 'Content-Type': 'application/json' // If sending POST with JSON body
-				}
-				// body: JSON.stringify(filters) // If sending POST
-			})
-					.then(response => {
-						if (!response.ok) {
-							throw new Error(`HTTP error ${response.status}`);
-						}
-						return response.json(); // Expecting JSON array of products
-					})
-					.then(data => { // Rename parameter to 'data' for clarity
-						console.log("Received data:", data); // Log the whole structure
-
-						if (data && data.error) {
-							// ... handle server error ...
-						} else if (data && Array.isArray(data.products)) { // Check data.products
-							console.log("Rendering products array:", data.products);
-							console.log("Vendor names:", data.vendorNames); // Log maps too
-							console.log("Average ratings:", data.averageRatings);
-
-							// *** CORRECTED CALL: Pass individual parts of the data object ***
-							renderProductGrid(data.products, data.vendorNames, data.averageRatings);
-
-							if(pageMessageHeading) pageMessageHeading.textContent = `Showing ${data.products.length} product(s)`;
-						} else {
-							console.error("Invalid data structure received:", data);
-							renderProductGrid([], {}, {}); // Pass empty structures on error
-							if(pageMessageHeading) pageMessageHeading.textContent = 'Error: Invalid data received';
-						}
-					})
-					.catch(error => {
-						console.error('Error applying filters:', error);
-						if(pageMessageHeading) pageMessageHeading.textContent = 'Error loading products';
-						if(productGridContainer) productGridContainer.innerHTML = '<div class="alert alert-danger">Could not load products. Please try again later.</div>';
-					});
-			// --- End AJAX/Fetch ---
-		}
-
-		// Function to dynamically render the product grid (Placeholder - Requires detailed implementation)
-		function renderProductGrid(productArray, vendorNameMap, ratingMap) {
-			const productGridContainer = document.getElementById('product-grid-container');
-			if (!productGridContainer) return;
-			productGridContainer.innerHTML = ''; // Clear existing products
-
-			if (!productArray || productArray.length === 0) {
-				productGridContainer.innerHTML = `
-            <div class="col-12">
-                <div class="no-products-found">
-                    <img src="Images/no-results.png" alt="No Products Found">
-                    <h4>No products match your criteria.</h4>
-                    <a href="products.jsp" class="btn btn-outline-primary mt-3">View All Products</a>
-                </div>
-            </div>`;
-				return;
-			}
-
-			const productGridRow = document.createElement('div');
-			// Add necessary grid classes based on how many items per row you want
-			productGridRow.className = 'row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-4';
-			let allCardsHtml = ''; // Build HTML string efficiently
-
-			// ** IMPORTANT: You need JS templating here **
-			// This is where you'd loop through the 'products' JSON array and build the
-			// HTML for each product card dynamically using JavaScript.
-			// This involves creating divs, imgs, spans, setting attributes, text content, etc.
-			// Libraries like Handlebars.js or just plain JS template literals can help.
-			productArray.forEach(product => {
-				// --- Prepare data for this card ---
-				try {
-					// --- Prepare data (same as before) ---
-					const productId = product.productId;
-					const productName = product.productName || 'N/A';
-					const productImages = product.productImages || '';
-					const vendorId = product.vendorId;
-					const vendorName = vendorNameMap[vendorId] || 'Phong Shop';
-					const avgRating = ratingMap[productId] || 0;
-					const isInWishlist = userWishlistPids.has(productId);
-
-					// --- Build Helper HTML Strings (same logic as before) ---
-					let wishlistButtonHtml = '';
-					try {
-						if (!isUserLoggedIn) {
-							wishlistButtonHtml = '<a href="login.jsp" class="btn wishlist-btn" title="Login to add to wishlist"><i class="fa-regular fa-heart not-in-wishlist"></i></a>';
-						} else {
-							if (isInWishlist) {
-								wishlistButtonHtml = '<a href="WishlistServlet?pid=' + productId + '&op=remove" class="btn wishlist-btn" title="Remove from Wishlist"><i class="fa-solid fa-heart in-wishlist"></i></a>';
-							} else {
-								wishlistButtonHtml = '<a href="WishlistServlet?pid=' + productId + '&op=add" class="btn wishlist-btn" title="Add to Wishlist"><i class="fa-regular fa-heart not-in-wishlist"></i></a>';
-							}
-						}
-					} catch(wlError) { console.error("Wishlist HTML Error", wlError); wishlistButtonHtml = ''; }
-
-					let ratingStarsHtml = '';
-					try {
-						if (avgRating > 0) {
-							let stars = '';
-							for (let i = 1; i <= 5; i++) {
-								if (avgRating >= i) stars += '<i class="fa-solid fa-star text-warning"></i>';
-								else if (avgRating >= i - 0.5) stars += '<i class="fa-solid fa-star-half-stroke text-warning"></i>';
-								else stars += '<i class="fa-regular fa-star text-warning"></i>';
-							}
-							const ratingFormatted = avgRating.toLocaleString(undefined,{minimumFractionDigits: 1, maximumFractionDigits: 1});
-							ratingStarsHtml = '<div class="star-rating mb-1" title="' + ratingFormatted + ' out of 5 stars"><small>' + stars + ' <span class="text-muted ms-1">(' + ratingFormatted + ')</span></small></div>';
-						} else {
-							ratingStarsHtml = '<div class="star-rating mb-1 text-muted"><small>No reviews yet</small></div>';
-						}
-					} catch (rateError) { console.error("Rating HTML Error", rateError); ratingStarsHtml = ''; }
-
-
-					let priceHtml = '';
-					try {
-						const formatter = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' });
-						const priceAfterDiscountNum = Number(product.productPriceAfterDiscount);
-						const priceOriginalNum = Number(product.productPrice);
-						const discountNum = Number(product.productDiscount);
-
-						const discountedPriceFormatted = !isNaN(priceAfterDiscountNum) ? formatter.format(priceAfterDiscountNum) : 'N/A';
-						const originalPriceFormatted = !isNaN(priceOriginalNum) ? formatter.format(priceOriginalNum) : '';
-
-						priceHtml = '<span class="price-discounted">' + discountedPriceFormatted + '</span>';
-						if (!isNaN(discountNum) && discountNum > 0) {
-							if (originalPriceFormatted) {
-								priceHtml += ' <span class="price-original">' + originalPriceFormatted + '</span>';
-							}
-							priceHtml += ' <span class="discount-badge">' + discountNum + '% off</span>';
-						}
-					} catch (priceError) { console.error("Price HTML Error", priceError); priceHtml = ''; }
-
-					// --- Assemble the card HTML using String Concatenation ---
-					// Escape quotes within attributes if necessary, though less needed here
-					// Use encodeURIComponent for URL parameters if they could contain special chars
-					let cardHtml = '';
-					cardHtml += '<div class="col">';
-					cardHtml += '  <div class="card h-100 product-card">';
-					cardHtml += '    <div class="wishlist-icon-container">' + wishlistButtonHtml + '</div>';
-					cardHtml += '    <a href="viewProduct.jsp?pid=' + productId + '">'; // Basic concatenation
-					cardHtml += '      <div class="card-img-container">';
-					// Ensure s3BaseUrl and productImages are defined and valid strings
-					cardHtml += '        <img src="' + s3BaseUrl + (productImages || '') + '" class="card-img-top" alt="' + (productName || '') + '">';
-					cardHtml += '      </div>';
-					cardHtml += '      <div class="card-body">';
-					cardHtml += '        <h5 class="card-title" title="' + (productName || '') + '">' + (productName || '') + '</h5>';
-					cardHtml += '        <div class="product-vendor mb-1">';
-					cardHtml += '          <small class="text-muted">Sold by: <a href="vendor_store.jsp?vid=' + vendorId + '" class="link-secondary">' + vendorName + '</a></small>';
-					cardHtml += '        </div>';
-					cardHtml +=          ratingStarsHtml; // Inject rating string
-					cardHtml += '        <div class="price-container">';
-					cardHtml +=             priceHtml; // Inject price string
-					cardHtml += '        </div>';
-					cardHtml += '      </div>';
-					cardHtml += '    </a>';
-					cardHtml += '  </div>';
-					cardHtml += '</div>';
-
-					allCardsHtml += cardHtml;
-
-				} catch (cardError) {
-					console.error(`Error rendering card structure for PID ${product ? product.productId : 'UNKNOWN'}:`, cardError);
-					allCardsHtml += `<div class="col"><div class="card h-100"><div class="card-body text-danger">Error loading product</div></div></div>`;
-				}
-			}); // End forEach
-
-			productGridRow.innerHTML = allCardsHtml; // Set the row's HTML all at once
-			console.log(`  PID ${productId} - Generated all card HTML:`, allCardsHtml); // <-- ADD LOG
-			productGridContainer.appendChild(productGridRow); // Add completed row to container
-		}
-
-
-		// --- Attach Event Listeners ---
-		filterForm.addEventListener('change', applyFilters);
-
-		// Initial load (Optional - might load initial state via JSP EL)
-		// applyFilters(); // Apply filters based on initial state (e.g., URL params)?
-
-	});
-</script>
 </body>
 </html>

@@ -194,14 +194,14 @@ public class ProductDao {
 	}
 
 	/**
-	 * Retrieves products with a discount of 30% or higher, ordered by discount descending.
+	 * Retrieves products with a discount, ordered by discount descending.
 	 * Manages its own database connection.
 	 *
 	 * @return A List of discounted Product objects, which may be empty. Returns null on major error.
 	 */
 	public List<Product> getDiscountedProducts() {
 		List<Product> list = new ArrayList<>();
-		String query = "select * from product where discount >= 30 order by discount desc";
+		String query = "select * from product where discount > 0 order by discount desc";
 
 		try (Connection con = ConnectionProvider.getConnection();
 			 Statement statement = con.createStatement();
