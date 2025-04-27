@@ -6,16 +6,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phong.dao.UserDao;
 import com.phong.entities.Admin;
 import com.phong.entities.Message;
 import com.phong.entities.User;
-// ConnectionProvider import is no longer needed here
-// import com.phong.helper.ConnectionProvider;
 
 public class UpdateUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -44,8 +47,58 @@ public class UpdateUserServlet extends HttpServlet {
 
 		// --- Process based on operation ---
 		try { // Wrap operations in a try-catch block
+			if (op.equals("deleteUser")) {
+				// Set response type to JSON *only* for this operation
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+				PrintWriter out = response.getWriter();
+				Map<String, Object> jsonResponse = new HashMap<>();
+				String jsonStatus = "error";
+				String jsonMessage = "An error occurred during deletion.";
 
-			if (op.equals("changeAddress")) {
+				// Security Check
+				Admin activeAdmin = (Admin) session.getAttribute("activeAdmin");
+				if (activeAdmin == null) {
+					jsonStatus = "error";
+					jsonMessage = "Unauthorized operation.";
+				} else {
+					// Proceed with deletion logic
+					String uidParam = request.getParameter("uid");
+					if (uidParam == null || uidParam.trim().isEmpty()) {
+						jsonStatus = "error";
+						jsonMessage = "User ID is required for deletion.";
+					} else {
+						try {
+							int uid = Integer.parseInt(uidParam.trim());
+							boolean success = userDao.deleteUser(uid);
+							if (success) {
+								jsonStatus = "success";
+								jsonMessage = "User deleted successfully!";
+								jsonResponse.put("deletedId", uid); // Send back deleted ID
+							} else {
+								jsonStatus = "error";
+								jsonMessage = "Failed to delete user. User might not exist.";
+							}
+						} catch (NumberFormatException e) {
+							jsonStatus = "error";
+							jsonMessage = "Invalid User ID format.";
+						} catch (Exception e) {
+							// Catch DB or other errors during delete
+							jsonStatus = "error";
+							jsonMessage = "Server error during delete operation: " + e.getMessage();
+							System.err.println("Error during user delete processing: " + e.getMessage());
+							e.printStackTrace();
+						}
+					}
+				}
+				// Populate and send JSON response for delete operation
+				jsonResponse.put("status", jsonStatus);
+				jsonResponse.put("message", jsonMessage);
+				out.print(objectMapper.writeValueAsString(jsonResponse));
+				out.flush();
+				return; // IMPORTANT: Stop further processing for deleteUser
+
+			} else if (op.equals("changeAddress")) {
 				// --- Change Address Operation ---
 
 				// Check if user is logged in
@@ -157,40 +210,6 @@ public class UpdateUserServlet extends HttpServlet {
 				response.sendRedirect("profile.jsp"); // Redirect back to profile page
 				// Redirect handles response flow
 
-
-			} else if (op.equals("deleteUser")) {
-				// --- Delete User Operation (Likely Admin Action) ---
-
-				// !!! SECURITY WARNING: Add access control here! !!!
-				// Check if an admin user is logged in before allowing deletion.
-                Admin activeAdmin = (Admin) session.getAttribute("activeAdmin");
-                if (activeAdmin == null) {
-                    message = new Message("Unauthorized operation.", "error", "alert-danger");
-                    session.setAttribute("message", message);
-                    response.sendRedirect("adminlogin.jsp"); // Or appropriate access denied page
-                    return;
-                }
-
-
-				String uidParam = request.getParameter("uid");
-				if (uidParam == null || uidParam.trim().isEmpty()) {
-					message = new Message("User ID is required for deletion.", "error", "alert-warning");
-					session.setAttribute("message", message);
-					return;
-				}
-
-				int uid = Integer.parseInt(uidParam.trim()); // Potential NumberFormatException
-
-				// Call DAO method
-				boolean success = userDao.deleteUser(uid);
-
-				if (success) {
-					message = new Message("User deleted successfully!", "success", "alert-success");
-				} else {
-					message = new Message("Failed to delete user. The user might not exist or an error occurred.", "error", "alert-danger");
-				}
-				session.setAttribute("message", message);
-				// Redirect handles response flow
 
 			} else {
 				// --- Unknown Operation ---
