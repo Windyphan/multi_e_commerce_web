@@ -47,22 +47,22 @@
 <body>
 <!-- Add Category Modal -->
 <div class="modal fade" id="add-category" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true" data-bs-theme="light">
-    <div class="modal-dialog modal-dialog-centered"> <%-- Vertically center --%>
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="addCategoryModalLabel">Add New Category</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="AddOperationServlet" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <form id="add-category-form" action="AddOperationServlet" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                 <div class="modal-body">
                     <input type="hidden" name="operation" value="addCategory">
                     <div class="mb-3">
-                        <label for="categoryNameInputModal" class="form-label">Category Name</label> <%-- Unique ID if needed --%>
+                        <label for="categoryNameInputModal" class="form-label">Category Name</label>
                         <input type="text" name="category_name" id="categoryNameInputModal" placeholder="Enter category name" class="form-control" required>
                         <div class="invalid-feedback">Please enter a category name.</div>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryImageInputModal" class="form-label">Category Image</label> <%-- Unique ID --%>
+                        <label for="categoryImageInputModal" class="form-label">Category Image</label>
                         <input class="form-control" type="file" name="category_img" id="categoryImageInputModal" required accept="image/*">
                         <div class="invalid-feedback">Please select an image file.</div>
                     </div>

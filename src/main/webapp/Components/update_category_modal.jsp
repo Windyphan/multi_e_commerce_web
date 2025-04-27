@@ -59,7 +59,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 
-<%-- Main Content Wrapper --%>
+<!-- Update Category Modal -->
 <div class="modal fade" id="updateCategoryModal" tabindex="-1" aria-labelledby="updateCategoryModalLabel" aria-hidden="true" data-bs-theme="light">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -67,18 +67,16 @@
 				<h5 class="modal-title" id="updateCategoryModalLabel">Edit Category Details</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
-			<form action="AddOperationServlet" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-				<%-- Hidden fields --%>
+			<form id="update-category-form" action="AddOperationServlet" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+				<%-- Hidden fields - Values will be set by JavaScript --%>
 				<input type="hidden" name="operation" value="updateCategory">
-				<input type="hidden" name="cid" value="${category.categoryId}">
-				<input type="hidden" name="image" value="${category.categoryImage}">
+				<input type="hidden" name="cid" value=""> <%-- Value set by JS --%>
+				<input type="hidden" name="image" value=""> <%-- Value set by JS --%>
 
 				<div class="modal-body">
-
 					<div class="mb-3">
 						<label for="updateCategoryNameInputModal" class="form-label">Category Name</label>
-						<input type="text" class="form-control" id="updateCategoryNameInputModal" name="category_name"
-							   value="<c:out value='${category.categoryName}'/>" required>
+						<input type="text" class="form-control" id="updateCategoryNameInputModal" name="category_name" value="" required>
 						<div class="invalid-feedback">Category name is required.</div>
 					</div>
 
@@ -90,20 +88,13 @@
 
 					<div class="mb-3">
 						<span class="current-img-label">Current Image:</span>
-						<c:choose>
-							<c:when test="${not empty category.categoryImage}">
-								<img src="${s3BaseUrl}${category.categoryImage}" <%-- Forward slash --%>
-									 alt="Current image for ${category.categoryName}" class="current-img-preview">
-								<span class="ms-2 fst-italic"><c:out value="${category.categoryImage}"/></span>
-							</c:when>
-							<c:otherwise>
-								<span class="ms-2 text-muted">No image uploaded</span>
-							</c:otherwise>
-						</c:choose>
+						<div id="current-image-preview-container" style="display: inline-block; vertical-align: middle;">
+							<%-- JS will add <img> or <span> here --%>
+						</div>
 					</div>
 				</div>
 
-				<div class="card-footer text-center">
+				<div class="modal-footer text-center">
 					<button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
 						<i class="fa-solid fa-times"></i> Cancel
 					</button>
@@ -115,6 +106,7 @@
 		</div>
 	</div>
 </div>
+<!-- End Update Category Modal -->
 
 </body>
 </html>
