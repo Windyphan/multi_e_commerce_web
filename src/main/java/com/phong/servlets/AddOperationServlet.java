@@ -1,36 +1,38 @@
 package com.phong.servlets;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-// Remove File I/O imports if no longer needed elsewhere
-// import java.io.File;
-// import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
-import java.util.UUID; // For unique filenames
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phong.dao.CategoryDao;
 import com.phong.dao.ProductDao;
 import com.phong.dao.VendorDao;
 import com.phong.entities.Category;
-import com.phong.entities.Message;
+import com.phong.entities.Message; // Keep for potential non-AJAX errors if needed later
 import com.phong.entities.Product;
 import com.phong.entities.Admin;
 
-// AWS S3 SDK Imports
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.S3Exception; // More specific exception
+import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.core.sync.RequestBody;
 
+@MultipartConfig
 public class AddOperationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -38,7 +40,6 @@ public class AddOperationServlet extends HttpServlet {
 	private static final String S3_BUCKET_NAME = "phong-ecommerce-assets";
 	private static final String S3_REGION_ID = "eu-north-1";
 	private static final String S3_FOLDER_PATH = "Product_imgs/";
-
 	// Helper to create the S3 client (ensure credentials are provided via Instance Profile)
 	private S3Client getS3Client() {
 		Region region = Region.of(S3_REGION_ID);
@@ -123,321 +124,284 @@ public class AddOperationServlet extends HttpServlet {
 			s3.close();
 		}
 	}
+	// --- End S3 ---
 
+	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		HttpSession session = request.getSession();
-		Message message = null;
-		String redirectPage = "";
 
 		// Security Check
 		Admin activeAdmin = (Admin) session.getAttribute("activeAdmin");
 		if (activeAdmin == null) {
-			message = new Message("Unauthorized access. Please log in as admin.", "error", "alert-danger");
-			session.setAttribute("message", message);
-			response.sendRedirect("adminlogin.jsp");
+			// For AJAX, we should return a JSON error, not redirect immediately
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Set 401 status
+			PrintWriter out = response.getWriter();
+			Map<String, Object> errorResponse = new HashMap<>();
+			errorResponse.put("status", "error");
+			errorResponse.put("message", "Unauthorized access. Please log in as admin.");
+			out.print(objectMapper.writeValueAsString(errorResponse));
+			out.flush();
 			return;
 		}
+
+		// Get Operation
+		String operation = request.getParameter("operation");
+		if (operation == null || operation.trim().isEmpty()) {
+			sendJsonError(response, "No operation specified.");
+			return;
+		}
+		operation = operation.trim();
+
+		// --- Setup for JSON Response ---
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		PrintWriter out = response.getWriter();
+		Map<String, Object> jsonResponse = new HashMap<>();
+		String jsonStatus = "error"; // Default status
+		String jsonMessage = "An unknown error occurred."; // Default message
 
 		// DAOs
 		CategoryDao categoryDao = new CategoryDao();
 		ProductDao productDao = new ProductDao();
 		VendorDao vendorDao = new VendorDao();
 
-		// Operation
-		String operation = request.getParameter("operation");
-		if (operation == null || operation.trim().isEmpty()) {
-			message = new Message("No operation specified.", "error", "alert-warning");
-			session.setAttribute("message", message);
-			response.sendRedirect("admin.jsp");
-			return;
-		}
-		operation = operation.trim();
-
-
-		// --- Process Operations ---
+		// --- Process ALL Operations within a Single Try-Catch for AJAX ---
 		try {
-			boolean dbSuccess = false;
-			boolean fileOpSuccess = false; // Track file operation success separately
-			String fileNameForDb = null; // Will hold the filename to save
-			String oldFileNameToDelete = null; // For updates/deletes
+			String fileOpResultName = null;
+			String oldFileNameToDeleteOnSuccess = null;
+			boolean fileOpOccurred = false;
 
+			// --- Category Operations ---
 			if (operation.equals("addCategory")) {
-				String categoryName = request.getParameter("category_name");
 				Part part = request.getPart("category_img");
+				String categoryName = request.getParameter("category_name");
 
-				if (categoryName == null || categoryName.trim().isEmpty() ) { throw new ServletException("Category name is required."); }
-				// Image is required for add category
-				if (part == null || part.getSize() == 0 || part.getSubmittedFileName() == null || part.getSubmittedFileName().trim().isEmpty()) { throw new ServletException("Category image is required."); }
+				if (categoryName == null || categoryName.trim().isEmpty()) throw new Exception("Category name is required.");
+				if (part == null || part.getSize() == 0 || part.getSubmittedFileName() == null || part.getSubmittedFileName().trim().isEmpty()) throw new Exception("Category image is required.");
 
-				// 1. Upload file to S3 first
-				fileNameForDb = uploadFileToS3(part, null); // Pass null as no existing file
-				fileOpSuccess = (fileNameForDb != null); // Check if upload returned a filename
+				fileOpResultName = uploadFileToS3(part, null);
+				if (fileOpResultName != null) {
+					Category category = new Category(categoryName.trim(), fileOpResultName);
+					boolean saveSuccess = categoryDao.saveCategory(category);
+					Category savedCategory = null;
+					if(saveSuccess) {
+						savedCategory = category; // TEMPORARY - Lacks ID
+						System.err.println("WARN: addCategory response lacks generated ID. Modify DAO.saveCategory or fetch category again.");
+					}
 
-				// 2. If upload succeeded, save to DB
-				if (fileOpSuccess) {
-					Category category = new Category(categoryName.trim(), fileNameForDb);
-					dbSuccess = categoryDao.saveCategory(category);
-					if (dbSuccess) {
-						message = new Message("Category added successfully!", "success", "alert-success");
+					if (savedCategory != null) {
+						jsonStatus = "success";
+						jsonMessage = "Category added successfully!";
+						jsonResponse.put("newCategory", savedCategory);
 					} else {
-						message = new Message("Image uploaded to S3, but failed to save category to database!", "error", "alert-danger");
-						// Attempt to delete the just-uploaded S3 file for consistency
-						deleteFileFromS3(fileNameForDb);
+						jsonMessage = "Image uploaded, but failed to save category to database!";
+						deleteFileFromS3(fileOpResultName); // Rollback S3
 					}
 				} else {
-					message = new Message("Failed to upload category image.", "error", "alert-danger");
+					jsonMessage = "Failed to upload category image.";
 				}
 
-			}else if (operation.equals("updateCategory")) {
+			} else if (operation.equals("updateCategory")) {
+				Part part = request.getPart("category_img");
 				int cid = Integer.parseInt(request.getParameter("cid").trim());
 				String name = request.getParameter("category_name");
-				Part part = request.getPart("category_img");
-				String existingImage = request.getParameter("image"); // Current image filename
+				String existingImage = request.getParameter("image");
 
-				if (name == null || name.trim().isEmpty()) { throw new ServletException("Category name is required for update."); }
+				if (name == null || name.trim().isEmpty()) throw new Exception("Category name is required for update.");
 
-				fileNameForDb = existingImage; // Start with existing image
-				boolean newFileUploaded = (part != null && part.getSize() > 0 && part.getSubmittedFileName() != null && !part.getSubmittedFileName().trim().isEmpty());
+				String finalImageNameToSave = existingImage;
+				boolean newFileProvided = (part != null && part.getSize() > 0 && part.getSubmittedFileName() != null && !part.getSubmittedFileName().trim().isEmpty());
 
-				// 1. If new file uploaded, upload it and potentially mark old one for deletion
-				if (newFileUploaded) {
-					String uploadedFileName = uploadFileToS3(part, existingImage); // Pass existing in case new fails
-					if(uploadedFileName != null && !uploadedFileName.equals(existingImage)) {
-						fileNameForDb = uploadedFileName; // Use the newly uploaded filename
-						oldFileNameToDelete = existingImage; // Mark the old one for deletion IF DB update succeeds
-						fileOpSuccess = true;
+				if (newFileProvided) {
+					fileOpResultName = uploadFileToS3(part, existingImage);
+					if (fileOpResultName != null && !fileOpResultName.equals(existingImage)) {
+						finalImageNameToSave = fileOpResultName;
+						oldFileNameToDeleteOnSuccess = existingImage;
+						fileOpOccurred = true;
 					} else {
-						// Upload failed, keep existing image name, set fileOp success to false (but DB update might proceed)
-						fileOpSuccess = false;
-						System.err.println("Update Category: New file upload failed for CID " + cid + ", keeping old image.");
-						// Decide if you want to proceed with DB update even if file failed
-						message = new Message("Category name updated, but new image upload failed!", "warning", "alert-warning");
+						System.err.println("Product Update: Upload of new image failed or was same. Keeping existing.");
+						// Maybe set warning: jsonMessage = "Details updated, but image upload failed.";
 					}
-				} else {
-					fileOpSuccess = true; // No new file to upload, so file operation is considered successful
 				}
 
-				// 2. Update database record (always try this unless upload failed and you don't want to proceed)
-				Category category = new Category(cid, name.trim(), fileNameForDb); // Use potentially new filename
-				dbSuccess = categoryDao.updateCategory(category);
+				Category categoryToUpdate = new Category(cid, name.trim(), finalImageNameToSave);
+				boolean dbSuccess = categoryDao.updateCategory(categoryToUpdate);
 
 				if (dbSuccess) {
-					if (fileOpSuccess) {
-						// If DB success AND file op success (new upload ok, or no new upload)
-						if (oldFileNameToDelete != null) {
-							deleteFileFromS3(oldFileNameToDelete); // Delete old image *after* DB success
-						}
-						if (message == null) { // Don't overwrite warning message if file upload failed earlier
-							message = new Message("Category updated successfully!", "success", "alert-success");
-						}
-					} // else: fileOpSuccess was false, message already set to warning
+					jsonStatus = "success";
+					jsonMessage = "Category updated successfully!";
+					if (fileOpOccurred && oldFileNameToDeleteOnSuccess != null) {
+						deleteFileFromS3(oldFileNameToDeleteOnSuccess);
+					}
+					jsonResponse.put("updatedCategory", categoryToUpdate);
 				} else {
-					message = new Message("Failed to update category in database.", "error", "alert-danger");
-					// If new file was uploaded but DB failed, delete the new file from S3
-					if (newFileUploaded && fileOpSuccess) {
-						deleteFileFromS3(fileNameForDb);
+					jsonMessage = "Failed to update category in database.";
+					if (fileOpOccurred && oldFileNameToDeleteOnSuccess != null) {
+						deleteFileFromS3(finalImageNameToSave); // Rollback new S3 upload
 					}
 				}
-
 
 			} else if (operation.equals("deleteCategory")) {
 				int cid = Integer.parseInt(request.getParameter("cid").trim());
-
-				// 1. Get category details BEFORE deleting from DB to know image filename
 				Category catToDelete = categoryDao.getCategoryById(cid);
-				oldFileNameToDelete = (catToDelete != null) ? catToDelete.getCategoryImage() : null;
+				if (catToDelete == null) throw new Exception("Category not found for deletion.");
 
-				// 2. Delete from Database FIRST (handle FK constraints if necessary)
-				dbSuccess = categoryDao.deleteCategory(cid);
+				oldFileNameToDeleteOnSuccess = catToDelete.getCategoryImage();
+				boolean dbSuccess = categoryDao.deleteCategory(cid);
 
 				if (dbSuccess) {
-					// 3. If DB delete succeeded, delete image from S3
-					fileOpSuccess = deleteFileFromS3(oldFileNameToDelete);
-					if (fileOpSuccess) {
-						message = new Message("Category deleted successfully!", "success", "alert-success");
-					} else {
-						message = new Message("Category deleted from DB, but failed to remove image from S3.", "warning", "alert-warning");
-					}
+					jsonStatus = "success";
+					jsonMessage = "Category deleted successfully!";
+					deleteFileFromS3(oldFileNameToDeleteOnSuccess);
+					jsonResponse.put("deletedCategoryId", cid);
 				} else {
-					message = new Message("Failed to delete category. It might be in use or not exist.", "error", "alert-danger");
+					jsonMessage = "Failed to delete category (might be in use or DB error).";
 				}
 
+				// --- Vendor Operations ---
+			} else if (operation.equals("approveVendor") || operation.equals("suspendVendor")) {
+				int vendorId = Integer.parseInt(request.getParameter("vid"));
+				boolean dbSuccess = false;
+				boolean newStatusIsApproved = false;
 
+				if (operation.equals("approveVendor")) {
+					dbSuccess = vendorDao.approveVendor(vendorId);
+					newStatusIsApproved = dbSuccess; // Status is approved if success
+					jsonMessage = dbSuccess ? "Vendor approved successfully." : "Failed to approve vendor.";
+				} else { // suspendVendor
+					dbSuccess = vendorDao.suspendVendor(vendorId);
+					newStatusIsApproved = !dbSuccess; // Status is NOT approved if success (it's suspended)
+					jsonMessage = dbSuccess ? "Vendor suspended successfully." : "Failed to suspend vendor.";
+				}
+
+				if(dbSuccess) {
+					jsonStatus = "success";
+					jsonResponse.put("vendorId", vendorId);
+					jsonResponse.put("isApproved", newStatusIsApproved);
+				} // else status remains 'error', message set above
+
+				// --- Product Operations ---
 			} else if (operation.equals("updateProduct")) {
+				Part part = request.getPart("product_img");
 				int pid = Integer.parseInt(request.getParameter("pid").trim());
 				String name = request.getParameter("name");
 				String priceStr = request.getParameter("price");
 				String description = request.getParameter("description");
 				String quantityStr = request.getParameter("quantity");
 				String discountStr = request.getParameter("discount");
-				String categoryTypeStr = request.getParameter("categoryType");
-				Part part = request.getPart("product_img");
+				String categoryIdStr = request.getParameter("categoryType");
 				String existingImage = request.getParameter("image");
-				// ... Get and validate other parameters: price, desc, qty, discount, cid ...
-				if (name == null || name.trim().isEmpty() || priceStr == null || priceStr.trim().isEmpty() ||
-						description == null || description.trim().isEmpty() || discountStr == null || discountStr.trim().isEmpty() ||
-						quantityStr == null || quantityStr.trim().isEmpty() || categoryTypeStr == null || categoryTypeStr.trim().isEmpty() ||
-						part == null || part.getSize() == 0 || part.getSubmittedFileName() == null || part.getSubmittedFileName().trim().isEmpty())
-				{ throw new ServletException("Required fields missing for update."); }
+
+				if (name == null || name.trim().isEmpty() || priceStr == null || categoryIdStr == null) throw new Exception("Name, Price, Category are required.");
 				float price = Float.parseFloat(priceStr.trim());
 				int quantity = Integer.parseInt(quantityStr.trim());
 				int discount = Integer.parseInt(discountStr.trim());
-				int cid = /*... logic to determine category ID from request ...*/ 0;
-				if (price < 0 || quantity < 0) throw new ServletException("Price and Quantity cannot be negative.");
+				int cid = Integer.parseInt(categoryIdStr.trim());
+				if (price < 0 || quantity < 0 || cid <= 0) throw new Exception("Invalid price, quantity, or category.");
 				if (discount < 0 || discount > 100) discount = 0;
 
+				String finalImageNameToSave = existingImage;
+				boolean newFileProvided = (part != null && part.getSize() > 0 && part.getSubmittedFileName() != null && !part.getSubmittedFileName().trim().isEmpty());
 
-				fileNameForDb = existingImage; // Start with existing image
-				boolean newFileUploaded = (part != null && part.getSize() > 0 && part.getSubmittedFileName() != null && !part.getSubmittedFileName().trim().isEmpty());
-
-				// 1. Handle potential new file upload
-				if (newFileUploaded) {
-					String uploadedFileName = uploadFileToS3(part, existingImage);
-					if(uploadedFileName != null && !uploadedFileName.equals(existingImage)) {
-						fileNameForDb = uploadedFileName;
-						oldFileNameToDelete = existingImage;
-						fileOpSuccess = true;
+				if (newFileProvided) {
+					fileOpResultName = uploadFileToS3(part, existingImage);
+					if (fileOpResultName != null && !fileOpResultName.equals(existingImage)) {
+						finalImageNameToSave = fileOpResultName;
+						oldFileNameToDeleteOnSuccess = existingImage;
+						fileOpOccurred = true;
 					} else {
-						fileOpSuccess = false;
-						System.err.println("Update Product: New file upload failed for PID " + pid + ", keeping old image.");
-						message = new Message("Product details updated, but new image upload failed!", "warning", "alert-warning");
+						System.err.println("Product Update: Upload of new image failed or was same. Keeping existing.");
+						// Maybe set warning: jsonMessage = "Details updated, but image upload failed.";
 					}
-				} else {
-					fileOpSuccess = true; // No new file upload needed
 				}
 
-				// 2. Update database record
 				Product existingProduct = productDao.getProductsByProductId(pid);
-				Product productToUpdate = new Product(pid, name.trim(), description.trim(), price, discount, quantity, fileNameForDb, cid, existingProduct.getVendorId()); // Keep original vendor ID
-				if (existingProduct == null) throw new ServletException("Product to update not found.");
-				dbSuccess = productDao.updateProduct(productToUpdate);
+				if (existingProduct == null) throw new Exception("Product not found.");
+
+				Product productToUpdate = new Product(pid, name.trim(), description.trim(), price, discount, quantity, finalImageNameToSave, cid, existingProduct.getVendorId());
+				boolean dbSuccess = productDao.updateProduct(productToUpdate);
 
 				if (dbSuccess) {
-					if (fileOpSuccess) {
-						if (oldFileNameToDelete != null) {
-							deleteFileFromS3(oldFileNameToDelete);
-						}
-						if (message == null) {
-							message = new Message("Product updated successfully!", "success", "alert-success");
-						}
-					} // else: fileOpSuccess false, warning message already set
+					jsonStatus = "success";
+					jsonMessage = "Product updated successfully!";
+					if (fileOpOccurred && oldFileNameToDeleteOnSuccess != null) {
+						deleteFileFromS3(oldFileNameToDeleteOnSuccess);
+					}
+					// Fetch updated product data again to include calculated priceAfterDiscount if needed by JS
+					Product fetchedUpdatedProduct = productDao.getProductsByProductId(pid);
+					jsonResponse.put("updatedProduct", fetchedUpdatedProduct != null ? fetchedUpdatedProduct : productToUpdate ); // Send back updated product
 				} else {
-					message = new Message("Failed to update product in database.", "error", "alert-danger");
-					if (newFileUploaded && fileOpSuccess) {
-						deleteFileFromS3(fileNameForDb); // Rollback S3 upload if DB failed
+					jsonMessage = "Failed to update product in database.";
+					if (fileOpOccurred && oldFileNameToDeleteOnSuccess != null) {
+						deleteFileFromS3(finalImageNameToSave); // Rollback S3
 					}
 				}
 
 			} else if (operation.equals("deleteProduct")) {
 				int pid = Integer.parseInt(request.getParameter("pid").trim());
-
-				// 1. Get product details to find image filename
 				Product prodToDelete = productDao.getProductsByProductId(pid);
-				oldFileNameToDelete = (prodToDelete != null) ? prodToDelete.getProductImages() : null;
+				if (prodToDelete == null) throw new Exception("Product not found for deletion.");
 
-				// 2. Delete from Database FIRST
-				dbSuccess = productDao.deleteProduct(pid);
+				String imageToDelete = prodToDelete.getProductImages();
+				boolean dbSuccess = productDao.deleteProduct(pid);
 
 				if (dbSuccess) {
-					// 3. If DB delete succeeded, delete image from S3
-					fileOpSuccess = deleteFileFromS3(oldFileNameToDelete);
-					if (fileOpSuccess) {
-						message = new Message("Product deleted successfully!", "success", "alert-success");
-					} else {
-						message = new Message("Product deleted from DB, but failed to remove image from S3.", "warning", "alert-warning");
-					}
+					jsonStatus = "success";
+					jsonMessage = "Product deleted successfully!";
+					deleteFileFromS3(imageToDelete);
+					jsonResponse.put("deletedProductId", pid);
 				} else {
-					message = new Message("Failed to delete product. It might be in use or not exist.", "error", "alert-danger");
+					jsonMessage = "Failed to delete product (DB error or constraints).";
 				}
 
-			} else if (operation.equals("approveVendor")) {
-				try {
-					int vendorId = Integer.parseInt(request.getParameter("vid"));
-					if (vendorDao.approveVendor(vendorId)) {
-						message = new Message("Vendor approved successfully.", "success", "alert-success");
-						// TODO: Maybe send an approval email to the vendor?
-					} else {
-						message = new Message("Failed to approve vendor (maybe already approved or error occurred).", "error", "alert-danger");
-					}
-				} catch (NumberFormatException nfe) {
-					message = new Message("Invalid Vendor ID for approval.", "error", "alert-warning");
-				}
-			} else if (operation.equals("suspendVendor")) {
-					try {
-						int vendorId = Integer.parseInt(request.getParameter("vid"));
-						if (vendorDao.suspendVendor(vendorId)) {
-							message = new Message("Vendor suspended successfully.", "success", "alert-success");
-							// TODO: Maybe send an approval email to the vendor?
-						} else {
-							message = new Message("Failed to suspend vendor (maybe already approved or error occurred).", "error", "alert-danger");
-						}
-					} catch (NumberFormatException nfe) {
-						message = new Message("Invalid Vendor ID for suspend.", "error", "alert-warning");
-					}
+				// --- Unknown Operation ---
 			} else {
-				message = new Message("Unknown operation: " + operation, "error", "alert-warning");
-				redirectPage = "admin.jsp";
+				jsonMessage = "Unknown operation specified: " + operation;
+				// Status remains 'error'
 			}
 
-		} catch (NumberFormatException e) {
-			message = new Message("Invalid number format provided.", "error", "alert-danger");
-			System.err.println("NumberFormatException in AddOperationServlet: " + e.getMessage());
-			redirectPage = determineRedirectOnError(operation);
-		} catch (S3Exception e) { // Catch specific S3 exceptions from helpers
-			message = new Message("Error communicating with storage service: " + e.awsErrorDetails().errorMessage(), "error", "alert-danger");
-			System.err.println("S3Exception in AddOperationServlet: " + e.getMessage());
-			e.printStackTrace();
-			redirectPage = determineRedirectOnError(operation);
-		} catch (IOException | ServletException e) {
-			message = new Message("Error processing request or file: " + e.getMessage(), "error", "alert-danger");
-			System.err.println("IOException/ServletException in AddOperationServlet: " + e.getMessage());
-			e.printStackTrace();
-			redirectPage = determineRedirectOnError(operation);
-		} catch (Exception e) {
-			message = new Message("An unexpected error occurred: " + e.getMessage(), "error", "alert-danger");
-			System.err.println("Unexpected Error in AddOperationServlet: " + e.getMessage());
-			e.printStackTrace();
-			redirectPage = determineRedirectOnError(operation);
-		}
+		} catch (NumberFormatException nfe) { jsonMessage = "Invalid number format provided."; logError(operation, nfe); }
+		catch (S3Exception s3e) { jsonMessage = "Storage error: " + s3e.awsErrorDetails().errorMessage(); logError(operation, s3e); }
+		catch (IOException | ServletException io_se) { jsonMessage = "Error processing request/file: "+ io_se.getMessage(); logError(operation, io_se); }
+		catch (Exception e) { jsonMessage = "Error: " + e.getMessage(); logError(operation, e); }
 
-		// --- Set final message and Redirect ---
-		if (message == null) { // Should have been set by logic above
-			message = new Message("Operation status unknown.", "warning", "alert-warning");
-			System.err.println("Warning: Operation '" + operation + "' completed without setting a message.");
-		}
-		session.setAttribute("message", message);
+		// --- Send the final JSON Response ---
+		jsonResponse.put("status", jsonStatus);
+		jsonResponse.put("message", jsonMessage);
+		out.print(objectMapper.writeValueAsString(jsonResponse));
+		out.flush();
+		// No redirect needed, AJAX handles response
 	}
 
 
-	// Helper to determine redirect page on error
-	private String determineRedirectOnError(String operation) {
-		if (operation == null) return "admin.jsp";
-		switch (operation) {
-			case "addCategory":
-				return "admin.jsp";
-			case "updateCategory":
-			case "deleteCategory":
-				return "admin.jsp";
-			case "updateProduct":
-			case "deleteProduct":
-				return "admin.jsp";
-			case "approveVendor":
-				return "admin.jsp";
-			default:
-				return "admin.jsp";
-		}
+	// Helper to log errors consistently
+	private void logError(String operation, Exception e) {
+		System.err.println("Error during AJAX operation '" + operation + "': " + e.getMessage());
+		e.printStackTrace(); // Print stack trace for details
+	}
+
+	// Helper to send JSON error (used for early exits like missing operation)
+	private void sendJsonError(HttpServletResponse response, String message) throws IOException {
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Set 400 status for bad request
+		PrintWriter out = response.getWriter();
+		Map<String, Object> errorResponse = new HashMap<>();
+		errorResponse.put("status", "error");
+		errorResponse.put("message", message);
+		out.print(objectMapper.writeValueAsString(errorResponse));
+		out.flush();
 	}
 
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// Redirect GET requests for admin operations
-		HttpSession session = req.getSession();
-		Message message = new Message("Invalid request method for this operation.", "error", "alert-warning");
-		session.setAttribute("message", message);
-		resp.sendRedirect("admin.jsp");
+		// Reject GET requests for modification operations
+		sendJsonError(resp, "GET method not supported for this operation.");
 	}
 }

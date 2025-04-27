@@ -82,14 +82,32 @@
 			margin-bottom: 1.5rem;
 			font-weight: 500;
 		}
+		/* Style for AJAX loading indicator (optional) */
+		.ajax-loader {
+			display: none; /* Hidden by default */
+			/* Add styles for a spinner or loading text */
+			font-style: italic;
+			color: #6c757d;
+		}
+		/* Simple alert styling for dynamic messages */
+		#admin-alert-placeholder .alert {
+			display: none; /* Hidden initially */
+		}
 	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
 
 <%-- Main Content Wrapper --%>
 <main>
-
 	<h2 class="mb-4">Manage Administrators</h2>
+
+	<%-- Placeholder for dynamic AJAX messages --%>
+	<div id="admin-alert-placeholder" class="mb-3">
+		<div class="alert" role="alert">
+			<span class="alert-message"></span>
+			<button type="button" class="btn-close float-end" aria-label="Close" onclick="$(this).parent().hide();"></button>
+		</div>
+	</div>
 
 	<div class="row">
 		<%-- Column 1: Add Admin Form --%>
@@ -100,8 +118,9 @@
 					<div class="text-center">
 						<img src="Images/admin.png" alt="Admin Icon">
 					</div>
-					<%-- Add Admin Form --%>
-					<form action="AdminServlet?operation=save" method="post" class="needs-validation" novalidate>
+					<%-- ADD ID TO FORM --%>
+					<form id="add-admin-form" action="AdminServlet?operation=save" method="post" class="needs-validation" novalidate>
+						<%-- ... (form inputs remain the same) ... --%>
 						<div class="mb-3">
 							<label for="adminName" class="form-label">Name</label>
 							<input type="text" class="form-control" id="adminName" name="name" placeholder="Enter full name" required>
@@ -114,18 +133,19 @@
 						</div>
 						<div class="mb-3">
 							<label for="adminPassword" class="form-label">Password</label>
-							<input type="password" class="form-control" id="adminPassword" name="password" placeholder="Enter password" required minlength="8"> <%-- Example min length --%>
+							<input type="password" class="form-control" id="adminPassword" name="password" placeholder="Enter password" required minlength="8">
 							<div class="invalid-feedback">Password must be at least 8 characters.</div>
 						</div>
 						<div class="mb-3">
 							<label for="adminPhone" class="form-label">Phone</label>
-							<input type="tel" class="form-control" id="adminPhone" name="phone" placeholder="Enter phone number" required pattern="[0-9\s\-+()]*" title="Enter a valid phone number"> <%-- Basic pattern --%>
+							<input type="tel" class="form-control" id="adminPhone" name="phone" placeholder="Enter phone number" required pattern="[0-9\s\-+()]*" title="Enter a valid phone number">
 							<div class="invalid-feedback">Please enter a valid phone number.</div>
 						</div>
-						<div class="d-grid pt-2"> <%-- Use grid for full width button --%>
+						<div class="d-grid pt-2">
 							<button type="submit" class="btn btn-primary">
 								<i class="fa-solid fa-user-plus"></i> Register Admin
 							</button>
+							<span class="ajax-loader mt-2 text-center">Processing...</span> <%-- Optional loader --%>
 						</div>
 					</form>
 				</div>
@@ -136,9 +156,9 @@
 		<div class="col-lg-8">
 			<div class="card">
 				<div class="card-header">Existing Admins</div>
-				<div class="card-body p-0"> <%-- Remove padding for table --%>
+				<div class="card-body p-0">
 					<div class="table-responsive">
-						<table class="table table-hover admin-table mb-0"> <%-- Remove bottom margin --%>
+						<table class="table table-hover admin-table mb-0">
 							<thead>
 							<tr class="text-center">
 								<th>Name</th>
@@ -147,25 +167,26 @@
 								<th>Action</th>
 							</tr>
 							</thead>
-							<tbody>
-							<%-- Check if list is empty --%>
-							<c:if test="${empty listOfAdmins}">
-								<tr>
-									<td colspan="4" class="text-center text-muted p-4">No admins found.</td>
-								</tr>
-							</c:if>
-							<%-- Loop through admins using JSTL --%>
+							<%-- ADD ID TO TABLE BODY --%>
+							<tbody id="admin-table-body">
+							<%-- Placeholder for empty state, handled dynamically now --%>
+							<tr id="admin-no-results-row" style="${empty listOfAdmins ? '' : 'display: none;'}">
+								<td colspan="4" class="text-center text-muted p-4">No admins found.</td>
+							</tr>
 							<c:forEach var="admin" items="${listOfAdmins}">
-								<tr class="text-center">
+								<%-- ADD data-admin-id to the row --%>
+								<tr class="text-center" data-admin-id="${admin.id}">
 									<td><c:out value="${admin.name}"/></td>
 									<td><c:out value="${admin.email}"/></td>
 									<td><c:out value="${admin.phone}"/></td>
 									<td>
-											<%-- Add confirmation to delete button --%>
-										<a href="AdminServlet?operation=delete&id=${admin.id}"
+											<%-- CHANGE href to # or javascript:void(0) and add class for JS hook --%>
+										<a href="javascript:void(0);"
 										   role="button"
-										   class="btn btn-danger btn-sm btn-remove"
-										   onclick="return confirm('Are you sure you want to remove admin \'${admin.name}\'?');">
+										   class="btn btn-danger btn-sm btn-remove admin-delete-btn"
+										   data-admin-id="${admin.id}"  <%-- Store ID here --%>
+										   data-admin-name="${admin.name}" <%-- Store name for confirmation --%>
+										> <%-- Remove onclick confirmation --%>
 											<i class="fa-solid fa-trash-alt"></i> Remove
 										</a>
 									</td>
@@ -178,31 +199,185 @@
 			</div>
 		</div> <%-- End Admin List Column --%>
 	</div> <%-- End row --%>
-</main> <%-- End main content wrapper --%>
+</main>
+
 
 <%-- Conditionally include only if admin is logged in --%>
-
+<%-- JavaScript for AJAX --%>
 <script>
-	// Example starter JavaScript for disabling form submissions if there are invalid fields
-	// (From Bootstrap docs)
-	(() => {
-		'use strict'
+	$(document).ready(function() {
 
-		// Fetch all the forms we want to apply custom Bootstrap validation styles to
-		const forms = document.querySelectorAll('.needs-validation')
+		// --- Function to display alerts ---
+		function showAdminAlert(message, type) {
+			const alertDiv = $('#admin-alert-placeholder .alert');
+			const messageSpan = alertDiv.find('.alert-message');
 
-		// Loop over them and prevent submission
-		Array.from(forms).forEach(form => {
-			form.addEventListener('submit', event => {
-				if (!form.checkValidity()) {
-					event.preventDefault()
-					event.stopPropagation()
+			messageSpan.text(message);
+			alertDiv.removeClass('alert-success alert-danger alert-warning alert-info').addClass('alert-' + (type === 'success' ? 'success' : 'danger')); // Simplified types
+			alertDiv.fadeIn();
+
+			// Optional: Auto-hide after a few seconds
+			// setTimeout(() => { alertDiv.fadeOut(); }, 5000);
+		}
+
+		// --- AJAX Form Submission ---
+		$('#add-admin-form').on('submit', function(event) {
+			event.preventDefault(); // Prevent default page reload
+			event.stopPropagation();
+
+			const form = $(this);
+
+			// Basic client-side validation check (Bootstrap's)
+			if (!form[0].checkValidity()) {
+				form.addClass('was-validated');
+				return; // Stop if form is invalid
+			}
+			form.removeClass('was-validated'); // Reset validation state
+
+			const formData = form.serialize(); // Collect form data
+			const submitButton = form.find('button[type="submit"]');
+			const loader = form.find('.ajax-loader');
+
+			// Disable button and show loader
+			submitButton.prop('disabled', true);
+			loader.show();
+			$('#admin-alert-placeholder .alert').hide(); // Hide previous alerts
+
+			$.ajax({
+				type: 'POST', // Or 'GET' if your servlet uses doGet for save
+				url: 'AdminServlet?operation=save', // Servlet endpoint
+				data: formData,
+				dataType: 'json', // Expect JSON response
+				success: function(response) {
+					if (response.status === 'success') {
+						showAdminAlert(response.message, 'success');
+						form[0].reset(); // Clear the form
+
+						// --- Add new row to the table ---
+						const newAdmin = response.newAdmin; // Get data from response
+						if (newAdmin && newAdmin.id) {
+							let newRowHtml = ''; // Initialize empty string
+							newRowHtml += '<tr class="text-center" data-admin-id="' + newAdmin.id + '">';
+							newRowHtml +=   '<td>' + escapeHtml(newAdmin.name) + '</td>';
+							newRowHtml +=   '<td>' + escapeHtml(newAdmin.email) + '</td>';
+							newRowHtml +=   '<td>' + escapeHtml(newAdmin.phone) + '</td>';
+							newRowHtml +=   '<td>';
+							newRowHtml +=     '<a href="javascript:void(0);" ';
+							newRowHtml +=        'role="button" ';
+							newRowHtml +=        'class="btn btn-danger btn-sm btn-remove admin-delete-btn" ';
+							newRowHtml +=        'data-admin-id="' + newAdmin.id + '" ';
+							newRowHtml +=        'data-admin-name="' + escapeHtml(newAdmin.name) + '"'; // Ensure name is escaped here too
+							newRowHtml +=        '>';
+							newRowHtml +=       '<i class="fa-solid fa-trash-alt"></i> Remove';
+							newRowHtml +=     '</a>';
+							newRowHtml +=   '</td>';
+							newRowHtml += '</tr>';
+							// --- End of Replacement ---
+
+							$('#admin-table-body').append(newRowHtml);
+							$('#admin-no-results-row').hide(); // Hide 'no results' row if it was visible
+						} else {
+							console.warn("Save successful, but no new admin data received to update table.");
+							// Consider reloading the whole table list via another AJAX call if needed
+						}
+
+					} else {
+						// Handle error response from servlet
+						showAdminAlert(response.message || 'An unknown error occurred.', 'danger');
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					// Handle AJAX communication error
+					console.error("AJAX Error:", textStatus, errorThrown, jqXHR.responseText);
+					showAdminAlert('Failed to communicate with server. Please try again.', 'danger');
+				},
+				complete: function() {
+					// Re-enable button and hide loader regardless of success/error
+					submitButton.prop('disabled', false);
+					loader.hide();
 				}
+			});
+		});
 
-				form.classList.add('was-validated')
-			}, false)
-		})
-	})()
+		// --- AJAX Delete ---
+		// Use event delegation for dynamically added rows
+		$('#admin-table-body').on('click', '.admin-delete-btn', function() {
+			const button = $(this);
+			const adminId = button.data('admin-id');
+			const adminName = button.data('admin-name');
+
+			// Confirmation dialog
+			if (!confirm(`Are you sure you want to remove admin '${adminName}'?`)) {
+				return; // Stop if user cancels
+			}
+
+			$('#admin-alert-placeholder .alert').hide(); // Hide previous alerts
+			button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>'); // Show loading state
+
+			$.ajax({
+				type: 'POST', // Or 'GET' if your servlet uses doGet for delete
+				url: 'AdminServlet?operation=delete',
+				data: { id: adminId }, // Send ID as data
+				dataType: 'json',
+				success: function(response) {
+					if (response.status === 'success' && response.deletedId == adminId) {
+						showAdminAlert(response.message, 'success');
+						// --- Remove row from table ---
+						button.closest('tr').fadeOut(400, function() {
+							$(this).remove();
+							// Check if table is now empty
+							if ($('#admin-table-body tr:not(#admin-no-results-row)').length === 0) {
+								$('#admin-no-results-row').show();
+							}
+						});
+					} else {
+						// Handle delete error
+						showAdminAlert(response.message || 'Could not delete admin.', 'danger');
+						button.prop('disabled', false).html('<i class="fa-solid fa-trash-alt"></i> Remove'); // Restore button
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					console.error("AJAX Delete Error:", textStatus, errorThrown, jqXHR.responseText);
+					showAdminAlert('Failed to communicate with server for delete.', 'danger');
+					button.prop('disabled', false).html('<i class="fa-solid fa-trash-alt"></i> Remove'); // Restore button
+				}
+				// No 'complete' needed here as button is removed on success
+			});
+		});
+
+		// Helper function to escape HTML for safely injecting into table
+		function escapeHtml(unsafe) {
+			if (unsafe === null || typeof unsafe === 'undefined') return '';
+			return unsafe
+					.toString()
+					.replace(/&/g, "&")
+					.replace(/</g, "<")
+					.replace(/>/g, ">")
+					.replace(/"/g, '"')
+					.replace(/'/g, "'");
+		}
+
+		// Bootstrap validation script
+		(() => {
+			'use strict'
+
+			// Fetch all the forms we want to apply custom Bootstrap validation styles to
+			const forms = document.querySelectorAll('.needs-validation')
+
+			// Loop over them and prevent submission
+			Array.from(forms).forEach(form => {
+				form.addEventListener('submit', event => {
+					if (!form.checkValidity()) {
+						event.preventDefault()
+						event.stopPropagation()
+					}
+
+					form.classList.add('was-validated')
+				}, false)
+			})
+		})()
+
+	}); // End $(document).ready
 </script>
 
 </body>

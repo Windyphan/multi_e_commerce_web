@@ -108,6 +108,7 @@
 			font-size: 0.9em;
 			color: #6c757d;
 		}
+		#product-alert-placeholder .alert { display: none; }
 	</style>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -119,10 +120,19 @@
 		<h2>Manage Products</h2>
 	</div>
 
+	<%-- Placeholder for dynamic AJAX messages --%>
+	<div id="product-alert-placeholder" class="mb-3">
+		<div class="alert" role="alert">
+			<span class="alert-message"></span>
+			<button type="button" class="btn-close float-end" aria-label="Close" onclick="$(this).parent().hide();"></button>
+		</div>
+	</div>
+
+
 	<div class="card shadow-sm">
 		<div class="card-body p-0">
 			<div class="table-responsive">
-				<table class="table table-hover table-striped mb-0"> <%-- Added table-striped --%>
+				<table class="table table-hover table-striped mb-0">
 					<thead>
 					<tr class="text-center table-light">
 						<th style="width: 10%;">Image</th>
@@ -134,59 +144,58 @@
 						<th style="width: 15%;">Actions</th>
 					</tr>
 					</thead>
-					<tbody>
-					<%-- Check if list is empty --%>
-					<c:if test="${empty allProducts}">
-						<tr>
-							<td colspan="7" class="text-center text-muted p-4">No products found. Add one using the button above.</td>
-						</tr>
-					</c:if>
+					<%-- ADD ID to tbody --%>
+					<tbody id="product-table-body">
+					<%-- ADD No Results Row --%>
+					<tr id="product-no-results-row" style="${empty allProducts ? '' : 'display: none;'}">
+						<td colspan="7" class="text-center text-muted p-4">No products found.</td>
+					</tr>
 
-					<%-- Loop through products using JSTL --%>
 					<c:forEach var="product" items="${allProducts}">
-						<tr class="text-center">
-							<td>
-									<%-- Use forward slash for path --%>
+						<%-- ADD data-pid to row --%>
+						<tr class="text-center" data-pid="${product.productId}">
+							<td class="product-row-image-td"> <%-- Add class to cell --%>
 								<img src="${s3BaseUrl}${product.productImages}"
-									 alt="${product.productName}" class="product-img-sm">
+									 alt="${product.productName}" class="product-img-sm product-row-image"> <%-- Add class to image --%>
 							</td>
-							<td class="text-start product-name">
+							<td class="text-start product-name product-row-name"> <%-- Add class --%>
 								<c:out value="${product.productName}"/>
-									<%-- Optional: Add description tooltip or small text if needed --%>
 							</td>
-							<td class="text-start product-category">
-									<%-- Get category name from the map prepared earlier --%>
+							<td class="text-start product-category product-row-category"> <%-- Add class --%>
 								<c:out value="${categoryNames[product.categoryId]}"/>
-								<c:if test="${empty categoryNames[product.categoryId]}">
-									<span class="text-muted fst-italic">N/A</span>
-								</c:if>
+								<c:if test="${empty categoryNames[product.categoryId]}"><span class="text-muted fst-italic">N/A</span></c:if>
 							</td>
-							<td>
-									<%-- Display discounted price --%>
+							<td class="product-row-price"> <%-- Add class --%>
 								<fmt:setLocale value="en_GB"/>
 								<fmt:formatNumber value="${product.productPriceAfterDiscount}" type="currency" currencySymbol="£"/>
 							</td>
-							<td><c:out value="${product.productQuantity}"/></td>
-							<td><c:out value="${product.productDiscount}"/>%</td>
+							<td class="product-row-quantity"> <%-- Add class --%>
+								<c:out value="${product.productQuantity}"/>
+							</td>
+							<td class="product-row-discount"> <%-- Add class --%>
+								<c:out value="${product.productDiscount}"/>%
+							</td>
 							<td class="action-buttons">
-									<%-- Link to Update Page --%>
-									<button type="button" class="btn btn-secondary btn-sm btn-update-product"
-											data-bs-toggle="modal"
-											data-bs-target="#updateProductModal"
-											data-pid="${product.productId}"
-											data-name="${product.productName}"
-											data-price="${product.productPrice}"
-											data-description="<c:out value='${product.productDescription}' escapeXml='true'/>" <%-- Use c:out for description --%>
-											data-quantity="${product.productQuantity}"
-											data-discount="${product.productDiscount}"
-											data-category-id="${product.categoryId}"
-											data-image-name="${product.productImages}"> <%-- Pass current image name --%>
-										<i class="fa-solid fa-edit"></i> Update
-									</button>
-									<%-- Link to Delete Servlet with confirmation --%>
-								<a href="AddOperationServlet?pid=${product.productId}&operation=deleteProduct"
-								   class="btn btn-danger btn-sm" role="button"
-								   onclick="return confirm('Are you sure you want to delete product \'${product.productName}\'?');">
+									<%-- Update button still triggers modal --%>
+								<button type="button" class="btn btn-secondary btn-sm btn-update-product"
+										data-bs-toggle="modal"
+										data-bs-target="#updateProductModal"
+										data-pid="${product.productId}"
+										data-name="${product.productName}"
+										data-price="${product.productPrice}"
+										data-description="<c:out value='${product.productDescription}' escapeXml='true'/>"
+										data-quantity="${product.productQuantity}"
+										data-discount="${product.productDiscount}"
+										data-category-id="${product.categoryId}"
+										data-image-name="${product.productImages}">
+									<i class="fa-solid fa-edit"></i> Update
+								</button>
+									<%-- MODIFY Delete Link for AJAX --%>
+								<a href="javascript:void(0);"
+								   class="btn btn-danger btn-sm product-delete-btn" role="button"
+								   data-pid="${product.productId}"
+								   data-pname="${product.productName}"
+								> <%-- Remove onclick --%>
 									<i class="fa-solid fa-trash-alt"></i> Delete
 								</a>
 							</td>
@@ -194,118 +203,241 @@
 					</c:forEach>
 					</tbody>
 				</table>
-			</div> <%-- End table-responsive --%>
-		</div> <%-- End card-body --%>
-	</div> <%-- End card --%>
-
-</main> <%-- End main --%>
+			</div>
+		</div>
+	</div>
+</main>
 <script>
-	$(document).ready(function() { // Use jQuery ready for simplicity here
+	// Make S3 Base URL and Category Names available to JS
+	// Convert category map for easier JS use (requires Jackson/Gson on server or manual build)
+	// Option 1: If using Jackson/Gson in scriptlet above
+	<%--// const categoryNamesJs = JSON.parse('<%= new ObjectMapper().writeValueAsString(categoryNameMap) %>');--%>
+	// Option 2: Build manually if map isn't huge (less ideal)
+	const categoryNamesJs = {
+		<c:forEach var="entry" items="${categoryNames}" varStatus="loop">
+		"${entry.key}": "${entry.value}"${!loop.last ? ',' : ''}
+		</c:forEach>
+	};
 
-		const updateModal = document.getElementById('updateProductModal');
-		const updateModalForm = document.getElementById('updateProductModalForm');
-		const loadingDiv = document.getElementById('updateProductModalLoading');
-		const formContentDiv = document.getElementById('updateProductModalFormContent');
-		const s3BaseUrl = '<c:out value="${s3BaseUrl}"/>'; // Make sure s3BaseUrl is available
 
-		if (updateModal) {
-			updateModal.addEventListener('show.bs.modal', function (event) {
-				// Button that triggered the modal
-				const button = event.relatedTarget;
+	$(document).ready(function() {
 
-				// Extract info from data-* attributes
-				const productId = button.getAttribute('data-pid');
-				const name = button.getAttribute('data-name');
-				const price = button.getAttribute('data-price');
-				const description = button.getAttribute('data-description');
-				const quantity = button.getAttribute('data-quantity');
-				const discount = button.getAttribute('data-discount');
-				const categoryId = button.getAttribute('data-category-id');
-				const imageName = button.getAttribute('data-image-name');
-
-				console.log("Populating update modal for PID:", productId);
-
-				// Get the modal's elements
-				const modalTitle = updateModal.querySelector('.modal-title');
-				const productIdInput = updateModal.querySelector('#updateProductId');
-				const existingImageInput = updateModal.querySelector('#updateExistingImage');
-				const existingCategoryInput = updateModal.querySelector('#updateExistingCategory');
-				const nameInput = updateModal.querySelector('#updateProductName');
-				const priceInput = updateModal.querySelector('#updateProductPrice');
-				const descInput = updateModal.querySelector('#updateProductDesc');
-				const quantityInput = updateModal.querySelector('#updateProductQuantity');
-				const discountInput = updateModal.querySelector('#updateProductDiscount');
-				const categorySelect = updateModal.querySelector('#updateProductCategory');
-				const imagePreview = updateModal.querySelector('#updateCurrentImagePreview');
-				const imageNameLabel = updateModal.querySelector('#updateCurrentImageName');
-				const imageFileInput = updateModal.querySelector('#updateProductImage');
-
-				// Clear previous validation states
-				updateModalForm.classList.remove('was-validated');
-
-				// Reset file input (important!)
-				imageFileInput.value = '';
-
-				// --- Populate the form ---
-				modalTitle.textContent = 'Edit Product: ' + name; // Update title
-				productIdInput.value = productId;
-				existingImageInput.value = imageName || '';
-				existingCategoryInput.value = categoryId || '';
-				nameInput.value = name || '';
-				priceInput.value = price || 0;
-				descInput.value = description || '';
-				quantityInput.value = quantity || 0;
-				discountInput.value = discount || 0;
-
-				// Select the correct category in the dropdown
-				if(categorySelect){
-					if(categoryId){
-						categorySelect.value = categoryId;
-					} else {
-						categorySelect.value = ""; // Select the default disabled option
-					}
-				}
-
-				// Display current image preview
-				if (imageName) {
-					imagePreview.src = s3BaseUrl + imageName;
-					imagePreview.style.display = 'inline-block';
-					imageNameLabel.textContent = imageName;
-				} else {
-					imagePreview.style.display = 'none';
-					imagePreview.src = '';
-					imageNameLabel.textContent = 'No image';
-				}
-
-				// Optional: Show loading indicator while populating (usually fast enough not to need)
-				// formContentDiv.style.display = 'block';
-				// loadingDiv.style.display = 'none';
-			});
-
-			// Optional: Reset form when modal is hidden
-			updateModal.addEventListener('hidden.bs.modal', function (event) {
-				// updateModalForm.reset(); // Reset might clear hidden fields unintentionally
-				// Clear specific fields if needed or rely on show.bs.modal to repopulate
-				const imageFileInput = updateModal.querySelector('#updateProductImage');
-				imageFileInput.value = ''; // Clear file input
-				updateModalForm.classList.remove('was-validated'); // Remove validation classes
-			});
+		// --- Helper Functions ---
+		function showProductAlert(message, type) {
+			const alertDiv = $('#product-alert-placeholder .alert');
+			const messageSpan = alertDiv.find('.alert-message');
+			messageSpan.text(message);
+			alertDiv.removeClass('alert-success alert-danger alert-warning alert-info').addClass('alert-' + (type === 'success' ? 'success' : 'danger'));
+			alertDiv.fadeIn();
 		}
 
-		// Ensure discount validation function exists if modal is used
-		function validateModalDiscount(inputElement) {
-			const discountValue = parseInt(inputElement.value, 10);
-			if (inputElement.value === '' || (!isNaN(discountValue) && discountValue >= 0 && discountValue <= 100)) {
-				inputElement.setCustomValidity(''); inputElement.classList.remove('is-invalid');
-			} else {
-				inputElement.setCustomValidity('Discount must be between 0 and 100.'); inputElement.classList.add('is-invalid');
+		function escapeHtml(unsafe) {
+			if (unsafe === null || typeof unsafe === 'undefined') return '';
+			return unsafe
+					.toString()
+					.replace(/&/g, "&")
+					.replace(/</g, "<")
+					.replace(/>/g, ">")
+					.replace(/"/g, '"')
+					.replace(/'/g, "'");
+		}
+
+		// Get Bootstrap Modal instance for Update Product
+		const updateProductModalEl = document.getElementById('updateProductModal');
+		const updateProductModal = updateProductModalEl ? new bootstrap.Modal(updateProductModalEl) : null;
+
+		// --- Populate Update Product Modal ---
+		// Use jQuery to select the modal element and attach the listener
+		$('#updateProductModal').on('show.bs.modal', function (event) {
+			console.log(">>> 'show.bs.modal' event FIRED (jQuery)!"); // Log firing
+
+			// Button that triggered the modal
+			const button = $(event.relatedTarget); // Use jQuery $(event.relatedTarget)
+			if (!button || button.length === 0) { // Check button exists
+				console.error("Modal opened without a related target button or button not found.");
+				return;
 			}
-		}
-		const discountFieldModalCheck = document.getElementById('updateProductDiscount');
-		if(discountFieldModalCheck) discountFieldModalCheck.addEventListener('blur', () => validateModalDiscount(discountFieldModalCheck));
+
+			// Extract info from data-* attributes using jQuery .data()
+			const productId = button.data('pid');
+			const name = button.data('name');
+			const price = button.data('price');
+			const description = button.data('description');
+			const quantity = button.data('quantity');
+			const discount = button.data('discount');
+			const categoryId = button.data('category-id');
+			const imageName = (button.data('image-name') || '').toString().trim();
+
+			console.log("Populating update modal for PID:", productId, "Data:", button.data()); // Log all data
+
+			// Get the modal's elements using jQuery within the modal scope ('this' refers to the modal here)
+			const modal = $(this); // 'this' inside the event handler is the modal div
+			const modalTitle = modal.find('.modal-title');
+			const productIdInput = modal.find('#updateProductId');
+			const existingImageInput = modal.find('#updateExistingImage');
+			const nameInput = modal.find('#updateProductName');
+			const priceInput = modal.find('#updateProductPrice');
+			const descInput = modal.find('#updateProductDesc');
+			const quantityInput = modal.find('#updateProductQuantity');
+			const discountInput = modal.find('#updateProductDiscount');
+			const categorySelect = modal.find('#updateProductCategory');
+			const imagePreview = modal.find('#updateCurrentImagePreview');
+			const imageNameLabel = modal.find('#updateCurrentImageName');
+			const imageFileInput = modal.find('#updateProductImage');
+			const form = modal.find('#updateProductModalForm');
+
+			// --- Populate the form ---
+			modalTitle.text('Edit Product: ' + (name || '')); // Update title
+			productIdInput.val(productId || '');
+			existingImageInput.val(imageName || '');
+			nameInput.val(name || '');
+			priceInput.val(price || 0);
+			descInput.val(description || ''); // Use text() or val() based on element? textarea uses val()
+			quantityInput.val(quantity || 0);
+			discountInput.val(discount || 0);
+
+			// Select the correct category
+			if (categorySelect.length) {
+				categorySelect.val(categoryId || ""); // Set value, defaults to "" if categoryId is null/undefined
+			} else {
+				console.error("Category select dropdown #updateProductCategory not found!");
+			}
+
+			// Display current image preview
+			imagePreview.hide(); // Hide first
+			imageNameLabel.text('No image');
+			if (imageName && imageName !== 'null') {
+				const imgUrl = s3BaseUrlForJs + imageName;
+				imagePreview.attr('src', imgUrl).show();
+				imageNameLabel.text(escapeHtml(imageName));
+			} else {
+				imagePreview.attr('src', ''); // Clear src
+			}
+
+			// Clear previous validation states
+			form.removeClass('was-validated');
+			// Reset file input
+			imageFileInput.val('');
+
+			console.log("Modal population complete (jQuery).");
+
+		});
 
 
-	});
+		// --- AJAX Update Product ---
+		$('#updateProductModalForm').on('submit', function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+			const form = $(this);
+			if (!form[0].checkValidity()) { form.addClass('was-validated'); return; }
+
+			const formData = new FormData(this);
+			const productId = formData.get('pid'); // Get pid from hidden input
+			const submitButton = form.find('button[type="submit"]');
+
+			submitButton.prop('disabled', true); //.html('...');
+			$('#product-alert-placeholder .alert').hide();
+
+			$.ajax({
+				type: 'POST',
+				url: 'AddOperationServlet?operation=updateProduct',
+				data: formData,
+				processData: false,
+				contentType: false,
+				dataType: 'json',
+				success: function(response) {
+					if (response.status === 'success') {
+						showProductAlert(response.message, 'success');
+						if (updateProductModal) updateProductModal.hide();
+						$('.modal-backdrop').remove();
+						form.removeClass('was-validated');
+
+						// --- Update table row dynamically ---
+						const updatedProd = response.updatedProduct;
+						if (updatedProd && updatedProd.productId == productId) {
+							const row = $('#product-table-body tr[data-pid="' + productId + '"]');
+							if (row.length) {
+								console.log("Updating row for PID:", productId);
+								const categoryName = categoryNamesJs[updatedProd.categoryId] || 'N/A';
+								// Calculate price after discount for display
+								const priceAfterDiscount = updatedProd.productPrice * (1 - (updatedProd.productDiscount / 100.0));
+								const formatter = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' });
+
+								row.find('.product-row-image').attr('src', s3BaseUrlForJs + escapeHtml(updatedProd.productImages)).attr('alt', escapeHtml(updatedProd.productName));
+								row.find('.product-row-name').text(updatedProd.productName);
+								row.find('.product-row-category').text(categoryName);
+								row.find('.product-row-price').text(formatter.format(priceAfterDiscount));
+								row.find('.product-row-quantity').text(updatedProd.productQuantity);
+								row.find('.product-row-discount').text(updatedProd.productDiscount + '%');
+
+								// Update data attributes on buttons
+								const updateBtn = row.find('.btn-update-product');
+								updateBtn.data('name', updatedProd.productName);
+								updateBtn.data('price', updatedProd.productPrice); // Original price
+								updateBtn.data('description', updatedProd.productDescription);
+								updateBtn.data('quantity', updatedProd.productQuantity);
+								updateBtn.data('discount', updatedProd.productDiscount);
+								updateBtn.data('category-id', updatedProd.categoryId);
+								updateBtn.data('image-name', updatedProd.productImages);
+
+								row.find('.product-delete-btn').data('pname', updatedProd.productName);
+							} else {
+								console.warn("Update success, but couldn't find row:", productId);
+							}
+						} else {
+							console.warn("Update success, but data mismatch/missing:", updatedProd);
+						}
+					} else {
+						showProductAlert(response.message || 'Failed to update product.', 'danger');
+					}
+				},
+				error: function() { showProductAlert('Error communicating with server.', 'danger'); },
+				complete: function() { submitButton.prop('disabled', false); }
+			});
+		});
+
+
+		// --- AJAX Delete Product ---
+		$('#product-table-body').on('click', '.product-delete-btn', function(event) {
+			event.preventDefault();
+			const button = $(this);
+			const productId = button.data('pid');
+			const productName = button.data('pname');
+
+			if (!confirm('Are you sure you want to delete product \'' + productName + '\'?')) {
+				return;
+			}
+
+			$('#product-alert-placeholder .alert').hide();
+			button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
+
+			$.ajax({
+				type: 'POST',
+				url: 'AddOperationServlet?operation=deleteProduct',
+				data: { pid: productId }, // Send pid
+				dataType: 'json',
+				success: function(response) {
+					if (response.status === 'success' && response.deletedProductId == productId) {
+						showProductAlert(response.message, 'success');
+						button.closest('tr').fadeOut(400, function() {
+							$(this).remove();
+							if ($('#product-table-body tr:not(#product-no-results-row)').length === 0) {
+								$('#product-no-results-row').show();
+							}
+						});
+					} else {
+						showProductAlert(response.message || 'Could not delete product.', 'danger');
+						button.prop('disabled', false).html('<i class="fa-solid fa-trash-alt"></i> Delete');
+					}
+				},
+				error: function() {
+					showProductAlert('Error communicating with server.', 'danger');
+					button.prop('disabled', false).html('<i class="fa-solid fa-trash-alt"></i> Delete');
+				}
+			});
+		});
+
+	}); // End $(document).ready
 </script>
 </body>
 </html>

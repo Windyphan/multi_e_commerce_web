@@ -76,8 +76,15 @@
 
 <%-- Main Content Wrapper --%>
 <main>
-
 	<h2 class="page-header">Manage Registered Users</h2>
+
+	<%-- Placeholder for dynamic AJAX messages --%>
+	<div id="user-alert-placeholder" class="mb-3">
+		<div class="alert" role="alert">
+			<span class="alert-message"></span>
+			<button type="button" class="btn-close float-end" aria-label="Close" onclick="$(this).parent().hide();"></button>
+		</div>
+	</div>
 
 	<div class="card shadow-sm">
 		<div class="card-body p-0">
@@ -94,36 +101,35 @@
 						<th>Action</th>
 					</tr>
 					</thead>
-					<tbody>
-					<%-- Check if list is empty --%>
-					<c:if test="${empty allUsers}">
-						<tr>
-							<td colspan="7" class="text-center text-muted p-4">No registered users found.</td>
-						</tr>
-					</c:if>
+					<%-- ADD ID to tbody --%>
+					<tbody id="user-table-body">
+					<%-- ADD No Results Row --%>
+					<tr id="user-no-results-row" style="${empty allUsers ? '' : 'display: none;'}">
+						<td colspan="7" class="text-center text-muted p-4">No registered users found.</td>
+					</tr>
 
-					<%-- Loop through users using JSTL --%>
 					<c:forEach var="user" items="${allUsers}">
-						<tr>
+						<%-- ADD data-user-id to row --%>
+						<tr data-user-id="${user.userId}">
 							<td class="text-start ps-3"><c:out value="${user.userName}"/></td>
 							<td class="text-center"><c:out value="${user.userEmail}"/></td>
 							<td class="text-center"><c:out value="${user.userPhone}"/></td>
 							<td class="text-center"><c:out value="${user.userGender}"/></td>
 							<td class="text-start user-address">
-									<%-- Reconstruct address using individual fields for clarity --%>
 								<c:out value="${user.userAddress}"/><br>
 								<c:out value="${user.userCity}"/><br>
 								<c:out value="${user.userCounty}"/> - <c:out value="${user.userPostcode}"/>
 							</td>
 							<td class="text-center">
-									<%-- Format the registration date/time --%>
 								<fmt:formatDate value="${user.dateTime}" pattern="dd MMM yyyy, hh:mm a"/>
 							</td>
 							<td class="text-center action-buttons">
-									<%-- Delete User Link/Button --%>
-								<a href="UpdateUserServlet?operation=deleteUser&uid=${user.userId}"
-								   role="button" class="btn btn-danger btn-sm"
-								   onclick="return confirm('Are you sure you want to remove user \'${user.userName}\'? This action cannot be undone.');">
+									<%-- MODIFY Delete Link --%>
+								<a href="javascript:void(0);"
+								   role="button" class="btn btn-danger btn-sm user-delete-btn"
+								   data-user-id="${user.userId}"
+								   data-user-name="${user.userName}"
+								> <%-- Remove onclick --%>
 									<i class="fa-solid fa-user-slash"></i> Remove
 								</a>
 							</td>
@@ -134,8 +140,71 @@
 			</div> <%-- End table-responsive --%>
 		</div> <%-- End card-body --%>
 	</div> <%-- End card --%>
+</main>
+<script>
+	$(document).ready(function() {
 
-</main> <%-- End main wrapper --%>
+		// --- Function to display alerts ---
+		function showUserAlert(message, type) {
+			const alertDiv = $('#user-alert-placeholder .alert');
+			const messageSpan = alertDiv.find('.alert-message');
+
+			messageSpan.text(message);
+			alertDiv.removeClass('alert-success alert-danger alert-warning alert-info').addClass('alert-' + (type === 'success' ? 'success' : 'danger'));
+			alertDiv.fadeIn();
+			// Optional: Auto-hide
+			// setTimeout(() => { alertDiv.fadeOut(); }, 5000);
+		}
+
+		// --- AJAX Delete User ---
+		$('#user-table-body').on('click', '.user-delete-btn', function(event) {
+			event.preventDefault(); // Prevent default link behavior
+
+			const button = $(this);
+			const userId = button.data('user-id');
+			const userName = button.data('user-name');
+
+			if (!confirm(`Are you sure you want to remove user '${userName}'? This action cannot be undone.`)) {
+				return; // Stop if user cancels
+			}
+
+			$('#user-alert-placeholder .alert').hide(); // Hide previous alerts
+			button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>'); // Show loading state
+
+			$.ajax({
+				type: 'POST', // Match servlet's expected method (doPost calls processRequest)
+				url: 'UpdateUserServlet?operation=deleteUser', // Servlet endpoint
+				data: { uid: userId }, // Send user ID as 'uid'
+				dataType: 'json', // Expect JSON response
+				success: function(response) {
+					if (response.status === 'success' && response.deletedId == userId) {
+						showUserAlert(response.message, 'success');
+						// Remove the row from the table
+						button.closest('tr').fadeOut(400, function() {
+							$(this).remove();
+							// Check if table is now empty
+							if ($('#user-table-body tr:not(#user-no-results-row)').length === 0) {
+								$('#user-no-results-row').show();
+							}
+						});
+					} else {
+						// Handle delete error from servlet response
+						showUserAlert(response.message || 'Could not delete user.', 'danger');
+						button.prop('disabled', false).html('<i class="fa-solid fa-user-slash"></i> Remove'); // Restore button
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					// Handle AJAX communication error
+					console.error("AJAX Delete User Error:", textStatus, errorThrown, jqXHR.responseText);
+					showUserAlert('Failed to communicate with the server. Please try again.', 'danger');
+					button.prop('disabled', false).html('<i class="fa-solid fa-user-slash"></i> Remove'); // Restore button
+				}
+				// 'complete' callback not strictly needed here as button is removed on success
+			});
+		});
+
+	}); // End $(document).ready
+</script>
 
 </body>
 </html>
