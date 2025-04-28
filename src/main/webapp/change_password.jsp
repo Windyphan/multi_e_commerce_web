@@ -130,7 +130,7 @@
 			<div class="card reset-card">
 				<div class="card-header">
 					<%-- Changed icon slightly --%>
-					<img src="Images/forgot-password.png" alt="Password Reset Icon">
+					<i class="fas fa-unlock fa-3x text-success mb-3"></i>
 					<h3 class="card-title">Create New Password</h3>
 				</div>
 				<div class="card-body">

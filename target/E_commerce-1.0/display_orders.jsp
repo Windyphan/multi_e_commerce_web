@@ -181,7 +181,7 @@
 	<c:choose>
 		<c:when test="${empty allOrders}">
 			<div class="text-center p-5 empty-orders">
-				<img src="Images/empty-cart.png" alt="No Orders"> <%-- Consider a different icon --%>
+				<i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i> <%-- Consider a different icon --%>
 				<h4>No orders found.</h4>
 			</div>
 		</c:when>

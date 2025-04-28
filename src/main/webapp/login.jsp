@@ -108,7 +108,7 @@
 		<div class="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4">
 			<div class="card login-card">
 				<div class="card-header">
-					<img src="Images/login.png" alt="Login Icon">
+					<i class="fas fa-sign-in-alt me-1"></i>
 					<h3 class="card-title">Sign In</h3>
 				</div>
 				<div class="card-body">

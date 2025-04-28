@@ -218,7 +218,7 @@
 		<%-- Case 1: Cart is empty --%>
 		<c:when test="${empty cartContent}">
 			<div class="text-center empty-cart-container">
-				<img src="Images/empty-cart.png" alt="Empty Cart" class="img-fluid">
+				<i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
 				<h4>Your cart is empty!</h4>
 				<p>Looks like you haven't added anything yet.</p>
 				<a href="products.jsp" class="btn btn-primary btn-lg mt-3" role="button">

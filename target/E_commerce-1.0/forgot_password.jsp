@@ -104,7 +104,7 @@
 		<div class="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4">
 			<div class="card forgot-card">
 				<div class="card-header">
-					<img src="Images/forgot-password.png" alt="Forgot Password Icon">
+					<i class="fas fa-unlock fa-3x text-success mb-3"></i>
 					<h3 class="card-title">Forgot Your Password?</h3>
 				</div>
 				<div class="card-body">

@@ -186,7 +186,6 @@
 				previewContainer.empty(); // Clear previous preview content reliably
 
 				if (categoryImage && categoryImage !== 'null') { // Check if not empty and not the literal string "null"
-					// Assuming s3BaseUrlForJs has trailing slash and categoryImage does not start with one
 					const imgUrl = s3BaseUrlForJs + categoryImage;
 
 					let imgHtml = '<img src="' + imgUrl + '" alt="Current image" class="current-img-preview" onerror="this.style.display=\'none\';this.nextSibling.textContent=\' (image load failed)\';">'; // Added simple error handling

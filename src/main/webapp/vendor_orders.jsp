@@ -123,7 +123,7 @@
     <c:choose>
         <c:when test="${empty vendorOrders}">
             <div class="text-center p-5 empty-orders">
-                <img src="Images/empty-cart.png" alt="No Orders"> <%-- Update icon maybe --%>
+                <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i> <%-- Update icon maybe --%>
                 <h4>You have no orders requiring fulfillment yet.</h4>
             </div>
         </c:when>

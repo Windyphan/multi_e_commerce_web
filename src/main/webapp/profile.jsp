@@ -95,7 +95,7 @@
 			border-radius: 0.375rem;
 			min-height: 400px; /* Ensure card has some height */
 		}
-		.profile-content .card-body { /* Assuming content is wrapped in card-body in includes */
+		.profile-content .card-body {
 			padding: 1.5rem;
 		}
 
@@ -126,7 +126,7 @@
 		<div class="col-lg-3">
 			<div class="card profile-sidebar">
 				<div class="profile-greeting">
-					<img src="Images/profile.png" class="img-fluid rounded-circle" alt="Profile Icon">
+					<i class="fas fa-user-circle fa-3x text-secondary me-3"></i>
 					<div>
 						<span>Hello,</span>
 						<h5><c:out value="${sessionScope.activeUser.userName}"/></h5>

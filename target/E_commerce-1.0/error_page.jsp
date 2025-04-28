@@ -54,7 +54,7 @@
 	<%-- Icon or Image --%>
 	<h1 class="error-code">404</h1>
 	<%-- <i class="fas fa-map-signs error-icon"></i> --%> <%-- Example map signs icon --%>
-	<img src="Images/no-results.png" class="img-fluid mb-4" style="max-width: 300px;" alt="Page not found graphic">
+		<i class="fas fa-map-signs fa-4x text-primary mb-3"></i>
 
 
 	<h2 class="display-6 fw-bold text-secondary">Page Not Found</h2>

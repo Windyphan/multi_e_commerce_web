@@ -116,7 +116,7 @@
 				<div class="card-header">Add New Admin</div>
 				<div class="card-body p-4 add-admin-form">
 					<div class="text-center">
-						<img src="Images/admin.png" alt="Admin Icon">
+						<i class="fas fa-user-tie fa-3x text-dark mb-2"></i>
 					</div>
 					<%-- ADD ID TO FORM --%>
 					<form id="add-admin-form" action="AdminServlet?operation=save" method="post" class="needs-validation" novalidate>

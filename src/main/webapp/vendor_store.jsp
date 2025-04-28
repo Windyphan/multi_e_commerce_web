@@ -201,7 +201,7 @@
                     <div class="col-12">
                         <div class="no-products-found">
                                 <%-- Use a slightly different icon/message --%>
-                            <img src="Images/no-results.png" alt="No Products Found">
+                            <i class="fas fa-search fa-4x text-muted mb-3"></i>
                             <h4>This vendor currently has no products listed.</h4>
                             <a href="products.jsp" class="btn btn-outline-primary mt-3">View All Products</a>
                         </div>

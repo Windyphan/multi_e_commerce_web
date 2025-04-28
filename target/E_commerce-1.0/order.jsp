@@ -209,7 +209,7 @@
   <c:choose>
     <c:when test="${empty myOrders}">
       <div class="text-center p-5 empty-orders">
-        <img src="Images/empty-cart.png" alt="No Orders"> <%-- Consider specific icon --%>
+        <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
         <h4>You haven't placed any orders yet.</h4>
         <a href="products.jsp" class="btn btn-primary mt-3">Start Shopping</a>
       </div>

@@ -101,7 +101,7 @@
 		<div class="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4"> <%-- Responsive column width --%>
 			<div class="card login-card">
 				<div class="card-header">
-					<img src="Images/admin.png" alt="Admin Icon">
+					<i class="fas fa-user-tie fa-3x text-light mb-2"></i>
 					<h3 class="card-title">Admin Login</h3>
 				</div>
 				<div class="card-body">

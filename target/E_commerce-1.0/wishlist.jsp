@@ -115,7 +115,7 @@
   <c:choose>
     <c:when test="${empty wishlistProducts}">
       <div class="text-center p-5 empty-wishlist">
-        <img src="Images/wishlist.png" alt="Empty Wishlist"> <%-- Use forward slash --%>
+        <i class="fas fa-heart-crack fa-3x text-muted mb-3"></i>
         <h4 class="mt-3">Your Wishlist is Empty</h4>
         <p class="text-muted">Add items you love to your wishlist!</p>
         <a href="products.jsp" class="btn btn-outline-primary mt-3">Browse Products</a>

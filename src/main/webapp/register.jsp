@@ -122,7 +122,7 @@
 		<div class="col-11 col-sm-10 col-md-8 col-lg-7 col-xl-6">
 			<div class="card register-card">
 				<div class="card-header">
-					<img src="Images/signUp.png" alt="Sign Up Icon">
+					<i class="fas fa-user-plus fa-3x mb-3"></i>
 					<h3 class="card-title">Create Your Account</h3>
 				</div>
 				<div class="card-body">
