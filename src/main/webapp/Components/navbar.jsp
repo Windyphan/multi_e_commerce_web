@@ -193,11 +193,6 @@
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 						<%-- Admin Actions (aligned right) --%>
 					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-						<li class="nav-item">
-							<button type="button" class="btn btn-sm admin-nav-btn" data-bs-toggle="modal" data-bs-target="#add-product-vendor">
-								<i class="fa-solid fa-plus fa-xs"></i> Add Product
-							</button>
-						</li>
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 								<i class="fa-solid fa-user-gear"></i> ${activeVendorForNav.shopName}

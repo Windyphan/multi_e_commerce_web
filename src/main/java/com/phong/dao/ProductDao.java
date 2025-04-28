@@ -578,6 +578,417 @@ public class ProductDao {
 	}
 
 
+	/**
+	 * Gets a specific page of ALL products.
+	 * Manages its own database connection.
+	 * @param page Page number (1-based).
+	 * @param productsPerPage Number of products to fetch per page.
+	 * @return List of products for the requested page, empty if none found. Null on error.
+	 */
+	public List<Product> getProductsPaginated(int page, int productsPerPage) {
+		List<Product> list = new ArrayList<>();
+		if (page < 1) page = 1;
+		int offset = (page - 1) * productsPerPage;
+		String query = "SELECT * FROM product ORDER BY pid DESC LIMIT ? OFFSET ?"; // Adjust ORDER BY if needed
+
+		try (Connection con = ConnectionProvider.getConnection(); // Get connection in try-with-resources
+			 PreparedStatement pstmt = con.prepareStatement(query)) {
+
+			pstmt.setInt(1, productsPerPage);
+			pstmt.setInt(2, offset);
+
+			try (ResultSet rs = pstmt.executeQuery()) { // Also use try-with-resources for ResultSet
+				while (rs.next()) {
+					list.add(mapResultSetToProduct(rs));
+				}
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error fetching paginated products: " + e.getMessage());
+			e.printStackTrace();
+			return null; // Indicate error
+		}
+		return list;
+	}
+
+	/**
+	 * Gets a specific page of products BY CATEGORY.
+	 * Manages its own database connection.
+	 * @param categoryId The category ID to filter by.
+	 * @param page Page number (1-based).
+	 * @param productsPerPage Number of products to fetch per page.
+	 * @return List of products for the category and page. Null on error.
+	 */
+	public List<Product> getProductsByCategoryPaginated(int categoryId, int page, int productsPerPage) {
+		List<Product> list = new ArrayList<>();
+		if (page < 1) page = 1;
+		int offset = (page - 1) * productsPerPage;
+		String query = "SELECT * FROM product WHERE cid = ? ORDER BY pid DESC LIMIT ? OFFSET ?";
+
+		try (Connection con = ConnectionProvider.getConnection();
+			 PreparedStatement pstmt = con.prepareStatement(query)) {
+
+			pstmt.setInt(1, categoryId);
+			pstmt.setInt(2, productsPerPage);
+			pstmt.setInt(3, offset);
+
+			try (ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					list.add(mapResultSetToProduct(rs));
+				}
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error fetching paginated products by category " + categoryId + ": " + e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+		return list;
+	}
+
+	/**
+	 * Gets a specific page of products BY SEARCH KEY (case-insensitive).
+	 * Manages its own database connection.
+	 * @param searchKey The search term.
+	 * @param page Page number (1-based).
+	 * @param productsPerPage Number of products to fetch per page.
+	 * @return List of matching products for the page. Null on error.
+	 */
+	public List<Product> getProductsBySearchPaginated(String searchKey, int page, int productsPerPage) {
+		List<Product> list = new ArrayList<>();
+		if (page < 1) page = 1;
+		int offset = (page - 1) * productsPerPage;
+		// Using lower() for case-insensitivity
+		String query = "SELECT * FROM product WHERE lower(name) LIKE lower(?) OR lower(description) LIKE lower(?) ORDER BY pid DESC LIMIT ? OFFSET ?";
+
+		try (Connection con = ConnectionProvider.getConnection();
+			 PreparedStatement pstmt = con.prepareStatement(query)) {
+
+			String likeParam = "%" + searchKey + "%";
+			pstmt.setString(1, likeParam);
+			pstmt.setString(2, likeParam);
+			pstmt.setInt(3, productsPerPage);
+			pstmt.setInt(4, offset);
+
+			try(ResultSet rs = pstmt.executeQuery()) {
+				while (rs.next()) {
+					list.add(mapResultSetToProduct(rs));
+				}
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error fetching paginated products by search '" + searchKey + "': " + e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+		return list;
+	}
+
+
+	// --- NEW: Count Methods (Corrected) ---
+
+	/**
+	 * Gets the total count of ALL products.
+	 * Manages its own database connection.
+	 * @return Total product count, or -1 on error.
+	 */
+	public int getTotalProductCount() {
+		int count = -1; // Use -1 to indicate error state clearly
+		String query = "SELECT COUNT(*) FROM product";
+
+		try (Connection con = ConnectionProvider.getConnection();
+			 PreparedStatement pstmt = con.prepareStatement(query); // Use PreparedStatement even for simple count
+			 ResultSet rs = pstmt.executeQuery()) {
+
+			if (rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error counting all products: " + e.getMessage());
+			e.printStackTrace();
+			// count remains -1
+		}
+		return count;
+	}
+
+	/**
+	 * Gets the total count of products BY CATEGORY.
+	 * Manages its own database connection.
+	 * @param categoryId The category ID.
+	 * @return Total product count for the category, or -1 on error.
+	 */
+	public int getTotalProductCountByCategory(int categoryId) {
+		int count = -1;
+		String query = "SELECT COUNT(*) FROM product WHERE cid = ?";
+
+		try (Connection con = ConnectionProvider.getConnection();
+			 PreparedStatement pstmt = con.prepareStatement(query)) {
+
+			pstmt.setInt(1, categoryId);
+			try(ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					count = rs.getInt(1);
+				}
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error counting products by category " + categoryId + ": " + e.getMessage());
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+	/**
+	 * Gets the total count of products BY SEARCH KEY (case-insensitive).
+	 * Manages its own database connection.
+	 * @param searchKey The search term.
+	 * @return Total matching product count, or -1 on error.
+	 */
+	public int getTotalProductCountBySearch(String searchKey) {
+		int count = -1;
+		String query = "SELECT COUNT(*) FROM product WHERE lower(name) LIKE lower(?) OR lower(description) LIKE lower(?)";
+
+		try (Connection con = ConnectionProvider.getConnection();
+			 PreparedStatement pstmt = con.prepareStatement(query)) {
+
+			String likeParam = "%" + searchKey + "%";
+			pstmt.setString(1, likeParam);
+			pstmt.setString(2, likeParam);
+			try (ResultSet rs = pstmt.executeQuery()) {
+				if (rs.next()) {
+					count = rs.getInt(1);
+				}
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error counting products by search '" + searchKey + "': " + e.getMessage());
+			e.printStackTrace();
+		}
+		return count;
+	}
+
+	/**
+	 * Gets the total count of products matching various filter criteria.
+	 * Manages its own database connection.
+	 * @param categoryIds List of category IDs (null/empty for no filter).
+	 * @param minPrice Minimum price (null for no filter).
+	 * @param maxPrice Maximum price (null for no filter).
+	 * @param searchKey Search term (null/empty for no filter).
+	 * @return Total count of matching products, or -1 on error.
+	 */
+	public int getFilteredProductCount(List<Integer> categoryIds, Float minPrice, Float maxPrice, String searchKey) {
+		int count = -1;
+		StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(*) FROM product p ");
+		List<Object> parameters = new ArrayList<>();
+		StringBuilder whereClause = new StringBuilder();
+		boolean firstWhere = true;
+
+		// --- Build WHERE clause (same logic as getFilteredProductsPaginated below) ---
+		// Category Filter
+		if (categoryIds != null && !categoryIds.isEmpty()) {
+			whereClause.append(firstWhere ? "WHERE " : "AND ");
+			String categoryPlaceholders = categoryIds.stream().map(id -> "?").collect(Collectors.joining(", "));
+			whereClause.append("p.cid IN (").append(categoryPlaceholders).append(") ");
+			parameters.addAll(categoryIds);
+			firstWhere = false;
+		}
+		// Min Price Filter
+		if (minPrice != null) {
+			whereClause.append(firstWhere ? "WHERE " : "AND ");
+			whereClause.append("p.price >= ? ");
+			parameters.add(minPrice);
+			firstWhere = false;
+		}
+		// Max Price Filter
+		if (maxPrice != null) {
+			whereClause.append(firstWhere ? "WHERE " : "AND ");
+			whereClause.append("p.price <= ? ");
+			parameters.add(maxPrice);
+			firstWhere = false;
+		}
+		// Search Key Filter
+		if (searchKey != null && !searchKey.trim().isEmpty()) {
+			whereClause.append(firstWhere ? "WHERE " : "AND ");
+			whereClause.append("(lower(p.name) LIKE lower(?) OR lower(p.description) LIKE lower(?)) ");
+			String searchPattern = "%" + searchKey.trim() + "%";
+			parameters.add(searchPattern);
+			parameters.add(searchPattern);
+			firstWhere = false;
+		}
+		// --- End WHERE clause build ---
+
+		queryBuilder.append(whereClause); // Append the WHERE clause
+		String finalQuery = queryBuilder.toString();
+
+		System.out.println("Executing Filtered Count Query: " + finalQuery); // Log query
+		System.out.println("Parameters: " + parameters); // Log parameters
+
+		try (Connection con = ConnectionProvider.getConnection();
+			 PreparedStatement psmt = con.prepareStatement(finalQuery)) {
+
+			// Set parameters
+			setDynamicParameters(psmt, parameters);
+
+			try (ResultSet rs = psmt.executeQuery()) {
+				if (rs.next()) {
+					count = rs.getInt(1);
+				}
+			}
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error counting filtered products: " + e.getMessage());
+			e.printStackTrace();
+			// count remains -1
+		}
+		return count;
+	}
+
+	/**
+	 * Retrieves a specific page of products based on various filter criteria.
+	 * Handles filtering by category (multiple), price range, search key, and sorting by rating.
+	 * Manages its own database connection.
+	 *
+	 * @param categoryIds   List of category IDs to filter by (if empty or null, no category filter).
+	 * @param minPrice      Minimum price filter (inclusive, null if no min price).
+	 * @param maxPrice      Maximum price filter (inclusive, null if no max price).
+	 * @param ratingSortOrder Sorting order for average rating ("asc", "desc", or null/empty for no rating sort).
+	 * @param searchKey     Search term to match in name or description (null if no search).
+	 * @param page          Page number (1-based).
+	 * @param productsPerPage Number of products per page.
+	 * @return A List of matching Product objects for the requested page, may be empty. Returns null on major DB error.
+	 */
+	public List<Product> getFilteredProductsPaginated(List<Integer> categoryIds, Float minPrice, Float maxPrice,
+													  String ratingSortOrder, String searchKey,
+													  int page, int productsPerPage) {
+
+		List<Product> list = new ArrayList<>();
+		StringBuilder queryBuilder = new StringBuilder();
+		List<Object> parameters = new ArrayList<>();
+		boolean sortByRating = (ratingSortOrder != null && !ratingSortOrder.trim().isEmpty());
+
+		// --- Build SELECT and FROM clause (Handle rating sort join) ---
+		if (sortByRating) {
+			queryBuilder.append("SELECT p.*, COALESCE(AVG(r.rating), 0) as avg_rating ");
+			queryBuilder.append("FROM product p ");
+			queryBuilder.append("LEFT JOIN review r ON p.pid = r.product_id ");
+		} else {
+			queryBuilder.append("SELECT p.* FROM product p ");
+		}
+
+		// --- Build WHERE clause (Same logic as count method) ---
+		StringBuilder whereClause = new StringBuilder();
+		boolean firstWhere = true;
+		// Category Filter
+		if (categoryIds != null && !categoryIds.isEmpty()) {
+			whereClause.append(firstWhere ? "WHERE " : "AND ");
+			String categoryPlaceholders = categoryIds.stream().map(id -> "?").collect(Collectors.joining(", "));
+			whereClause.append("p.cid IN (").append(categoryPlaceholders).append(") ");
+			parameters.addAll(categoryIds);
+			firstWhere = false;
+		}
+		// Min Price Filter
+		if (minPrice != null) {
+			whereClause.append(firstWhere ? "WHERE " : "AND ");
+			whereClause.append("p.price >= ? ");
+			parameters.add(minPrice);
+			firstWhere = false;
+		}
+		// Max Price Filter
+		if (maxPrice != null) {
+			whereClause.append(firstWhere ? "WHERE " : "AND ");
+			whereClause.append("p.price <= ? ");
+			parameters.add(maxPrice);
+			firstWhere = false;
+		}
+		// Search Key Filter
+		if (searchKey != null && !searchKey.trim().isEmpty()) {
+			whereClause.append(firstWhere ? "WHERE " : "AND ");
+			whereClause.append("(lower(p.name) LIKE lower(?) OR lower(p.description) LIKE lower(?)) ");
+			String searchPattern = "%" + searchKey.trim() + "%";
+			parameters.add(searchPattern);
+			parameters.add(searchPattern);
+			firstWhere = false;
+		}
+		queryBuilder.append(whereClause); // Append WHERE clause
+		// --- End WHERE clause ---
+
+
+		// --- Build GROUP BY (Only if sorting by rating) ---
+		if (sortByRating) {
+			queryBuilder.append("GROUP BY p.pid "); // Adjust if your DB requires listing all non-aggregated columns
+		}
+
+		// --- Build ORDER BY ---
+		StringBuilder orderByClause = new StringBuilder();
+		boolean firstOrder = true;
+		if (sortByRating) {
+			orderByClause.append("ORDER BY avg_rating ");
+			orderByClause.append("asc".equalsIgnoreCase(ratingSortOrder) ? "ASC" : "DESC");
+			orderByClause.append(" NULLS LAST ");
+			firstOrder = false;
+		}
+		// Default/secondary sort
+		orderByClause.append(firstOrder ? "ORDER BY " : ", ");
+		orderByClause.append("p.pid ASC "); // Or p.name, etc.
+		queryBuilder.append(orderByClause); // Append ORDER BY clause
+		// --- End ORDER BY ---
+
+
+		// --- Build LIMIT and OFFSET ---
+		queryBuilder.append("LIMIT ? OFFSET ?");
+		if (page < 1) page = 1;
+		int offset = (page - 1) * productsPerPage;
+		parameters.add(productsPerPage); // Add LIMIT parameter
+		parameters.add(offset);          // Add OFFSET parameter
+		// --- End LIMIT/OFFSET ---
+
+
+		// Final Query String
+		String finalQuery = queryBuilder.toString();
+		System.out.println("Executing Filtered Paginated Query: " + finalQuery); // Log query
+		System.out.println("Parameters: " + parameters); // Log parameters
+
+		// --- Execute Query ---
+		try (Connection con = ConnectionProvider.getConnection();
+			 PreparedStatement psmt = con.prepareStatement(finalQuery)) {
+
+			// Set parameters dynamically
+			setDynamicParameters(psmt, parameters);
+
+			try (ResultSet rs = psmt.executeQuery()) {
+				while (rs.next()) {
+					// Map using existing helper
+					list.add(mapResultSetToProduct(rs));
+				}
+			}
+
+		} catch (SQLException | ClassNotFoundException e) {
+			System.err.println("Error executing filtered paginated product query: " + e.getMessage());
+			e.printStackTrace();
+			return null; // Return null on major query execution error
+		}
+
+		return list; // Return the filtered & paginated list
+	}
+
+	// --- NEW Helper method to set parameters dynamically ---
+	private void setDynamicParameters(PreparedStatement psmt, List<Object> parameters) throws SQLException {
+		int paramIndex = 1;
+		for (Object param : parameters) {
+			if (param instanceof Integer) {
+				psmt.setInt(paramIndex++, (Integer) param);
+			} else if (param instanceof Float) {
+				psmt.setFloat(paramIndex++, (Float) param);
+			} else if (param instanceof String) {
+				psmt.setString(paramIndex++, (String) param);
+			} else if (param instanceof Double) {
+				psmt.setDouble(paramIndex++, (Double) param);
+			} else if (param == null) {
+				// Handle null if necessary, e.g., for different DB types or specific checks
+				// psmt.setNull(paramIndex++, Types.VARCHAR); // Example, adjust type
+			} else {
+				System.err.println("Warning: Unhandled parameter type in setDynamicParameters: " + param.getClass().getName());
+				// Fallback or throw error
+				psmt.setObject(paramIndex++, param);
+			}
+		}
+	}
+
+
 	// --- Helper method to map ResultSet row to Product object ---
 	private Product mapResultSetToProduct(ResultSet rs) throws SQLException {
 		Product product = new Product();

@@ -21,6 +21,7 @@ public class FilterProductsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private final ObjectMapper objectMapper = new ObjectMapper(); // For JSON conversion
+    private static final int PRODUCTS_PER_PAGE = 9; // Match the value in products.jsp
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -83,25 +84,58 @@ public class FilterProductsServlet extends HttpServlet {
             searchKey = searchKey.trim();
             if (searchKey.isEmpty()) searchKey = null;
         }
+        // --- Get Pagination Parameter ---
+        int currentPage = 1;
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            try {
+                currentPage = Integer.parseInt(pageParam);
+                if (currentPage < 1) currentPage = 1;
+            } catch (NumberFormatException e) {
+                currentPage = 1; // Default if invalid
+            }
+        }
 
         System.out.println("FilterServlet: Received Filters - Cats: " + categoryIds +
                 ", MinPrice: " + minPrice + ", MaxPrice: " + maxPrice +
-                ", RatingSort: " + ratingSort + ", Search: " + searchKey);
+                ", RatingSort: " + ratingSort + ", Search: " + searchKey +", Page: " + currentPage); // Log page
 
 
         // --- Call DAO to Fetch Filtered Products ---
         ProductDao productDao = new ProductDao();
         List<Product> filteredProducts = null;
         Map<String, Object> responseMap = new HashMap<>(); // Map to hold final JSON response
+        int totalProducts = 0;
+        int totalPages = 1; // Default to 1 page
 
         try {
+            // 1. Get TOTAL count matching filters
             // ** You NEED to create this method in ProductDao **
-            filteredProducts = productDao.getFilteredProducts(
+            totalProducts = productDao.getFilteredProductCount(
+                    categoryIds, minPrice, maxPrice, searchKey
+                    // Note: ratingSort doesn't usually affect the *count*
+            );
+
+            if (totalProducts < 0) { // Check for DAO error
+                throw new Exception("Product DAO returned error counting filtered products.");
+            }
+
+            // 2. Calculate total pages
+            if (totalProducts > 0) {
+                totalPages = (int) Math.ceil((double) totalProducts / PRODUCTS_PER_PAGE);
+            }
+            // Adjust currentPage if it's out of bounds after filtering
+            if (currentPage > totalPages) {
+                currentPage = totalPages;
+            }
+            filteredProducts = productDao.getFilteredProductsPaginated(
                     categoryIds, // List<Integer>
                     minPrice,    // Float
                     maxPrice,    // Float
                     ratingSort,  // String ("asc", "desc", or null)
-                    searchKey    // String
+                    searchKey,    // String
+                    currentPage,    // int
+                    PRODUCTS_PER_PAGE // int
             );
 
             if (filteredProducts == null) { // Check for DAO error indication
@@ -140,6 +174,9 @@ public class FilterProductsServlet extends HttpServlet {
             responseMap.put("vendorNames", vendorNameMap);
             responseMap.put("averageRatings", averageRatingsMap);
             // Optionally add wishlist status if needed (more complex, requires user ID)
+            responseMap.put("currentPage", currentPage); // Add pagination info
+            responseMap.put("totalPages", totalPages);   // Add pagination info
+            responseMap.put("totalProducts", totalProducts); // Optional: total count
 
             response.setStatus(HttpServletResponse.SC_OK); // 200 OK
 
@@ -151,6 +188,8 @@ public class FilterProductsServlet extends HttpServlet {
             responseMap.put("products", Collections.emptyList()); // Send empty list on error
             responseMap.put("vendorNames", Collections.emptyMap());
             responseMap.put("averageRatings", Collections.emptyMap());
+            responseMap.put("currentPage", 1); // Sensible default on error
+            responseMap.put("totalPages", 1);  // Sensible default on error
         }
 
         // --- Write JSON Response ---
