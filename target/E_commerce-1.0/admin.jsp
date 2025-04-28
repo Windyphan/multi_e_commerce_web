@@ -102,6 +102,10 @@
 				</div>
 				<div class="list-group list-group-flush admin-nav">
 					<%-- Use data-target corresponding to content pane IDs --%>
+						<%-- Dashboard Link --%>
+					<button type="button" class="list-group-item list-group-item-action ${activeAdminTab == 'dashboard' ? 'active' : ''}" data-target="#dashboard-content">
+						<i class="fas fa-tachometer-alt fa-fw"></i>Dashboard
+					</button>
 					<button type="button" class="list-group-item list-group-item-action ${activeAdminTab == 'categories' ? 'active' : ''}" data-target="#categories-content">
 						<i class="fas fa-tags fa-fw"></i>Categories
 					</button>
@@ -132,6 +136,21 @@
 			<div class="card admin-content">
 				<div class="card-body">
 					<%-- Content panes - Include content JSPs here --%>
+					<%-- === DASHBOARD CONTENT === --%>
+					<div id="dashboard-content" class="tab-pane ${activeAdminTab == 'dashboard' ? 'active' : ''}">
+						<div class="text-center dashboard-welcome"> <%-- Added class --%>
+							<i class="fas fa-tachometer-alt fa-3x text-primary"></i> <%-- Dashboard Icon --%>
+							<h2 class="display-6 mb-3 mt-3">Welcome back, <c:out value="${sessionScope.activeAdmin.name}"/>!</h2>
+							<p class="lead text-muted">
+								Use the sidebar navigation to manage the shop.
+							</p>
+							<hr> <%-- Optional separator --%>
+							<p class="text-muted small">
+								Today is <fmt:formatDate value="<%= new Date() %>" pattern="EEEE, dd MMMM yyyy" />.
+							</p>
+						</div>
+					</div>
+					<%-- ======================================= --%>
 					<div id="categories-content" class="tab-pane ${activeAdminTab == 'categories' ? 'active' : ''}">
 						<%@include file="display_category.jsp"%>
 					</div>
