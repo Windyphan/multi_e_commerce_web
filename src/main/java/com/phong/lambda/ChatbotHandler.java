@@ -109,17 +109,6 @@ public class ChatbotHandler implements RequestHandler<APIGatewayProxyRequestEven
 
         // Fetch response from DynamoDB based on the keyword
         return getResponseFromDynamoDB(matchedKeyword);
-
-        /* // --- Alternative: Hardcoded responses ---
-        if (lowerCaseMessage.contains("hours")) {
-            return "We are open Monday to Friday, 9 AM to 5 PM.";
-        } else if (lowerCaseMessage.contains("greeting") || lowerCaseMessage.contains("hello") || lowerCaseMessage.contains("hi")) {
-            return "Hello! How can I help you?";
-        } // ... add more else if blocks ...
-        else {
-            return "Sorry, I didn't understand that. Please ask about hours or contact information.";
-        }
-        */
     }
 
     private String getResponseFromDynamoDB(String keyword) {

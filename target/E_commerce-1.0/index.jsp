@@ -79,7 +79,6 @@
 
 	// Set active category for sidebar (0 = All)
 	request.setAttribute("activeCategoryId", 0);
-	// Ensure category list is available for sidebar (assuming navbar sets navbarCategoryList)
 	// request.setAttribute("sidebarCategoryList", request.getAttribute("navbarCategoryList"));
 %>
 <script>
@@ -239,8 +238,6 @@
 			width: 100%;            /* Make image fill container width */
 			height: 100%;           /* Make image fill container height */
 			object-fit: cover;      /* Crucial: Scales image to cover the container, maintaining aspect ratio, cropping if needed */
-			/* Or use object-fit: contain; if you want the whole image visible, potentially leaving empty space */
-			/* object-fit: contain; */
 		}
 
 
@@ -257,12 +254,11 @@
 			text-transform: uppercase;
 			letter-spacing: 0.5px;
 		}
-		.promo-section.great-deal .brand-placeholder { /* For 'ebay' */
+		.promo-section.great-deal .brand-placeholder {
 			font-weight: bold;
 			font-size: 1.8rem;
-			color: #8a2be2; /* Example purple */
+			color: #8a2be2; /* purple */
 			margin-bottom: 1rem;
-			/* If you had a logo: height: 30px; width: auto; */
 		}
 		.promo-section.great-deal h3 { /* Using h3 here */
 			font-weight: 600;
@@ -419,8 +415,6 @@
 			width: 100%;            /* Make image fill container width */
 			height: 100%;           /* Make image fill container height */
 			object-fit: cover;      /* Crucial: Scales image to cover the container, maintaining aspect ratio, cropping if needed */
-			/* Or use object-fit: contain; if you want the whole image visible, potentially leaving empty space */
-			/* object-fit: contain; */
 		}
 	</style>
 </head>

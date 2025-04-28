@@ -57,7 +57,7 @@ public class UpdateOrderServlet extends HttpServlet {
 		VendorDao vendorDao = new VendorDao();
 
 		// --- Default response to error until success ---
-		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Assume error initially
+		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		responseMap.put("status", "error");
 		responseMap.put("message", "An internal error occurred."); // Default error
 

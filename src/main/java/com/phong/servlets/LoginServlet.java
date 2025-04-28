@@ -134,8 +134,8 @@ public class LoginServlet extends HttpServlet {
 		}
 
 		// Note: The redirects within the try/catch blocks handle the response.
-		// If you reach here without a redirect having happened (e.g., due to an error
-		// before a redirect), you might want a final fallback redirect, though the current
+		// If reach here without a redirect having happened (e.g., due to an error
+		// before a redirect), might want a final fallback redirect, though the current
 		// structure aims to redirect in all logical paths.
 	}
 }

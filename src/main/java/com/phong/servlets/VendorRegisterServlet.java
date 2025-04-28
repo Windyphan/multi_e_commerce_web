@@ -133,41 +133,6 @@ public class VendorRegisterServlet extends HttpServlet {
         session.setAttribute("message", message);
         response.sendRedirect("vendor_login.jsp"); // Redirect to vendor login
 
-        // } catch (Exception e) { // Catch exceptions from DAO calls or validation
-        //     if (con != null) try { con.rollback(); } catch (SQLException se) { /* log rollback error */ }
-        //     System.err.println("Error during vendor registration: " + e.getMessage());
-        //     e.printStackTrace();
-        //     message = new Message("An unexpected error occurred during registration.", "error", "alert-danger");
-        //     session.setAttribute("message", message);
-        //     response.sendRedirect(redirectPage);
-        // } finally {
-        //      // Close connection if using manual transaction management
-        //      if (con != null) try { con.setAutoCommit(true); con.close(); } catch (SQLException se) {}
-        // }
-        // --- Transaction Block End (Conceptual) ---
-
-        // Note: The above try/catch/finally wrapping the whole process is needed
-        // for proper transaction management. Without it, the code below runs
-        // without transaction safety. Simpler version below assumes no transactions:
-
-        // --- Simplified Version (No Transaction Handling) ---
-        // try { // Still use try-catch for general errors
-        // ... (Validation as above) ...
-        // ... (Hashing password) ...
-        // ... (Create User object newUser) ...
-        // boolean userSaved = userDao.saveUser(newUser);
-        // if (!userSaved) { /* Set error message, redirect */ return; }
-        // User createdUser = userDao.getUserByEmailPassword(...); // Fetch back user
-        // if (createdUser == null) { /* Set error message, redirect */ return; }
-        // int ownerUserId = createdUser.getUserId();
-        // Vendor newVendor = new Vendor(...);
-        // newVendor.setOwnerUserId(ownerUserId);
-        // int vendorId = vendorDao.saveVendor(newVendor);
-        // if (vendorId <= 0) { /* Set error message, redirect */ return; }
-        // message = new Message("Vendor registration submitted...", "success", "alert-info");
-        // session.setAttribute("message", message);
-        // response.sendRedirect("vendor_login.jsp");
-        // } catch (Exception e) { /* Handle exceptions, set error message, redirect */ }
 
     }
 }
