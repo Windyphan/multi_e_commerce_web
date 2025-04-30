@@ -197,7 +197,7 @@ public class VendorDao {
                 "  AND o.date >= ? " +                         // Filter by start date
                 "  AND o.date <= ? ";                          // Filter by end date (exclusive for timestamp comparison)
 
-        // We use < endDate + 1 day because timestamp comparison should usually be exclusive for the end boundary
+        // Use < endDate + 1 day because timestamp comparison should usually be exclusive for the end boundary
         LocalDate nextDay = endDate.plusDays(1);
 
         try (Connection con = ConnectionProvider.getConnection();

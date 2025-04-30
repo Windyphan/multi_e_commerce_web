@@ -254,7 +254,7 @@
                         }
                         // Replace the old button with the new one
                         actionCell.html(newButtonHtml);
-                        // Note: No need to re-enable button, as we replaced it.
+                        // Note: No need to re-enable button, as replaced it.
 
                     } else {
                         // Handle error from servlet response

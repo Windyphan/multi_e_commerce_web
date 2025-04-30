@@ -324,7 +324,7 @@
 			button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
 
 			$.ajax({
-				type: 'POST', // Or GET if your servlet handles delete via GET
+				type: 'POST',
 				url: 'AddOperationServlet?operation=deleteCategory',
 				data: { cid: categoryId },
 				dataType: 'json',

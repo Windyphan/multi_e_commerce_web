@@ -171,7 +171,6 @@
 <%-- ====================================================================== --%>
 <%!
 	// Simple helper class to combine Cart and Product info for easy iteration in JSP
-	// Make sure this class definition is present ONCE in your checkout.jsp
 	public static class CartItemDetail {
 		private Cart cart;
 		private Product product;

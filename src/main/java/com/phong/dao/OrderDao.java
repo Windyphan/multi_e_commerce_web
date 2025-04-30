@@ -213,7 +213,6 @@ public class OrderDao {
 
 			try (ResultSet rs = psmt.executeQuery()) {
 				while (rs.next()) {
-					// Reuse your existing helper method to map the main order details
 					list.add(mapResultSetToOrder(rs));
 				}
 			} // ResultSet automatically closed

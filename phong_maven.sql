@@ -166,7 +166,6 @@ CREATE TABLE review (
 CREATE INDEX idx_review_product_id ON review (product_id);
 CREATE INDEX idx_review_user_id ON review (user_id);
 
--- Connect to your database if needed
 -- \c phong
 
 -- Step 1: Create the new 'vendor' table (Same as before)

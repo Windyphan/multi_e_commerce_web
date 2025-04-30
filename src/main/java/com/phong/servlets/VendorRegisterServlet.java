@@ -14,8 +14,6 @@ import com.phong.entities.Message;
 import com.phong.entities.User;
 import com.phong.entities.Vendor;
 import com.phong.helper.PasswordUtil;
-// Import your password hashing utility
-// import com.phong.helper.PasswordUtil;
 
 public class VendorRegisterServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;

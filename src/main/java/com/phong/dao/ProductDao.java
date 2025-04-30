@@ -451,7 +451,7 @@ public class ProductDao {
 		List<Object> parameters = new ArrayList<>(); // To hold parameters for PreparedStatement in order
 
 		// Base query - Select product columns
-		// If sorting by rating, we need to calculate average rating first
+		// If sorting by rating, need to calculate average rating first
 		boolean sortByRating = (ratingSortOrder != null && !ratingSortOrder.trim().isEmpty());
 
 		if (sortByRating) {
@@ -909,7 +909,7 @@ public class ProductDao {
 
 		// --- Build GROUP BY (Only if sorting by rating) ---
 		if (sortByRating) {
-			queryBuilder.append("GROUP BY p.pid "); // Adjust if your DB requires listing all non-aggregated columns
+			queryBuilder.append("GROUP BY p.pid ");
 		}
 
 		// --- Build ORDER BY ---

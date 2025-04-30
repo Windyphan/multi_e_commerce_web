@@ -244,7 +244,7 @@
 			$('#admin-alert-placeholder .alert').hide(); // Hide previous alerts
 
 			$.ajax({
-				type: 'POST', // Or 'GET' if your servlet uses doGet for save
+				type: 'POST',
 				url: 'AdminServlet?operation=save', // Servlet endpoint
 				data: formData,
 				dataType: 'json', // Expect JSON response
@@ -315,7 +315,7 @@
 			button.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>'); // Show loading state
 
 			$.ajax({
-				type: 'POST', // Or 'GET' if your servlet uses doGet for delete
+				type: 'POST',
 				url: 'AdminServlet?operation=delete',
 				data: { id: adminId }, // Send ID as data
 				dataType: 'json',
@@ -361,7 +361,7 @@
 		(() => {
 			'use strict'
 
-			// Fetch all the forms we want to apply custom Bootstrap validation styles to
+			// Fetch all the forms want to apply custom Bootstrap validation styles to
 			const forms = document.querySelectorAll('.needs-validation')
 
 			// Loop over them and prevent submission
