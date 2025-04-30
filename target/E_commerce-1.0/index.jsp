@@ -595,7 +595,7 @@
 				<div class="col-md-6">
 					<p class="featured-text">Featured</p>
 					<%-- Placeholder for Brand Logo/Name --%>
-					<div class="brand-placeholder">Phong Shop</div> <%-- Or use <img> if you have a logo --%>
+					<div class="brand-placeholder">Phong Shop</div>
 					<h3>Looking for a Great Deal?</h3>
 					<p>We've got everything you need.</p>
 					<a href="products.jsp" class="btn btn-outline-dark">Shop Now</a> <%-- Link to products page --%>

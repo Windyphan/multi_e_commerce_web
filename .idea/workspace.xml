@@ -4,8 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99cc4e27-b3cd-4759-ad19-9816ff79b9ba" name="Changes" comment="Add paging system">
+    <list default="true" id="99cc4e27-b3cd-4759-ad19-9816ff79b9ba" name="Changes" comment="Upgrade">
+      <change afterPath="$PROJECT_DIR$/phong.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/checkout.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/checkout.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_admin.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_admin.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_category.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_category.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/display_vendors.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/display_vendors.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/E_commerce-1.0/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/E_commerce-1.0/index.jsp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,6 +101,7 @@
       <recent name="C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\webapp\Images" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Laptop\IdeaProjects\multi_e_commerce_web" />
       <recent name="C:\Users\Laptop\IdeaProjects\multi_e_commerce_web\src\main\webapp\Components" />
     </key>
   </component>
@@ -238,15 +246,8 @@
       <workItem from="1745605347585" duration="30342000" />
       <workItem from="1745679503583" duration="31258000" />
       <workItem from="1745858721616" duration="22883000" />
-      <workItem from="1745960188497" duration="4675000" />
-    </task>
-    <task id="LOCAL-00069" summary="Update">
-      <option name="closed" value="true" />
-      <created>1744905568845</created>
-      <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1744905568845</updated>
+      <workItem from="1745960188497" duration="5737000" />
+      <workItem from="1746036666542" duration="1740000" />
     </task>
     <task id="LOCAL-00070" summary="Fix admin modal theme color">
       <option name="closed" value="true" />
@@ -632,7 +633,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745883405535</updated>
     </task>
-    <option name="localTasksCounter" value="118" />
+    <task id="LOCAL-00118" summary="Upgrade">
+      <option name="closed" value="true" />
+      <created>1745975903819</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1745975903819</updated>
+    </task>
+    <option name="localTasksCounter" value="119" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -650,7 +659,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add vendor actions" />
     <MESSAGE value="Add vendor validation for performing customer action" />
     <MESSAGE value="Add password hashing" />
     <MESSAGE value="Fix dropdown not worked" />
@@ -673,8 +681,9 @@
     <MESSAGE value="Add admin dashboard" />
     <MESSAGE value="Remove image" />
     <MESSAGE value="Replace image with icon" />
-    <MESSAGE value="Remove redundant code" />
     <MESSAGE value="Add paging system" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add paging system" />
+    <MESSAGE value="Remove redundant code" />
+    <MESSAGE value="Upgrade" />
+    <option name="LAST_COMMIT_MESSAGE" value="Upgrade" />
   </component>
 </project>
